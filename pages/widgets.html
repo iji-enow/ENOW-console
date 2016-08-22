@@ -566,7 +566,8 @@
       <!-- /.row -->
 <!--- ------------------------------------------------------------------------------->
 <iframe id="iframecode" src="./textediter/aceindex.html" width="400" height="500"></iframe>
-<form role="form">
+<form role="form" action="/" method="post">
+
     <!-- text input -->
     <!-- <div class="form-group">
         <label>Code name</label>
@@ -576,8 +577,8 @@
 
     <div class="input-group input-group-sm">
       <input style="width:50%" type="text" class="form-control" placeholder="filename.txt">
-          <class="input-group-btn">
-            <button onclick="startdb()" type="button" class="btn btn-info btn-flat">Upload</button>
+      <input type="hidden" id="hidden" name="name">
+          <button onclick="getval()" type="submit" class="btn btn-info btn-flat">startdb</button>
     </div>
 
 
@@ -802,13 +803,12 @@
 <!-- AdminLTE for demo purposes -->
 <script src="../dist/js/demo.js"></script>
 <!-- mongodb, ace editor -->
-<script src="./textediter/bundle.js"></script>
+<!-- <script src="./textediter/textediter.js" type="text/javascript"></script> -->
 
 <script>
 function getval(){
-
-    var code = document.getElementById("iframecode").contentWindow['code'];
-    alert(code);
+  var code = document.getElementById("iframecode").contentWindow['code'];
+  document.getElementById("hidden").value = code;
 }
 </script>
 </body>
