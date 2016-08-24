@@ -32,9 +32,9 @@
     <!-- Logo -->
     <a href="../index.html" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>A</b>LT</span>
+      <span class="logo-mini"><b>E</b>NOW</span>
       <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>Admin</b>LTE</span>
+      <span class="logo-lg"><b>E</b>NOW</span>
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
@@ -369,10 +369,6 @@
           </a>
         </li>
         <li><a href="../documentation/index.html"><i class="fa fa-book"></i> <span>Documentation</span></a></li>
-        <li class="header">LABELS</li>
-        <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Important</span></a></li>
-        <li><a href="#"><i class="fa fa-circle-o text-yellow"></i> <span>Warning</span></a></li>
-        <li><a href="#"><i class="fa fa-circle-o text-aqua"></i> <span>Information</span></a></li>
       </ul>
     </section>
     <!-- /.sidebar -->
@@ -383,18 +379,64 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Widgets
+        Recipes
         <small>Preview page</small>
       </h1>
       <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Widgets</li>
+        <li class="active">Recipes</li>
       </ol>
     </section>
 
     <!-- Main content -->
     <section class="content">
+        <div style="text-align:center" class="row">
+          <div class="col-md-3">
+            <div class="box box-default collapsed-box">
+              <div class="box-header with-border">
+                <h3 class="box-title">Phase 1</h3>
 
+                <div class="box-tools pull-right">
+                  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+                  </button>
+                </div>
+                <!-- /.box-tools -->
+              </div>
+              <!-- /.box-header -->
+
+              <form name="form">
+              <div class="box-body">
+                <div class="form-group">
+                  <label>Connectable Devices</label>
+                  <!-- 텍스트값: <input type="text" name="textValue">&nbsp;&nbsp;옵션값:
+                  <input type="text" name="optionValue"> -->
+                  <select name="device_name" id="device_name" class="form-control" onChange="getSelectValue(this.form);">
+                    <option value="rpi">Raspberry Pi</option>
+                    <option value="echo">Amazon Echo</option>
+                    <option value="zara">Zara</option>
+                    <option value="i7">Samsung i7</option>
+                  </select>
+                </div>
+                <input type="text" class="form-control" name="device_is" placeholder="Enter ..." disabled>
+                <div class="form-group">
+                  <label>Device Id</label>
+                  <select class="form-control">
+                    <option>a38ds9sa2322423</option>
+                  </select>
+                </div>
+              </div>
+          </form>
+              <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+          </div>
+          <!-- /.col -->
+          <div class="col-md-1">
+            <button type="button" class="btn btn-block btn-success btn-xs">Add</button>
+        </div>
+    </div>
+
+  </section>
   </div>
 <!--- ------------------------------------------------------------------------------->
 
@@ -618,6 +660,12 @@
 <script src="../dist/js/demo.js"></script>
 <!-- mongodb, ace editor -->
 <!-- <script src="./textediter/textediter.js" type="text/javascript"></script> -->
-
+<script language="javascript">
+function getSelectValue(frm)
+{
+    frm.device_is.value = frm.device_name.options[frm.device_name.selectedIndex].text;
+    // frm.optionValue.value = frm.device_name.options[frm.device_name.selectedIndex].value;
+}
+</script>
 </body>
 </html>

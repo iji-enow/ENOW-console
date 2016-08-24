@@ -23,7 +23,7 @@
     var editor = ace.edit("editor");
     var code="aaa";
     editor.setTheme("ace/theme/monokai");
-    editor.getSession().setMode("ace/mode/python");
+    editor.getSession().setMode("ace/mode/javascript");
     editor.getSession().on("change", function () {
         code = editor.getSession().getValue();
     });
