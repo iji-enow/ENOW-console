@@ -420,9 +420,20 @@
                 <input type="text" class="form-control" name="device_is" placeholder="Enter ..." disabled>
                 <div class="form-group">
                   <label>Device Id</label>
-                  <select class="form-control">
+                  <select class="form-control" disabled>
                     <option>a38ds9sa2322423</option>
                   </select>
+                </div>
+                <div class="form-group">
+                  <label>IP mask:</label>
+
+                  <div class="input-group">
+                    <div class="input-group-addon">
+                      <i class="fa fa-laptop"></i>
+                    </div>
+                    <input type="text" class="form-control" data-inputmask="'alias': 'ip'" data-mask>
+                  </div>
+                  <!-- /.input group -->
                 </div>
               </div>
           </form>
@@ -659,6 +670,12 @@
 <!-- AdminLTE for demo purposes -->
 <script src="../dist/js/demo.js"></script>
 <!-- mongodb, ace editor -->
+
+<!-- mask -->
+<script src="../plugins/input-mask/jquery.inputmask.js"></script>
+<script src="../plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+<script src="../plugins/input-mask/jquery.inputmask.extensions.js"></script>
+
 <!-- <script src="./textediter/textediter.js" type="text/javascript"></script> -->
 <script language="javascript">
 function getSelectValue(frm)
@@ -666,6 +683,11 @@ function getSelectValue(frm)
     frm.device_is.value = frm.device_name.options[frm.device_name.selectedIndex].text;
     // frm.optionValue.value = frm.device_name.options[frm.device_name.selectedIndex].value;
 }
+</script>
+<script>
+$(function () {
+    $("[data-mask]").inputmask();
+});
 </script>
 </body>
 </html>
