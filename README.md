@@ -6,7 +6,6 @@ Introduction
 
 **ENOW-DASHBOARD** -- is a dashboard for enow project. Highly customizable and easy to use. Fits many screen resolutions from small mobile devices to large desktops.
 
----
 
 
 Installation
