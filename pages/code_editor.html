@@ -391,8 +391,8 @@
     <section class="content">
 
 <!--- ------------------------------------------------------------------------------->
-<iframe id="iframecode" src="./textediter/aceindex.html" width="400" height="500"></iframe>
-<form role="form" action="/" method="post">
+<iframe id="iframecode" src="./textediter/aceindex.html" width="800" height="500"></iframe>
+<form role="form" action="/db" method="post">
 
     <!-- text input -->
     <!-- <div class="form-group">
@@ -402,9 +402,10 @@
     <p class="margin">Source Edit<code>save to MongoDB ex) helloworld.txt</code></p>
 
     <div class="input-group input-group-sm">
-      <input style="width:50%" type="text" class="form-control" placeholder="filename.txt">
+      <input id="txtname" style="width:50%" type="text" class="form-control" placeholder="filename.txt">
       <input type="hidden" id="hidden" name="name">
-          <button style="height:30px" onclick="getval()" type="submit" class="btn btn-info btn-flat">execute</button>
+      <input type="hidden" id="hiddentxt" name="txtname">
+          <button style="height:30px" onclick="return getval()" type="submit" class="btn btn-info btn-flat">execute</button>
     </div>
 
 
@@ -634,12 +635,20 @@
 <!-- AdminLTE for demo purposes -->
 <script src="../dist/js/demo.js"></script>
 <!-- mongodb, ace editor -->
-<!-- <script src="./textediter/textediter.js" type="text/javascript"></script> -->
+<script src="./textediter/textediter.js" type="text/javascript"></script>
 
 <script>
 function getval(){
   var code = document.getElementById("iframecode").contentWindow['code'];
+  var txtname = document.getElementById("txtname").value;
   document.getElementById("hidden").value = code;
+  document.getElementById("hiddentxt").value = txtname;
+
+  if (!txtname)
+  {
+      alert("enter txt name");
+      return -1;
+  }
 }
 </script>
 </body>

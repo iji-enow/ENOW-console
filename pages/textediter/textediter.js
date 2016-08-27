@@ -22,9 +22,9 @@ expressapp.get('/', function(req, res){
 	console.log("zzzz");
 });
 
-expressapp.post('/', function(req, res){
+expressapp.post('/db', function(req, res){
 	console.log(req.param('name',null));
-	startdb(req.param('name',null));
+	startdb(req.param('name',null), req.param('txtname',null));
 });
 
 var server = expressapp.listen(expressapp.get('port'), function(){
@@ -32,12 +32,13 @@ var server = expressapp.listen(expressapp.get('port'), function(){
 });
 
 
-function startdb(source){
+function startdb(source, txtname){
+	source.replace("\\r","");
     MongoClient.connect('mongodb://localhost/source',function(err,db) {
         console.log("start db");
         var insertDocument = function(db, callback){
             db.collection('codes').insertOne({
-                "name" : "hello",
+                "name" : txtname,
                 "source" : source
             },function(err, result){
                 console.log("Inserted a document into logs collection.");
