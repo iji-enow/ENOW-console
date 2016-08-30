@@ -51,10 +51,10 @@ ENOW is an open source project licensed under [Apache License, Version 2.0](http
 
 Todo List
 ---------
-- ~~basic structure, layout~~ (Done v0.0.1)
-- Main Page
-- Code Editor Page
-- Widget Page
-- Phase Page
-- Statistics Page
-- Documentation Page
+- [x] ~~basic structure, layout~~ (Done v0.0.1)
+- [ ] Main Page
+- [ ] Code Editor Page
+- [ ] Widget Page
+- [ ] Phase Page
+- [ ] Statistics Page
+- [ ] Documentation Page
