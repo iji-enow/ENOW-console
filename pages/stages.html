@@ -17,14 +17,16 @@
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="../dist/css/skins/_all-skins.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
-  <script src="../pages/phaseEditor/app.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
   <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
+
+
 </head>
 <body class="hold-transition skin-blue sidebar-mini" data-ng-app="PhaseApp">
 <div class="wrapper">
@@ -321,22 +323,6 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu">
         <li class="header">MAIN NAVIGATION</li>
-        <!-- 레이아웃. -->
-        <!-- <li class="treeview">
-          <a href="#">
-            <i class="fa fa-files-o"></i>
-            <span>Layout Options</span>
-            <span class="pull-right-container">
-              <span class="label label-primary pull-right">4</span>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="pages/layout/top-nav.html"><i class="fa fa-circle-o"></i> Top Navigation</a></li>
-            <li><a href="pages/layout/boxed.html"><i class="fa fa-circle-o"></i> Boxed</a></li>
-            <li><a href="pages/layout/fixed.html"><i class="fa fa-circle-o"></i> Fixed</a></li>
-            <li><a href="pages/layout/collapsed-sidebar.html"><i class="fa fa-circle-o"></i> Collapsed Sidebar</a></li>
-          </ul>
-        </li> -->
         <li>
           <a href="../pages/widgets.html">
             <i class="fa fa-th"></i> <span>Widgets</span>
@@ -399,18 +385,14 @@
 
     <!-- Main content -->
     <section class="content">
-      <div style="width:1024px;height:650px;position:relative;margin:0;background:url('./phaseEditor/grid.gif');" data-ng-controller="MainController">
-        <div id="droppableContainer">
-            <div data-ng-repeat="item in droppableArray">
-                <div dropme data-fruitname="{{item.fruitname}}" backgroundimage="{{item.fruitimg}}" set-score="setScore(value)" remove-array="removeFromArray(value)"  set-doraemon="setDoraemonStatus(value)"></div>
-            </div>
-        </div>
-    </div>
-    <div id="draggableContainer">
-        <div data-ng-repeat="item in draggableArray">
-            <div dragme bgcolor="#fdcca0" left="20" data-fruitname="{{item.fruitname}}" answerdata="{{item.fruitname}}" backgroundimage="{{item.fruitimg}}" myindex="$index" set-doraemon="setDoraemonStatus(value)"></div>
-        </div>
-    </div>
+
+<!--  -->
+
+<iframe id="iframecode" style="height:500px" src="../pages/stages/drag-drop.html" class="col-lg-6 col-xs-6"></iframe>
+
+
+<!--  -->
+
   </section>
   </div>
 <!--- ------------------------------------------------------------------------------->
@@ -635,23 +617,7 @@
 <script src="../dist/js/demo.js"></script>
 <!-- mongodb, ace editor -->
 
-<!-- mask -->
-<script src="../plugins/input-mask/jquery.inputmask.js"></script>
-<script src="../plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
-<script src="../plugins/input-mask/jquery.inputmask.extensions.js"></script>
 
-<!-- <script src="./textediter/textediter.js" type="text/javascript"></script> -->
-<script language="javascript">
-function getSelectValue(frm)
-{
-    frm.device_is.value = frm.device_name.options[frm.device_name.selectedIndex].text;
-    // frm.optionValue.value = frm.device_name.options[frm.device_name.selectedIndex].value;
-}
-</script>
-<script>
-$(function () {
-    $("[data-mask]").inputmask();
-});
-</script>
+
 </body>
 </html>
