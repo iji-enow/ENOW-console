@@ -17,7 +17,8 @@
   <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
   <link rel="stylesheet" href="../dist/css/skins/_all-skins.min.css">
-
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+  <script src="../pages/phaseEditor/app.js"></script>
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -25,7 +26,7 @@
   <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
 </head>
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue sidebar-mini" data-ng-app="PhaseApp">
 <div class="wrapper">
 
   <header class="main-header">
@@ -398,63 +399,18 @@
 
     <!-- Main content -->
     <section class="content">
-        <div style="text-align:center" class="row">
-          <div class="col-md-3">
-            <div class="box box-default collapsed-box">
-              <div class="box-header with-border">
-                <h3 class="box-title">Phase 1</h3>
-
-                <div class="box-tools pull-right">
-                  <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
-                  </button>
-                </div>
-                <!-- /.box-tools -->
-              </div>
-              <!-- /.box-header -->
-
-              <form name="form">
-              <div class="box-body">
-                <div class="form-group">
-                  <label>Connectable Devices</label>
-                  <!-- 텍스트값: <input type="text" name="textValue">&nbsp;&nbsp;옵션값:
-                  <input type="text" name="optionValue"> -->
-                  <select name="device_name" id="device_name" class="form-control" onchange="getSelectValue(this.form);">
-                    <option value="rpi">Raspberry Pi</option>
-                    <option value="echo">Amazon Echo</option>
-                    <option value="zara">Zara</option>
-                    <option value="i7">Samsung i7</option>
-                  </select>
-                </div>
-                <input type="text" class="form-control" name="device_is" placeholder="Enter ..." disabled>
-                <div class="form-group">
-                  <label>Device Id</label>
-                  <select class="form-control" disabled>
-                    <option>a38ds9sa2322423</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label>IP mask:</label>
-
-                  <div class="input-group">
-                    <div class="input-group-addon">
-                      <i class="fa fa-laptop"></i>
-                    </div>
-                    <input type="text" class="form-control" data-inputmask="'alias': 'ip'" data-mask>
-                  </div>
-                  <!-- /.input group -->
-                </div>
-              </div>
-          </form>
-              <!-- /.box-body -->
+      <div style="width:1024px;height:650px;position:relative;margin:0;background:url('./phaseEditor/grid.gif');" data-ng-controller="MainController">
+        <div id="droppableContainer">
+            <div data-ng-repeat="item in droppableArray">
+                <div dropme data-fruitname="{{item.fruitname}}" backgroundimage="{{item.fruitimg}}" set-score="setScore(value)" remove-array="removeFromArray(value)"  set-doraemon="setDoraemonStatus(value)"></div>
             </div>
-            <!-- /.box -->
-          </div>
-          <!-- /.col -->
-          <div class="col-md-1">
-            <button type="button" class="btn btn-block btn-success btn-xs">Add</button>
         </div>
     </div>
-
+    <div id="draggableContainer">
+        <div data-ng-repeat="item in draggableArray">
+            <div dragme bgcolor="#fdcca0" left="20" data-fruitname="{{item.fruitname}}" answerdata="{{item.fruitname}}" backgroundimage="{{item.fruitimg}}" myindex="$index" set-doraemon="setDoraemonStatus(value)"></div>
+        </div>
+    </div>
   </section>
   </div>
 <!--- ------------------------------------------------------------------------------->
