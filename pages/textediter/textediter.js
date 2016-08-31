@@ -18,13 +18,14 @@ const port = 3000;
 expressapp.set('port', port);
 
 expressapp.get('/', function(req, res){
-	res.sendFile("./index.html");
+	res.sendFile(__dirname + "/index.html");
 	console.log("zzzz");
 });
 
 expressapp.post('/db', function(req, res){
 	console.log(req.param('name',null));
 	startdb(req.param('name',null), req.param('txtname',null));
+	res.sendFile(path.resolve(__dirname+'/../../index.html'));
 });
 
 var server = expressapp.listen(expressapp.get('port'), function(){
