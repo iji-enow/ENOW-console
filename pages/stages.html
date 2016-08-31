@@ -368,6 +368,14 @@
             </span>
           </a>
         </li>
+        <li>
+          <a href="../pages/settings.html">
+            <i class="fa fa-th"></i> <span>Settings</span>
+            <span class="pull-right-container">
+              <small class="label pull-right bg-green">new</small>
+            </span>
+          </a>
+        </li>
         <li><a href="../documentation/index.html"><i class="fa fa-book"></i> <span>Documentation</span></a></li>
       </ul>
     </section>
@@ -410,7 +418,7 @@
                   <label>Connectable Devices</label>
                   <!-- 텍스트값: <input type="text" name="textValue">&nbsp;&nbsp;옵션값:
                   <input type="text" name="optionValue"> -->
-                  <select name="device_name" id="device_name" class="form-control" onChange="getSelectValue(this.form);">
+                  <select name="device_name" id="device_name" class="form-control" onchange="getSelectValue(this.form);">
                     <option value="rpi">Raspberry Pi</option>
                     <option value="echo">Amazon Echo</option>
                     <option value="zara">Zara</option>
