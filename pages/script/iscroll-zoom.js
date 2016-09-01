@@ -520,36 +520,26 @@ IScroll.prototype = {
 			return;
 		}
 
-		// If you are scrolling in one direction lock the other
-		if ( !this.directionLocked && !this.options.freeScroll ) {
-			if ( absDistX > absDistY + this.options.directionLockThreshold ) {
-				this.directionLocked = 'h';		// lock horizontally
-			} else if ( absDistY >= absDistX + this.options.directionLockThreshold ) {
-				this.directionLocked = 'v';		// lock vertically
-			} else {
-				this.directionLocked = 'n';		// no lock
-			}
-		}
 
-		if ( this.directionLocked == 'h' ) {
-			if ( this.options.eventPassthrough == 'vertical' ) {
-				e.preventDefault();
-			} else if ( this.options.eventPassthrough == 'horizontal' ) {
-				this.initiated = false;
-				return;
-			}
-
-			deltaY = 0;
-		} else if ( this.directionLocked == 'v' ) {
-			if ( this.options.eventPassthrough == 'horizontal' ) {
-				e.preventDefault();
-			} else if ( this.options.eventPassthrough == 'vertical' ) {
-				this.initiated = false;
-				return;
-			}
-
-			deltaX = 0;
-		}
+		// if ( this.directionLocked == 'h' ) {
+		// 	if ( this.options.eventPassthrough == 'vertical' ) {
+		// 		e.preventDefault();
+		// 	} else if ( this.options.eventPassthrough == 'horizontal' ) {
+		// 		this.initiated = false;
+		// 		return;
+		// 	}
+		//
+		// 	deltaY = 0;
+		// } else if ( this.directionLocked == 'v' ) {
+		// 	if ( this.options.eventPassthrough == 'horizontal' ) {
+		// 		e.preventDefault();
+		// 	} else if ( this.options.eventPassthrough == 'vertical' ) {
+		// 		this.initiated = false;
+		// 		return;
+		// 	}
+		//
+		// 	deltaX = 0;
+		// }
 
 		deltaX = this.hasHorizontalScroll ? deltaX : 0;
 		deltaY = this.hasVerticalScroll ? deltaY : 0;
@@ -1831,7 +1821,7 @@ IScroll.prototype = {
 			case 'mousewheel':
 				if ( this.options.wheelAction == 'zoom' ) {
 					this._wheelZoom(e);
-					return;	
+					return;
 				}
 				this._wheel(e);
 				break;
