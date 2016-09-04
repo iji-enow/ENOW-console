@@ -7,14 +7,14 @@ App.controller('oneCtrl', function($scope, $timeout) {
   $scope.list4 = [];
 
   $scope.list5 = [
-    { 'title': 'Item 1', 'drag': true },
-    { 'title': 'Item 2', 'drag': true },
-    { 'title': 'Item 3', 'drag': true },
-    { 'title': 'Item 4', 'drag': true },
-    { 'title': 'Item 5', 'drag': true },
-    { 'title': 'Item 6', 'drag': true },
-    { 'title': 'Item 7', 'drag': true },
-    { 'title': 'Item 8', 'drag': true }
+      { 'deviceId': 'Rpi_1'},
+      { 'deviceId': 'Rpi_2'},
+      { 'deviceId': 'Rpi_3'},
+      { 'deviceId': 'I7_1'},
+      { 'deviceId': 'I7dd_2'},
+      { 'deviceId': 'Echo_1'},
+      { 'deviceId': 'Echo_2'},
+      { 'deviceId': 'Echo_3'}
   ];
 
   // Limit items to be dropped in list1
