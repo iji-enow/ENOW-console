@@ -6,10 +6,11 @@ const bodyparser = require('body-parser');
 var path = require('path');
 var MongoClient = mongo.MongoClient;
 var expressapp = express();
+var theValue="zzzzzzz123123";
+
 
 expressapp.use(bodyparser.urlencoded({extended:true}));
-expressapp.use(express.static(path.join(__dirname+"/../../../", 'dashboard')));
-const hostname = '127.0.0.1';
+expressapp.use(express.static(path.join(__dirname+"/../", 'console')));
 const port = 3000;
 
 // http.createServer(expressapp).listen(port);
@@ -20,6 +21,11 @@ expressapp.set('port', port);
 expressapp.get('/', function(req, res){
 	res.sendFile(__dirname + "/index.html");
 	console.log("zzzz");
+});
+
+expressapp.get('/get_db', function(req, res){
+	getdevicedb();
+	console.log("zzz111z");
 });
 
 expressapp.post('/db', function(req, res){
@@ -33,8 +39,30 @@ var server = expressapp.listen(expressapp.get('port'), function(){
 });
 
 
+function getdevicedb(){
+	MongoClient.connect('mongodb://52.196.199.32:9191/enow',function(err,db) {
+	        console.log("searching deviceid in db");
+			var findRestaurants = function(db, callback) {
+			   var cursor =db.collection('device').find( );
+			   module.exports.hello = [
+			       { 'deviceId': 'Rpi_1'},
+				   { 'deviceId': 'Rpi_1'}
+			   ];
+			   cursor.each(function(err, doc) {
+			      if (doc != null) {
+			         console.dir(doc);
+			      } else {
+			         callback();
+			      }
+			   });
+			};
+			findRestaurants(db, function() {
+		        db.close();
+		    });
+	});
+}
+
 function startdb(source, txtname){
-	source.replace("\\r","");
     MongoClient.connect('mongodb://localhost/source',function(err,db) {
         console.log("start db");
         var insertDocument = function(db, callback){
