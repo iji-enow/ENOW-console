@@ -6,8 +6,6 @@ const bodyparser = require('body-parser');
 var path = require('path');
 var MongoClient = mongo.MongoClient;
 var expressapp = express();
-var theValue="zzzzzzz123123";
-
 
 expressapp.use(bodyparser.urlencoded({extended:true}));
 expressapp.use(express.static(path.join(__dirname+"/../", 'console')));
@@ -44,10 +42,6 @@ function getdevicedb(){
 	        console.log("searching deviceid in db");
 			var findRestaurants = function(db, callback) {
 			   var cursor =db.collection('device').find( );
-			   module.exports.hello = [
-			       { 'deviceId': 'Rpi_1'},
-				   { 'deviceId': 'Rpi_1'}
-			   ];
 			   cursor.each(function(err, doc) {
 			      if (doc != null) {
 			         console.dir(doc);
