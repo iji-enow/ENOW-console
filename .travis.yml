@@ -3,3 +3,12 @@ node_js:
   - "6"
   - "6.1"
   - "5.11"
+branches:
+  only:
+  - master
+notifications:
+  email: false
+  slack: ijiteam:E9Rr8nKzl9hTppiVyvYAvzsZ
+env:
+  global:
+  - LANG="en_US.UTF-8"
