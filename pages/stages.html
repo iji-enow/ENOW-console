@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="drag-and-drop">
+<html ng-app="mainModule">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -25,10 +25,23 @@
 
     <script src="./script/angular-dragdrop.min.js"></script>
     <script src="./script/app.js"></script>
+
+    <script scr="../start.js">
+
+    </script>
+
+
     <style>
     .thumbnail { height: 280px !important; }
     .btn-droppable { width: 100%; height: 100%;}
     .btn-draggable { width: 100%; }
+    .modal{
+        overflow: hidden;
+    }
+    .modal-dialog{
+        margin-right: 0;
+        margin-left: 0;
+    }
     </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -383,23 +396,18 @@
                 <li class="active">Recipes</li>
             </ol>
         </section>
-        <textarea class="terms" readonly="readonly" id="theTextarea">
-        </textarea>
         <!-- Main content -->
         <section class="content">
-
-            <div ng-controller="oneCtrl">
+            <div ng-controller="myCtrl">
                 <div class="col-lg-12 col-xs-12">
                     <div class="row">
                         <div class="roadmap">
-                            <div class="col-lg-9 col-xs-9">
+                            <div class="col-lg-8 col-xs-8">
                                 <div class="box box-warning">
                                     <div class="box-header with-border">
                                         <h3 class="box-title">Phase RoadMap</h3>
                                     </div>
                                     <div class="col-lg-12 col-xs-12">
-
-
                                         <div class="col-lg-3 col-xs-3">
                                             <div class="thumbnail" data-drop="true" ng-model='list1' data-jqyoui-options="optionsList1" jqyoui-droppable="{multiple:true}">
                                                 <div class="caption">
@@ -428,11 +436,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
-
-
-
-
                                     </div>
                                     <div class="box-footer">
 
@@ -443,7 +446,7 @@
                         </div>
 
 
-                        <div class="col-lg-3 col-xs-3">
+                        <div class="col-lg-4 col-xs-4">
                             <form role="form" action="/get_db" method="get">
                                 <div class="box box-warning">
                                     <div class="box-header with-border">
@@ -453,36 +456,35 @@
                                     <div class="col-lg-12 col-xs-12">
                                         <div class="box-body">
                                             <div class="navbar-inner">
-                                                <!-- <div class="navbar-inner" style="overflow-y:auto; max-height:250px;"> -->
-                                                <div class="col-lg-12 col-xs-12" style="text-align: center;">
-                                                    <div class="btn btn-droppable" ng-repeat="item in list5" data-drop="true" ng-model='list5' data-jqyoui-options="{accept:'.btn-draggable:not([ng-model=list5])'}"  jqyoui-droppable="{index: {{$index}}}">
-                                                        <span class="btn btn-info btn-draggable" data-drag="true" data-jqyoui-options="{revert: 'invalid'}" ng-model="list5" jqyoui-draggable="{index: {{$index}},placeholder:true,animate:false}" ng-hide="!item.deviceId">{{item.deviceId}}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-
-                                            <!-- <div class="navbar-inner" style="max-height: 300px;overflow-y: scroll;">
-                                            <div class="col-lg-12 col-xs-12" style="text-align: center;">
+                                        <div class="navbar-inner" style="overflow-y:auto; max-height:275px;">
                                             <div class="btn btn-droppable" ng-repeat="item in list5" data-drop="true" ng-model='list5' data-jqyoui-options="{accept:'.btn-draggable:not([ng-model=list5])'}"  jqyoui-droppable="{index: {{$index}}}">
                                             <span class="btn btn-info btn-draggable" data-drag="true" data-jqyoui-options="{revert: 'invalid'}" ng-model="list5" jqyoui-draggable="{index: {{$index}},placeholder:true,animate:false}" ng-hide="!item.deviceId">{{item.deviceId}}</span>
                                         </div>
+                                        </div>
                                     </div>
-                                </div> -->
+
+
+
+                                    <!-- <div class="navbar-inner" style="max-height: 300px;overflow-y: scroll;">
+                                    <div class="col-lg-12 col-xs-12" style="text-align: center;">
+                                    <div class="btn btn-droppable" ng-repeat="item in list5" data-drop="true" ng-model='list5' data-jqyoui-options="{accept:'.btn-draggable:not([ng-model=list5])'}"  jqyoui-droppable="{index: {{$index}}}">
+                                    <span class="btn btn-info btn-draggable" data-drag="true" data-jqyoui-options="{revert: 'invalid'}" ng-model="list5" jqyoui-draggable="{index: {{$index}},placeholder:true,animate:false}" ng-hide="!item.deviceId">{{item.deviceId}}</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="box-footer">
-                        </div>
+                        </div> -->
                     </div>
-                </form>
+                </div>
+                <div class="box-footer">
+                </div>
             </div>
-
-
-
-        </div>
+        </form>
     </div>
 
+
+
+</div>
+</div>
+</div>
 
 </section>
 </div>
@@ -711,11 +713,6 @@ immediately after the control sidebar -->
 $('#nope').slimScroll({
     height: '200px'
 });
-
-</script>
-
-<script src="../start.js">
-
 </script>
 
 </body>

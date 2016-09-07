@@ -1,19 +1,15 @@
 
-var App = angular.module('drag-and-drop', ['ngDragDrop']);
-App.controller('oneCtrl', function($scope, $timeout) {
+var app = angular.module('mainModule', ['ngDragDrop']);
+// var app = angular.module('mainModule',[]);
+
+app.controller('myCtrl', function($scope, $http){
   $scope.list1 = [];
   $scope.list2 = [];
   $scope.list3 = [];
   $scope.list4 = [];
-
-  $scope.list5 = [
-      { 'deviceId': 'Rpi_1'},
-      { 'deviceId': 'Rpi_2'},
-      { 'deviceId': 'Rpi_3'},
-      { 'deviceId': 'I7_1'},
-      { 'deviceId': 'I7dd_2'},
-      { 'deviceId': 'Echo_1'},
-      { 'deviceId': 'Echo_2'},
-      { 'deviceId': 'Echo_3'}
-  ];
+  $scope.list5 = [];
+  $scope.name = "kihwan";
+  $http.get("/get_db").then(function(response, error){
+      $scope.list5 = response.data;
+  })
 });

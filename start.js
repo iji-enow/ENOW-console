@@ -6,6 +6,7 @@ const bodyparser = require('body-parser');
 var path = require('path');
 var MongoClient = mongo.MongoClient;
 var expressapp = express();
+var device_data = new Array();
 
 expressapp.use(bodyparser.urlencoded({extended:true}));
 expressapp.use(express.static(path.join(__dirname+"/../", 'console')));
@@ -22,7 +23,7 @@ expressapp.get('/', function(req, res){
 });
 
 expressapp.get('/get_db', function(req, res){
-	getdevicedb();
+	getdevicedb(req, res);
 	console.log("zzz111z");
 });
 
@@ -37,20 +38,22 @@ var server = expressapp.listen(expressapp.get('port'), function(){
 });
 
 
-function getdevicedb(){
-	MongoClient.connect('mongodb://52.196.199.32:9191/enow',function(err,db) {
+function getdevicedb(req, res){
+	MongoClient.connect('mongodb://52.68.183.120:9191/enow',function(err,db) {
 	        console.log("searching deviceid in db");
 			var findRestaurants = function(db, callback) {
 			   var cursor =db.collection('device').find( );
 			   cursor.each(function(err, doc) {
 			      if (doc != null) {
 			         console.dir(doc);
+					 device_data.push(doc);
 			      } else {
 			         callback();
 			      }
 			   });
 			};
 			findRestaurants(db, function() {
+				res.send(device_data)
 		        db.close();
 		    });
 	});
