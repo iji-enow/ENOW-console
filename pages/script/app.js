@@ -8,14 +8,6 @@ app.controller('myCtrl', function($scope, $http){
         {"deviceId":"dev3"},
         {"deviceId":"dev4"},
         {"deviceId":"dev5"},
-        {"deviceId":"dev5"},
-        {"deviceId":"dev5"},
-        {"deviceId":"dev5"},
-        {"deviceId":"dev5"},
-        {"deviceId":"dev5"},
-        {"deviceId":"dev5"},
-        {"deviceId":"dev5"},
-        {"deviceId":"dev5"},
         {"deviceId":"dev6"}
     ];
     $scope.name = "kihwan";
@@ -23,10 +15,6 @@ app.controller('myCtrl', function($scope, $http){
         $scope.list5 = response.data;
     })
     $scope.maplist = [
-        {"deviceId":"dev1"},
-        {"deviceId":"dev2"},
-        {"deviceId":"dev3"},
-        {"deviceId":"dev4"}
     ];
     $scope.gridsterOpts = {
         minRows: 2, // the minimum height of the grid, in rows
@@ -34,8 +22,8 @@ app.controller('myCtrl', function($scope, $http){
         columns: 6, // the width of the grid, in columns
         colWidth: 'auto', // can be an integer or 'auto'.  'auto' uses the pixel width of the element divided by 'columns'
         rowHeight: 'match', // can be an integer or 'match'.  Match uses the colWidth, giving you square widgets.
-        margins: [10, 10], // the pixel distance between each widget
-        defaultSizeX: 2, // the default width of a gridster item, if not specifed
+        margins: [50, 50], // the pixel distance between each widget
+        defaultSizeX: 1, // the default width of a gridster item, if not specifed
         defaultSizeY: 1, // the default height of a gridster item, if not specified
         mobileBreakPoint: 600, // if the screen is not wider that this, remove the grid layout and stack the items
         resizable: {

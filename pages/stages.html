@@ -448,7 +448,7 @@
                                 <div class="box-body">
                                     <div class="navbar-inner">
                                         <div class="navbar-inner" style="overflow-y:auto; max-height:275px;">
-                                            <div class="btn btn-droppable" ng-repeat="item in list5" data-drop="true" ng-model='list5' data-jqyoui-options="{accept:'.btn-draggable:not([ng-model=list5])'}"  jqyoui-droppable="{index: {{$index}}}">
+                                            <div class="btn btn-droppable" ng-repeat="item in list5 | orderBy : 'deviceId' " data-drop="true" ng-model='list5' data-jqyoui-options="{accept:'.btn-draggable:not([ng-model=list5])'}" jqyoui-droppable="{index: {{$index}}, applyFilter: 'filterIt'}">
                                                 <span class="btn btn-info btn-draggable" data-drag="true" data-jqyoui-options="{revert: 'invalid'}" ng-model="list5" jqyoui-draggable="{index: {{$index}},placeholder:true,animate:false}" ng-hide="!item.deviceId">{{item.deviceId}}</span>
                                             </div>
                                         </div>
