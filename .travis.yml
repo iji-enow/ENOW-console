@@ -1,3 +1,4 @@
+# Enable NODE.js support
 language: node_js
 node_js:
   - "6.1"
