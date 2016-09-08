@@ -50,6 +50,7 @@
     box-shadow: 4px 4px 0 0 rgba(0,0,0,0.35);
     overflow: auto;
   }
+
   </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -406,22 +407,24 @@
     </section>
     <!-- Main content -->
     <section class="content" ng-controller="myCtrl" style="position:relative;">
+
       <div class="col-lg-12 col-xs-12">
         <div class="box box-warning" style="height:800px;">
           <div class="box-header with-border">
             <h3 class="box-title">Phase RoadMap</h3>
           </div>
           <div class="col-lg-12 col-xs-12" style="height:800px;">
-
             <div gridster="gridsterOpts" data-drop="true" ng-model='maplist' data-jqyoui-options="optionsList1" jqyoui-droppable="{multiple:true}">
               <ul>
-                <li style="border: solid 1px;"gridster-item="item" ng-repeat="item in maplist">
+                <li style="border: solid 1px;"gridster-item="item" ng-repeat="item in maplist" data-toggle="tooltip" data-placement="right" title="{{item}}">
                   <div class="ddd" style="width: 100%; background: #ddd; padding: 10px 0px">Handle</div>
                   {{ item.deviceId }}
                 </li>
               </ul>
             </div>
           </div>
+        </div>
+      </div>
 
           <div id="myModal" class="modal" data-backdrop="false">
             <div class="modal-content">
@@ -436,13 +439,9 @@
                     <button type="summit" class="fa fa-refresh"></button>
                   </div>
                   <div class="box-body">
-                    <div class="navbar-inner">
                       <div class="navbar-inner" style="overflow-y:auto; max-height:275px;">
-                        <div class="btn btn-droppable" ng-repeat="item in list5" data-drop="true" ng-model='list5' data-jqyoui-options="{accept:'.btn-draggable:not([ng-model=list5])'}"  jqyoui-droppable="{index: {{$index}}}">
-                          <div class="btn btn-info btn-draggable" data-drag="true" data-jqyoui-options="{revert: 'invalid'}" ng-model="list5" jqyoui-draggable="{index: {{$index}},placeholder:true,animate:false}" ng-hide="!item.deviceId">{{item.deviceId}}</div>
-                        </div>
+                          <div class="btn btn-info btn-draggable" ng-repeat="item in list5" data-drag="true" data-jqyoui-options="{revert: 'invalid'}" ng-model="list5" jqyoui-draggable="{index: {{$index}},placeholder:true,animate:false}" ng-hide="!item.deviceId">{{item.deviceId}}</div>
                       </div>
-                    </div>
                   </div>
                   <div class="box-footer">
                   </div>
