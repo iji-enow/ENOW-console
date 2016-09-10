@@ -75,7 +75,7 @@
     cursor: pointer;
 }
 
-.flowchart-demo .aLabel {
+.aLabel {
     background-color: white;
     padding: 0.4em;
     font: 12px sans-serif;
@@ -86,10 +86,11 @@
     cursor: pointer;
 }
 
-.flowchart-demo .aLabel.jsplumb-hover {
-    background-color: #5C96BC;
+.aLabel.jsplumb-hover {
+    background-color: #111;
     color: white;
-    border: 1px solid white;
+    font: 14px sans-serif;
+    border: 10px solid white;
 }
 
 .window.jsplumb-connected {

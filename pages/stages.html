@@ -38,6 +38,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
     <script src="script/jsPlumb-2.1.7-min.js"></script>
+    <link rel="stylesheet" href="../dist/css/demo.css">
 
 
     <script scr="../start.js">
@@ -742,7 +743,7 @@ jsPlumb.ready(function () {
                 }
             } ],
             [ "Label", {
-                location: 0.1,
+                location: 0.8,
                 id: "label",
                 cssClass: "aLabel",
                 events:{
@@ -878,6 +879,7 @@ jsPlumb.ready(function () {
         var parentnode = $(this)[0].parentNode.parentNode;
         //get list of current endpoints
         var endpoints = jsPlumb.getEndpoints(parentnode);
+        console.log(endpoints);
         //remove last one
         if (endpoints.length > 0) {
             jsPlumb.deleteEndpoint(endpoints[endpoints.length - 1]);
