@@ -840,6 +840,7 @@ jsPlumb.ready(function () {
         instance.bind("click", function (conn, originalEvent) {
            // if (confirm("Delete connection from " + conn.sourceId + " to " + conn.targetId + "?"))
              //   instance.detach(conn);
+             console.log("aaaa");
             conn.toggleType("basic");
         });
 
@@ -857,14 +858,13 @@ jsPlumb.ready(function () {
     });
     var _addEndpoints = function (toId) {
             instance.addEndpoint(toId, sourceEndpoint, {
-                anchor: [0, 0.5, -1, 0],
+                anchor: "RightMiddle",
                 uuid: toId+"_source"
             });
             instance.addEndpoint(toId, targetEndpoint, {
-                anchor: [ 0.5, -0.05, 0, 1, 0, -4 ],
+                anchor: "LeftMiddle",
                 uuid: toId+"_target"
             });
-            init;
         };
     //Add additional anchor
     $('body').on("click",".button_add", function () {
@@ -883,21 +883,6 @@ jsPlumb.ready(function () {
             jsPlumb.deleteEndpoint(endpoints[endpoints.length - 1]);
         }
     });
-    var common = {
-        connector: ["Straight"],
-        anchor: ["Left", "Right"],
-        endpoint:"Dot"
-    };
-    // jsPlumb.connect({
-    //     source : "container1",
-    //     target : "container0",
-    //     paintStyle:{ strokeStyle:"lightgray", lineWidth:3 },
-    //     endpointStyle:{ fillStyle:"lightgray", outlineColor:"gray" },
-    //     overlays:[
-    //         ["Arrow" , { width:12, length:12, location:0.67 }]
-    //     ]
-    // }, common);
-
     //adds new window
     $(".button_add_window").click(function () {
         var id = "container" + $(".window").length;
