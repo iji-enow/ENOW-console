@@ -81,15 +81,16 @@
     font: 12px sans-serif;
     color: #444;
     z-index: 21;
-    border: 1px dotted gray;
-    opacity: 0.8;
+    border: 1px solid gray;
+    opacity: 0.3;
     cursor: pointer;
 }
 
 .aLabel.jsplumb-hover {
     background-color: #111;
     color: white;
-    font: 14px sans-serif;
+    opacity: 1;
+    font: 15px sans-serif;
     border: 10px solid white;
 }
 
