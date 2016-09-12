@@ -2,16 +2,12 @@
 var app = angular.module('mainModule', ['ngDragDrop','gridster']);
 // var app = angular.module('mainModule',[]);
 app.controller('myCtrl', function($scope, $http){
-    $scope.list5 = [
-    ];
     $scope.name = "kihwan";
-    $http.get("/get_db").then(function(response, error){
-        $scope.list5 = response.data;
-    })
-    $scope.maplist = [
-    ];
-
-
+    // $http.get("/get_db").then(function(response, error){
+    //     $scope.list5 = response.data;
+    // })
+    // $scope.maplist = [];
+    $scope.listofdevice = {};
 
     var changeToTree = function (arrayList) {
         Object.setPrototypeOf(arrayList, Object.prototype);
