@@ -18,15 +18,15 @@ app.controller('myCtrl', function($scope, $http){
         var rootNodes = {};
 
         var insert_incoming = function (list){
-            rootNodes.incomingPeer[list.target] = rootNodes.incomingPeer[list.target] || [];
-            rootNodes.incomingPeer[list.target].push(list.source);
+            rootNodes.incomingNode[list.target] = rootNodes.incomingNode[list.target] || [];
+            rootNodes.incomingNode[list.target].push(list.source);
         }
         var insert_outcoming = function (list){
-            rootNodes.outingPeer[list.source] = rootNodes.outingPeer[list.source] || [];
-            rootNodes.outingPeer[list.source].push(list.target);
+            rootNodes.outingNode[list.source] = rootNodes.outingNode[list.source] || [];
+            rootNodes.outingNode[list.source].push(list.target);
         }
-        rootNodes.incomingPeer = rootNodes.incomingPeer || {};
-        rootNodes.outingPeer = rootNodes.outingPeer || {};
+        rootNodes.incomingNode = rootNodes.incomingNode || {};
+        rootNodes.outingNode = rootNodes.outingNode || {};
         rootNodes.isInput = false;
         rootNodes.isOutput = false;
         rootNodes.devices = rootNodes.devices || {};
@@ -35,9 +35,10 @@ app.controller('myCtrl', function($scope, $http){
             insert_incoming(arrayList[i]);
             insert_outcoming(arrayList[i]);
         }
+
+        return rootNodes;
     };
     $scope.list = [];
-    var tree = treeModel($scope.list);
+    var tree = changeToTree($scope.list);
     $scope.tree = JSON.stringify(tree, null, '   ');
-    return rootNodes;
 });

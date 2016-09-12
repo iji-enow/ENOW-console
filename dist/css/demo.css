@@ -82,7 +82,7 @@
     color: #444;
     z-index: 21;
     border: 1px solid gray;
-    opacity: 0.3;
+    opacity: 0.01;
     cursor: pointer;
 }
 

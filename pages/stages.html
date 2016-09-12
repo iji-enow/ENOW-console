@@ -754,7 +754,16 @@ var instance = window.jsp = jsPlumb.getInstance({
             id: "label",
             cssClass: "aLabel",
             events:{
-                tap:function() { alert("hey"); }
+                tap:function() {
+                    var ask = confirm("Delete this connection?");
+                    if(ask==true){
+                            var connection = $(this)[0].component;
+                            instance.detach(connection);
+                    }
+                    else{
+                        console.log("no");
+                    }
+                }
             }
         }]
     ],
@@ -762,8 +771,6 @@ var instance = window.jsp = jsPlumb.getInstance({
 });
 var basicType = {
     connector: "StateMachine",
-    paintStyle: { strokeStyle: "red", lineWidth: 4 },
-    hoverPaintStyle: { strokeStyle: "blue" },
     overlays: [
         "Arrow"
     ]
@@ -794,6 +801,7 @@ sourceEndpoint = {
         lineWidth: 3
     },
     isSource: true,
+    maxConnections: 5,
     connector: [ "Flowchart", { stub: [40, 60], gap: 10, cornerRadius: 5, alwaysRespectStubs: true } ],
     connectorStyle: connectorPaintStyle,
     hoverPaintStyle: endpointHoverStyle,
@@ -811,9 +819,14 @@ sourceEndpoint = {
 // the definition of target endpoints (will appear when the user drags a connection)
 targetEndpoint = {
     endpoint: "Dot",
-    paintStyle: { fillStyle: "#7AB02C", radius: 11 },
+    paintStyle: {
+        fillStyle: "#7AB02C",
+            strokeStyle: "#7AB02C",
+            radius: 7,
+            lineWidth: 3
+},
     hoverPaintStyle: endpointHoverStyle,
-    maxConnections: -1,
+    maxConnections: 5,
     dropOptions: { hoverClass: "hover", activeClass: "active" },
     isTarget: true,
     overlays: [
@@ -877,14 +890,6 @@ $('#test').on("click",".button_add", function () {
 
 //Remove anchor
 $('body').on("click",".button_remove", function () {
-    var parentnode = $(this)[0].parentNode.parentNode;
-    //get list of current endpoints
-    var endpoints = jsPlumb.getEndpoints(parentnode);
-    console.log(endpoints);
-    //remove last one
-    if (endpoints.length > 0) {
-        jsPlumb.deleteEndpoint(endpoints[endpoints.length - 1]);
-    }
 });
 //adds new window
 $('#test').on("click",".tog_button", function () {
