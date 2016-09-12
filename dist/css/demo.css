@@ -91,7 +91,7 @@
     color: white;
     opacity: 1;
     font: 15px sans-serif;
-    border: 10px solid white;
+    border: 1px solid black;
 }
 
 .window.jsplumb-connected {
