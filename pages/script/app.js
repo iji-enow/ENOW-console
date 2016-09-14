@@ -12,7 +12,8 @@ app.controller('myCtrl', function($scope, $http){
     $scope.listOfLastNode = [];
     $scope.list = [];
     $scope.tree;
-
+    $scope.mapIds;
+    
     $scope.changeToTree = function (arrayList) {
         Object.setPrototypeOf(arrayList, Object.prototype);
         var rootNodes = {};
@@ -34,7 +35,7 @@ app.controller('myCtrl', function($scope, $http){
         rootNodes.outingNode = rootNodes.outingNode || {};
         rootNodes.isInput = false;
         rootNodes.isOutput = false;
-        rootNodes.mapIds = rootNodes.mapIds || {};
+        rootNodes.mapIds = this.mapIds || {};
 
         for(var i=0; i<arrayList.length; ++i){
             insert_incoming(arrayList[i]);

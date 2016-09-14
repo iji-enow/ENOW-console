@@ -494,10 +494,10 @@
                         <div class="modal-body" style="height:500px; margin-left:20px;margin-right:20px;">
                             <div id="editor"></div>
                             <div class="row">
-                                
                             </div>
                         </div>
                         <div class="modal-footer">
+                            <input type="text" id="parameters" class="form-control" placeholder="Enter Parameters Ex) -p, -num ..." style="margin-bottom:5px;">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                             <button type="button" class="btn btn-default" id="saveCode">Save</button>
                         </div>
@@ -914,6 +914,7 @@ $("#run").click(function(){
     angular.element(document.getElementById('jsonToScope')).scope().listOfInitNode = initNode;
     angular.element(document.getElementById('jsonToScope')).scope().listOfLastNode = lastNode;
     angular.element(document.getElementById('jsonToScope')).scope().list = connectInfo;
+    angular.element(document.getElementById('jsonToScope')).scope().mapIds = deviceInfo;
     angular.element(document.getElementById('jsonToScope')).scope().changeToTree(connectInfo);
     console.log(angular.element(document.getElementById('jsonToScope')).scope().tree);
     // angular.element(document.getElementById('jsonToScope')).scope().$apply();
@@ -927,35 +928,38 @@ $("#setting").click(function(){
 $('#test').on("click",".tog_button", function () {
     setTimeout(function () {
         instance.repaintEverything();
-        console.log("cc");
     }, 801);
 });
 $('#test').on("click","#codeEditor", function () {
     var node = $(this)[0].parentNode.parentNode.id;
-    // console.log(node);
-    console.log(JSON.stringify(deviceInfo,null,'   '));
     currentNode = node;
+    code="";
+    $('#parameters').val(deviceInfo[currentNode.substring(6)]['parameter']);
+    setTimeout(function () {
+        editor.getSession().setValue(code);
+        editor.resize();
+    }, 300);
     if(deviceInfo[currentNode.substring(6)]['code']!==undefined){
         code = deviceInfo[currentNode.substring(6)]['code'];
-
-        console.log(code);
 
         setTimeout(function () {
             editor.getSession().setValue(code);
             editor.resize();
-        }, 500);
+        }, 300);
     }
     $('#myModal').modal('show');
-    // editor.renderer.updateFull();
 
 });
 $("#saveCode").click(function(){
-    console.log(currentNode);
     code = editor.getSession().getValue();
     deviceInfo[currentNode.substring(6)]['code'] = code;
-    console.log(JSON.stringify(deviceInfo,null,'   '));
-    editor.setValue("");
-    code = "";
+    editor.setValue(code);
+    var temp = $('#parameters').val().split(",");
+    deviceInfo[currentNode.substring(6)]['parameter']=[];
+    for (var i = 0; i< temp.length ; ++i){
+        deviceInfo[currentNode.substring(6)]['parameter'].push(temp[i]);
+    }
+
 });
 
 $(".button_add_window").click(function () {
@@ -967,7 +971,8 @@ $(".button_add_window").click(function () {
 
     var temp = deviceInfo[_id.substring(6)] = new Object();
     temp["deviceId"] = _id;
-
+    deviceInfo[_id.substring(6)]['parameter'] = new Array();
+    deviceInfo[_id.substring(6)]['code'] = "";
     $(instance.getSelector("#"+_id)).draggable({
         containment:'parent',
         drag: function(e){
