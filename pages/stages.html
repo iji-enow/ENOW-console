@@ -440,7 +440,7 @@
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
-        <section id="focal" class="content-header">
+        <section class="content-header">
             <h1>
                 Recipes
                 <small>Preview page</small>
@@ -453,16 +453,15 @@
         <!-- Main content -->
         <section class="content" ng-controller="myCtrl">
             <input name="sendToAngular" type="hidden" id="jsonToScope" ng-model="list" ng-change="list"></input>
-            {{tree}}
             <div class="col-lg-12 col-xs-12">
                 <div class="box box-warning" style="height:800px;">
                     <div class="box-header with-border">
                         <h2 class="box-title" style="margin-top:10px;">RoadMap</h2>
-                        <button id="setting" style="height:30px;" class="fa fa-map pull-right"></button>
-                        <button id="run" class="btn btn-info btn-flat pull-right">MakeDB</button>
-                        <div class="button_add_window btn btn-info btn-flat pull-right">Add</div>
+                        <button id="openDeviceList" style="height:34px;" class="fa fa-list pull-right" data-toggle="tooltip" title="Show list of available devices"></button>
+                        <button id="run" class="btn btn-info btn-flat pull-right" data-toggle="tooltip" title="Save Roadmap to database">MakeDB</button>
+                        <button id="addDevice" class="btn btn-info btn-flat pull-right" data-toggle="tooltip" title="Add custom device">Add</button>
                     </div>
-                    <div id="test" class="map" style="height:800px;">
+                    <div id="test" class="map" style="height:750px;">
                         <div class="canvas">
                             <div class="window box box-default collapsed-box" id="device0" style="display:none;">
                                 <div class="box-header with-border">
@@ -478,7 +477,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
 
@@ -493,8 +491,6 @@
                         </div>
                         <div class="modal-body" style="height:500px; margin-left:20px;margin-right:20px;">
                             <div id="editor"></div>
-                            <div class="row">
-                            </div>
                         </div>
                         <div class="modal-footer">
                             <input type="text" id="parameters" class="form-control" placeholder="Enter Parameters Ex) -p, -num ..." style="margin-bottom:5px;">
@@ -728,6 +724,10 @@
 <script>
 
 
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+});
+
 var instance = window.jsp = jsPlumb.getInstance({
     // default drag options
     DragOptions: { cursor: 'pointer', zIndex: 2000 },
@@ -833,15 +833,6 @@ instance.batch(function () {
     instance.bind("connection", function (connInfo, originalEvent) {
         init(connInfo.connection);
     });
-
-    // make all the window divs draggable
-    // THIS DEMO ONLY USES getSelector FOR CONVENIENCE. Use your library's appropriate selector
-    // method, or document.querySelectorAll:
-    // jsPlumb.draggable(document.querySelectorAll(".window"), { grid: [20, 20] });
-
-    //
-    // listen for clicks on connections, and offer to delete connections on click.
-    //
     instance.bind("click", function (conn, originalEvent) {
         // if (confirm("Delete connection from " + conn.sourceId + " to " + conn.targetId + "?"))
         //   instance.detach(conn);
@@ -875,12 +866,6 @@ var _addEndpoints = function (toId) {
         uuid: toId+"_target"
     });
 };
-//Add additional anchor
-// $('#test').on("click",".button_add", function () {
-//     var parentnode = $(this)[0].parentNode.parentNode.parentNode;
-//     console.log(parentnode.id);
-//     _addEndpoints(parentnode.id);
-// });
 
 var connectInfo;
 var devices;
@@ -895,7 +880,6 @@ $("#run").click(function(){
             var temp = new Object();
             temp["source"] = value['sourceId'].substring(6);
             temp["target"] = value['targetId'].substring(6);
-            // console.log(value['sourceId'].substring(6)+" -> "+value['targetId'].substring(6));
             connectInfo.push(temp);
         }
     )
@@ -905,10 +889,10 @@ $("#run").click(function(){
     for(var i = 1; i < n.length; ++i){
         // console.log("asdf"+instance.getEndpoints($($('.window')[i]))[1].connections);
         if(!instance.getEndpoints($($('.window')[i]))[1].connections[0]){
-            initNode.push(i);
+            initNode.push(i.toString());
         }
         if(!instance.getEndpoints($($('.window')[i]))[0].connections[0]){
-            lastNode.push(i);
+            lastNode.push(i.toString());
         }
     }
     angular.element(document.getElementById('jsonToScope')).scope().listOfInitNode = initNode;
@@ -922,7 +906,7 @@ $("#run").click(function(){
 
 
 
-$("#setting").click(function(){
+$("#openDeviceList").click(function(){
 });
 
 $('#test').on("click",".tog_button", function () {
@@ -962,7 +946,7 @@ $("#saveCode").click(function(){
 
 });
 
-$(".button_add_window").click(function () {
+$("#addDevice").click(function () {
     var _id = "Device" + $(".window").length;
     //create new window and add it to the body
     var newnode = $('<div class="window box box-default collapsed-box" id="' + _id + '" >').appendTo("#test").html($(("#device0"))[0].innerHTML);

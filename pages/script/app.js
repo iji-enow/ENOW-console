@@ -13,7 +13,7 @@ app.controller('myCtrl', function($scope, $http){
     $scope.list = [];
     $scope.tree;
     $scope.mapIds;
-    
+
     $scope.changeToTree = function (arrayList) {
         Object.setPrototypeOf(arrayList, Object.prototype);
         var rootNodes = {};
@@ -27,8 +27,8 @@ app.controller('myCtrl', function($scope, $http){
             rootNodes.outingNode[list.source].push(list.target);
         }
 
-        rootNodes.roadMapId = 1;
-        rootNodes.clientId = 1;
+        rootNodes.roadMapId = "1";
+        rootNodes.clientId = "1";
         rootNodes.initNode = this.listOfInitNode;
         rootNodes.lastNode = this.listOfLastNode;
         rootNodes.incomingNode = rootNodes.incomingNode || {};
@@ -36,7 +36,6 @@ app.controller('myCtrl', function($scope, $http){
         rootNodes.isInput = false;
         rootNodes.isOutput = false;
         rootNodes.mapIds = this.mapIds || {};
-
         for(var i=0; i<arrayList.length; ++i){
             insert_incoming(arrayList[i]);
             insert_outcoming(arrayList[i]);
