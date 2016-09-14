@@ -17,8 +17,8 @@
     <!-- AdminLTE Skins. Choose a skin from the css/skins
     folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="../dist/css/skins/_all-skins.min.css">
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="../dist/js/jquery.panzoom.js"></script>
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.0/themes/smoothness/jquery-ui.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.0/jquery-ui.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
@@ -43,24 +43,24 @@
     .btn-droppable { width: 100%; height: 100%;}
     .btn-draggable { width: 100%; }
     .error {
-    width:200px;
-    height:20px;
-    height:auto;
-    position:absolute;
-    left:50%;
-    margin-left:-100px;
-    bottom:50%;
-    background-color: #383838;
-    color: #F0F0F0;
-    font-family: Calibri;
-    font-size: 20px;
-    padding:10px;
-    text-align:center;
-    border-radius: 2px;
-    -webkit-box-shadow: 0px 0px 24px -1px rgba(56, 56, 56, 1);
-    -moz-box-shadow: 0px 0px 24px -1px rgba(56, 56, 56, 1);
-    box-shadow: 0px 0px 24px -1px rgba(56, 56, 56, 1);
-}
+        width:200px;
+        height:20px;
+        height:auto;
+        position:absolute;
+        left:50%;
+        margin-left:-100px;
+        bottom:50%;
+        background-color: #383838;
+        color: #F0F0F0;
+        font-family: Calibri;
+        font-size: 20px;
+        padding:10px;
+        text-align:center;
+        border-radius: 2px;
+        -webkit-box-shadow: 0px 0px 24px -1px rgba(56, 56, 56, 1);
+        -moz-box-shadow: 0px 0px 24px -1px rgba(56, 56, 56, 1);
+        box-shadow: 0px 0px 24px -1px rgba(56, 56, 56, 1);
+    }
     .modal{
         border: 2px solid #ebedef;
         border-radius: 10px;
@@ -100,19 +100,6 @@
     .window:hover {
         box-shadow: 2px 2px 19px #AAAAAA;
         cursor: pointer;
-    }
-    .button_add, .button_code, .button_remove, .button {
-        background-color: deepskyblue;
-        border: 1px solid #346789;
-
-        box-shadow: 2px 2px 5px #AAAAAA;
-        text-align: center;
-        border: 1px solid;
-    }
-    .button_container {
-        margin: 5px;
-        display:inherit;
-        background-color: #aaaaaa
     }
     </style>
 </head>
@@ -472,7 +459,7 @@
                         <button id="addDevice" class="btn btn-info btn-flat pull-right" data-toggle="tooltip" title="Add custom device">Add</button>
                     </div>
                     <div id="test" class="map" style="height:750px;">
-                        <div class="canvas">
+                        <!-- <div class="canvas"> -->
                             <div class="window box box-default collapsed-box" id="device0" style="display:none;">
                                 <div class="box-header with-border">
                                     <h3 class="box-title" id="devname">Device</h3>
@@ -482,10 +469,11 @@
                                     </div>
                                 </div>
                                 <div class="box-body">
-                                    <button type="button" id="codeEditor">CodeEdit</button>
+
+                                    <button id="codeEditor" class="btn btn-info btn-flat pull-right" data-toggle="tooltip" title="Add custom device">Edit code</button>
                                 </div>
                             </div>
-                        </div>
+                        <!-- </div> -->
                     </div>
                 </div>
             </div>
@@ -924,6 +912,15 @@ $('#test').on("click",".tog_button", function () {
         instance.repaintEverything();
     }, 801);
 });
+
+$('#test').on("mousewheel", function (e) {
+    if(e.originalEvent.wheelDelta>0){
+        console.log("dd");
+    }else{
+        console.log("zz");
+    }
+});
+
 $('#test').on("click","#codeEditor", function () {
     var node = $(this)[0].parentNode.parentNode.id;
     currentNode = node;
@@ -942,8 +939,8 @@ $('#test').on("click","#codeEditor", function () {
         }, 300);
     }
     $('#myModal').modal('show');
-
 });
+
 $("#saveCode").click(function(){
     code = editor.getSession().getValue();
     deviceInfo[currentNode.substring(6)]['code'] = code;
@@ -956,7 +953,7 @@ $("#saveCode").click(function(){
     $('#myModal').append(toast);
     toast.stop().fadeIn(400).delay(2000).fadeOut(400); //fade out after 2 seconds
 });
-    var toast = $('<div class="error" style="display:none">Code Saved..</div>');
+var toast = $('<div class="error" style="display:none">Code Saved..</div>');
 $("#addDevice").click(function () {
     var _id = "Device" + $(".window").length;
     //create new window and add it to the body
@@ -970,6 +967,7 @@ $("#addDevice").click(function () {
     deviceInfo[_id.substring(6)]['code'] = "def eventHandler(event, context, callback):\n    ";
     $(instance.getSelector("#"+_id)).draggable({
         containment:'parent',
+        grid:[20,20],
         drag: function(e){
             instance.repaintEverything();
         },
@@ -977,10 +975,10 @@ $("#addDevice").click(function () {
             instance.repaintEverything();
         }
     });
-
 });
-jsPlumb.fire("jsPlumbDemoLoaded", instance);
 
+
+jsPlumb.fire("jsPlumbDemoLoaded", instance);
 var code="def eventHandler(event, context, callback):\n    ";
 var editor = ace.edit("editor");
 editor.setTheme("ace/theme/terminal");
