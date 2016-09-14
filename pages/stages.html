@@ -26,9 +26,6 @@
 
     <script src="script/angular-dragdrop.min.js"></script>
     <script src="script/app.js"></script>
-    <link rel="stylesheet" href="bower_components/angular-gridster/dist/angular-gridster.min.css"/>
-    <script src="bower_components/javascript-detect-element-resize/jquery.resize.js"></script>
-    <script src="bower_components/angular-gridster/dist/angular-gridster.min.js"></script>
 
 
     <!-- jsplumb -->
@@ -455,7 +452,7 @@
         </section>
         <!-- Main content -->
         <section class="content" ng-controller="myCtrl">
-            <input name="sendToAngular" id="jsonToScope" ng-model="list" ng-change="list"></input>
+            <input name="sendToAngular" type="hidden" id="jsonToScope" ng-model="list" ng-change="list"></input>
             {{tree}}
             <div class="col-lg-12 col-xs-12">
                 <div class="box box-warning" style="height:800px;">
@@ -469,18 +466,14 @@
                         <div class="canvas">
                             <div class="window box box-default collapsed-box" id="device0" style="display:none;">
                                 <div class="box-header with-border">
-                                    <div style="overflow:hidden;">
-                                        <h3 class="box-title" id="devname">Device</h3>
-                                    </div>
+                                    <h3 class="box-title" id="devname">Device</h3>
                                     <div class="box-tools pull-right">
                                         <button type="button" class="tog_button" data-widget="collapse"><i class="fa fa-plus"></i>
                                         </button>
                                     </div>
                                 </div>
                                 <div class="box-body">
-                                    <div class="button_container">
-                                        <div class="button_code">CodeEdit</div>
-                                    </div>
+                                    <button type="button" id="codeEditor">CodeEdit</button>
                                 </div>
                             </div>
                         </div>
@@ -489,16 +482,27 @@
                 </div>
             </div>
 
-            <div class="modal fade" id="myModal" style="">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">CodeEditor</h4>
+            <div id="myModal" class="modal fade">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Code Editor</h4>
+                        </div>
+                        <div class="modal-body" style="height:500px; margin-left:20px;margin-right:20px;">
+                            <div id="editor"></div>
+                            <div class="row">
+                                
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-default" id="saveCode">Save</button>
+                        </div>
                     </div>
-                    <div class="modal-body">
-                        <div id="editor"></div>
-                    </div>
-                    <div class="modal-footer">
-                    </div>
+
                 </div>
             </div>
 
@@ -856,11 +860,11 @@ instance.batch(function () {
         console.log("connection " + params.connection.id + " was moved");
     });
 });
-var dynamicAnchors = [ [ 1, 0.5, 1, 0 ],[ 0.5, 0, 0, -1 ],
-[ 0.5, 1, 0, 1 ], [ 0, 0.5, -1, 0 ] ];
+var dynamicAnchors = [ [ 1, 0.5, 1, 0 ],[ 0.3, 0, 0, -1 ],
+[ 0.3, 1, 0, 1 ], [ 0, 0.5, -1, 0 ] ];
 
-var dynamicAnchors2 = [  [ 0, 0.5, -1, 0 ],[ 1, 0.5, 1, 0 ], [ 0.5, 0, 0, -1 ],
-[ 0.5, 1, 0, 1 ] ];
+var dynamicAnchors2 = [  [ 0, 0.5, -1, 0 ],[ 1, 0.5, 1, 0 ], [ 0.7, 0, 0, -1 ],
+[ 0.7, 1, 0, 1 ] ];
 var _addEndpoints = function (toId) {
     instance.addEndpoint(toId, sourceEndpoint, {
         anchor: dynamicAnchors,
@@ -880,7 +884,9 @@ var _addEndpoints = function (toId) {
 
 var connectInfo;
 var devices;
+var currentNode;
 var print;
+var deviceInfo={};
 $("#run").click(function(){
     connectInfo=[];
     devices=$(".window").length-1;
@@ -889,10 +895,24 @@ $("#run").click(function(){
             var temp = new Object();
             temp["source"] = value['sourceId'].substring(6);
             temp["target"] = value['targetId'].substring(6);
-            console.log(value['sourceId'].substring(6)+" -> "+value['targetId'].substring(6));
+            // console.log(value['sourceId'].substring(6)+" -> "+value['targetId'].substring(6));
             connectInfo.push(temp);
         }
     )
+    var n = $('.window');
+    var initNode = [];
+    var lastNode = [];
+    for(var i = 1; i < n.length; ++i){
+        // console.log("asdf"+instance.getEndpoints($($('.window')[i]))[1].connections);
+        if(!instance.getEndpoints($($('.window')[i]))[1].connections[0]){
+            initNode.push(i);
+        }
+        if(!instance.getEndpoints($($('.window')[i]))[0].connections[0]){
+            lastNode.push(i);
+        }
+    }
+    angular.element(document.getElementById('jsonToScope')).scope().listOfInitNode = initNode;
+    angular.element(document.getElementById('jsonToScope')).scope().listOfLastNode = lastNode;
     angular.element(document.getElementById('jsonToScope')).scope().list = connectInfo;
     angular.element(document.getElementById('jsonToScope')).scope().changeToTree(connectInfo);
     console.log(angular.element(document.getElementById('jsonToScope')).scope().tree);
@@ -910,10 +930,32 @@ $('#test').on("click",".tog_button", function () {
         console.log("cc");
     }, 801);
 });
-$('#test').on("click",".button_code", function () {
-    var node = $(this)[0].parentNode.parentNode.parentNode;
+$('#test').on("click","#codeEditor", function () {
+    var node = $(this)[0].parentNode.parentNode.id;
+    // console.log(node);
+    console.log(JSON.stringify(deviceInfo,null,'   '));
+    currentNode = node;
+    if(deviceInfo[currentNode.substring(6)]['code']!==undefined){
+        code = deviceInfo[currentNode.substring(6)]['code'];
+
+        console.log(code);
+
+        setTimeout(function () {
+            editor.getSession().setValue(code);
+            editor.resize();
+        }, 500);
+    }
     $('#myModal').modal('show');
-    console.log(node);
+    // editor.renderer.updateFull();
+
+});
+$("#saveCode").click(function(){
+    console.log(currentNode);
+    code = editor.getSession().getValue();
+    deviceInfo[currentNode.substring(6)]['code'] = code;
+    console.log(JSON.stringify(deviceInfo,null,'   '));
+    editor.setValue("");
+    code = "";
 });
 
 $(".button_add_window").click(function () {
@@ -922,9 +964,16 @@ $(".button_add_window").click(function () {
     var newnode = $('<div class="window box box-default collapsed-box" id="' + _id + '" >').appendTo("#test").html($(("#device0"))[0].innerHTML);
     newnode.find('h3').text(_id);
     _addEndpoints(newnode);
+
+    var temp = deviceInfo[_id.substring(6)] = new Object();
+    temp["deviceId"] = _id;
+
     $(instance.getSelector("#"+_id)).draggable({
         containment:'parent',
         drag: function(e){
+            instance.repaintEverything();
+        },
+        stop: function(e){
             instance.repaintEverything();
         }
     });
@@ -932,14 +981,12 @@ $(".button_add_window").click(function () {
 });
 jsPlumb.fire("jsPlumbDemoLoaded", instance);
 
+var code="";
 var editor = ace.edit("editor");
-var code="aaa";
 editor.setTheme("ace/theme/terminal");
 editor.getSession().setMode("ace/mode/python");
-editor.getSession().on("change", function () {
-    code = editor.getSession().getValue();
-});
-
+editor.$blockScrolling = Infinity;
+document.getElementById('editor').style.fontSize='18px';
 </script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 
-var app = angular.module('mainModule', ['ngDragDrop','gridster']);
+var app = angular.module('mainModule', ['ngDragDrop']);
 // var app = angular.module('mainModule',[]);
 app.controller('myCtrl', function($scope, $http){
     $scope.name = "kihwan";
@@ -7,7 +7,9 @@ app.controller('myCtrl', function($scope, $http){
     //     $scope.list5 = response.data;
     // })
     // $scope.maplist = [];
-    $scope.listofdevice = {};
+    $scope.listOfDevice = {};
+    $scope.listOfInitNode = [];
+    $scope.listOfLastNode = [];
     $scope.list = [];
     $scope.tree;
 
@@ -26,8 +28,8 @@ app.controller('myCtrl', function($scope, $http){
 
         rootNodes.roadMapId = 1;
         rootNodes.clientId = 1;
-        rootNodes.initNode = rootNodes.initNode || [];
-        rootNodes.lastNode = rootNodes.lastNode || [];
+        rootNodes.initNode = this.listOfInitNode;
+        rootNodes.lastNode = this.listOfLastNode;
         rootNodes.incomingNode = rootNodes.incomingNode || {};
         rootNodes.outingNode = rootNodes.outingNode || {};
         rootNodes.isInput = false;
@@ -39,9 +41,6 @@ app.controller('myCtrl', function($scope, $http){
             insert_outcoming(arrayList[i]);
         }
         $scope.tree = JSON.stringify(rootNodes, null, '   ');
-        console.log("asdf"+$scope.tree);
         return rootNodes;
     };
-    // var tree = $scope.changeToTree($scope.list);
-    // $scope.tree = JSON.stringify(tree, null, '   ');
 });
