@@ -8,8 +8,10 @@ app.controller('myCtrl', function($scope, $http){
     // })
     // $scope.maplist = [];
     $scope.listofdevice = {};
+    $scope.list = [];
+    $scope.tree;
 
-    var changeToTree = function (arrayList) {
+    $scope.changeToTree = function (arrayList) {
         Object.setPrototypeOf(arrayList, Object.prototype);
         var rootNodes = {};
 
@@ -21,20 +23,25 @@ app.controller('myCtrl', function($scope, $http){
             rootNodes.outingNode[list.source] = rootNodes.outingNode[list.source] || [];
             rootNodes.outingNode[list.source].push(list.target);
         }
+
+        rootNodes.roadMapId = 1;
+        rootNodes.clientId = 1;
+        rootNodes.initNode = rootNodes.initNode || [];
+        rootNodes.lastNode = rootNodes.lastNode || [];
         rootNodes.incomingNode = rootNodes.incomingNode || {};
         rootNodes.outingNode = rootNodes.outingNode || {};
         rootNodes.isInput = false;
         rootNodes.isOutput = false;
-        rootNodes.devices = rootNodes.devices || {};
+        rootNodes.mapIds = rootNodes.mapIds || {};
 
         for(var i=0; i<arrayList.length; ++i){
             insert_incoming(arrayList[i]);
             insert_outcoming(arrayList[i]);
         }
-
+        $scope.tree = JSON.stringify(rootNodes, null, '   ');
+        console.log("asdf"+$scope.tree);
         return rootNodes;
     };
-    $scope.list = [];
-    var tree = changeToTree($scope.list);
-    $scope.tree = JSON.stringify(tree, null, '   ');
+    // var tree = $scope.changeToTree($scope.list);
+    // $scope.tree = JSON.stringify(tree, null, '   ');
 });

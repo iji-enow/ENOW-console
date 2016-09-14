@@ -1,710 +1,711 @@
 <!DOCTYPE html>
 <html ng-app="mainModule">
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>ENOW | Stages</title>
-  <!-- Tell the browser to be responsive to screen width -->
-  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-  <!-- Bootstrap 3.3.6 -->
-  <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="../dist/css/AdminLTE.min.css">
-  <!-- AdminLTE Skins. Choose a skin from the css/skins
-  folder instead of downloading all of them to reduce the load. -->
-  <link rel="stylesheet" href="../dist/css/skins/_all-skins.min.css">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>ENOW | Stages</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.6 -->
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="../dist/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+    folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="../dist/css/skins/_all-skins.min.css">
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.0/themes/smoothness/jquery-ui.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.0/jquery-ui.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
-  <!-- <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap.min.css" rel="stylesheet"> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.0/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.0/jquery-ui.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+    <!-- <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap.min.css" rel="stylesheet"> -->
 
-  <script src="script/angular-dragdrop.min.js"></script>
-  <script src="script/app.js"></script>
-  <link rel="stylesheet" href="bower_components/angular-gridster/dist/angular-gridster.min.css"/>
-  <script src="bower_components/javascript-detect-element-resize/jquery.resize.js"></script>
-  <script src="bower_components/angular-gridster/dist/angular-gridster.min.js"></script>
-
-
-  <!-- jsplumb -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
-  <script src="script/jsPlumb-2.1.7-min.js"></script>
-  <link rel="stylesheet" href="../dist/css/demo.css">
-
-  <script src="texteditor/ace-builds/src-noconflict/ace.js" type="text/javascript"></script>
-
-  <script scr="../start.js"></script>
+    <script src="script/angular-dragdrop.min.js"></script>
+    <script src="script/app.js"></script>
+    <link rel="stylesheet" href="bower_components/angular-gridster/dist/angular-gridster.min.css"/>
+    <script src="bower_components/javascript-detect-element-resize/jquery.resize.js"></script>
+    <script src="bower_components/angular-gridster/dist/angular-gridster.min.js"></script>
 
 
-  <style>
-  .thumbnail { height: 280px !important; }
-  .btn-droppable { width: 100%; height: 100%;}
-  .btn-draggable { width: 100%; }
-  .modal{
-    border: 2px solid #ebedef;
-    border-radius: 10px;
-    box-shadow: 4px 4px 0 0 rgba(0,0,0,0.35);
-    overflow: auto;
-  }
-  #editor {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-  }
-  #diagramContainer {
-    padding: 20px;
-    width:100%; height: 100%;
-    border: 1px solid gray;
-  }
-  .map{
-    background-repeat: repeat;
-    background-image: url(../dist/img/grid.png);
-  }
-  .item {
-    height:8px; width: 8px;
-    border: 1px solid blue;
-    float: left;
-  }
-  .window {
-    background-color: #EEEEEF;
-    border: 1px solid #346789;
-    border-radius: 0.5em;
-    box-shadow: 2px 2px 5px #AAAAAA;
-    color: black;
-    position: absolute;
-    width: 16em;
-  }
-  .window:hover {
-    box-shadow: 2px 2px 19px #AAAAAA;
-    cursor: pointer;
-  }
-  .button_add, .button_code, .button_remove, .button {
-    background-color: deepskyblue;
-    border: 1px solid #346789;
+    <!-- jsplumb -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+    <script src="script/jsPlumb-2.1.7-min.js"></script>
+    <link rel="stylesheet" href="../dist/css/demo.css">
 
-    box-shadow: 2px 2px 5px #AAAAAA;
-    text-align: center;
-    border: 1px solid;
-  }
-  .button_container {
-    margin: 5px;
-    display:inherit;
-    background-color: #aaaaaa
-  }
-  </style>
+    <script src="texteditor/ace-builds/src-noconflict/ace.js" type="text/javascript"></script>
+
+    <script scr="../start.js"></script>
+
+
+    <style>
+    .thumbnail { height: 280px !important; }
+    .btn-droppable { width: 100%; height: 100%;}
+    .btn-draggable { width: 100%; }
+    .modal{
+        border: 2px solid #ebedef;
+        border-radius: 10px;
+        box-shadow: 4px 4px 0 0 rgba(0,0,0,0.35);
+        overflow: auto;
+    }
+    #editor {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    }
+    #diagramContainer {
+        padding: 20px;
+        width:100%; height: 100%;
+        border: 1px solid gray;
+    }
+    .map{
+        background-repeat: repeat;
+        background-image: url(../dist/img/grid.png);
+    }
+    .item {
+        height:8px; width: 8px;
+        border: 1px solid blue;
+        float: left;
+    }
+    .window {
+        background-color: #EEEEEF;
+        border: 1px solid #346789;
+        border-radius: 0.5em;
+        box-shadow: 2px 2px 5px #AAAAAA;
+        color: black;
+        position: absolute;
+        width: 16em;
+    }
+    .window:hover {
+        box-shadow: 2px 2px 19px #AAAAAA;
+        cursor: pointer;
+    }
+    .button_add, .button_code, .button_remove, .button {
+        background-color: deepskyblue;
+        border: 1px solid #346789;
+
+        box-shadow: 2px 2px 5px #AAAAAA;
+        text-align: center;
+        border: 1px solid;
+    }
+    .button_container {
+        margin: 5px;
+        display:inherit;
+        background-color: #aaaaaa
+    }
+    </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
-  <header class="main-header">
-    <!-- Logo -->
-    <a href="../index.html" class="logo">
-      <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini"><b>E</b>NOW</span>
-      <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg"><b>E</b>NOW</span>
-    </a>
-    <!-- Header Navbar: style can be found in header.less -->
-    <nav class="navbar navbar-static-top">
-      <!-- Sidebar toggle button-->
-      <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </a>
-
-      <div class="navbar-custom-menu">
-        <ul class="nav navbar-nav">
-          <!-- Messages: style can be found in dropdown.less-->
-          <li class="dropdown messages-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <i class="fa fa-envelope-o"></i>
-              <span class="label label-success">4</span>
+    <header class="main-header">
+        <!-- Logo -->
+        <a href="../index.html" class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <span class="logo-mini"><b>E</b>NOW</span>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg"><b>E</b>NOW</span>
+        </a>
+        <!-- Header Navbar: style can be found in header.less -->
+        <nav class="navbar navbar-static-top">
+            <!-- Sidebar toggle button-->
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
             </a>
-            <ul class="dropdown-menu">
-              <li class="header">You have 4 messages</li>
-              <li>
-                <!-- inner menu: contains the actual data -->
-                <ul class="menu">
-                  <li><!-- start message -->
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="../dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Support Team
-                        <small><i class="fa fa-clock-o"></i> 5 mins</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-                  <!-- end message -->
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="../dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        AdminLTE Design Team
-                        <small><i class="fa fa-clock-o"></i> 2 hours</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="../dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Developers
-                        <small><i class="fa fa-clock-o"></i> Today</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="../dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Sales Department
-                        <small><i class="fa fa-clock-o"></i> Yesterday</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <div class="pull-left">
-                        <img src="../dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
-                      </div>
-                      <h4>
-                        Reviewers
-                        <small><i class="fa fa-clock-o"></i> 2 days</small>
-                      </h4>
-                      <p>Why not buy a new awesome theme?</p>
-                    </a>
-                  </li>
+
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <!-- Messages: style can be found in dropdown.less-->
+                    <li class="dropdown messages-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-envelope-o"></i>
+                            <span class="label label-success">4</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="header">You have 4 messages</li>
+                            <li>
+                                <!-- inner menu: contains the actual data -->
+                                <ul class="menu">
+                                    <li><!-- start message -->
+                                        <a href="#">
+                                            <div class="pull-left">
+                                                <img src="../dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                            </div>
+                                            <h4>
+                                                Support Team
+                                                <small><i class="fa fa-clock-o"></i> 5 mins</small>
+                                            </h4>
+                                            <p>Why not buy a new awesome theme?</p>
+                                        </a>
+                                    </li>
+                                    <!-- end message -->
+                                    <li>
+                                        <a href="#">
+                                            <div class="pull-left">
+                                                <img src="../dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
+                                            </div>
+                                            <h4>
+                                                AdminLTE Design Team
+                                                <small><i class="fa fa-clock-o"></i> 2 hours</small>
+                                            </h4>
+                                            <p>Why not buy a new awesome theme?</p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <div class="pull-left">
+                                                <img src="../dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
+                                            </div>
+                                            <h4>
+                                                Developers
+                                                <small><i class="fa fa-clock-o"></i> Today</small>
+                                            </h4>
+                                            <p>Why not buy a new awesome theme?</p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <div class="pull-left">
+                                                <img src="../dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
+                                            </div>
+                                            <h4>
+                                                Sales Department
+                                                <small><i class="fa fa-clock-o"></i> Yesterday</small>
+                                            </h4>
+                                            <p>Why not buy a new awesome theme?</p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <div class="pull-left">
+                                                <img src="../dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
+                                            </div>
+                                            <h4>
+                                                Reviewers
+                                                <small><i class="fa fa-clock-o"></i> 2 days</small>
+                                            </h4>
+                                            <p>Why not buy a new awesome theme?</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="footer"><a href="#">See All Messages</a></li>
+                        </ul>
+                    </li>
+                    <!-- Notifications: style can be found in dropdown.less -->
+                    <li class="dropdown notifications-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-bell-o"></i>
+                            <span class="label label-warning">10</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="header">You have 10 notifications</li>
+                            <li>
+                                <!-- inner menu: contains the actual data -->
+                                <ul class="menu">
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-users text-aqua"></i> 5 new members joined today
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-warning text-yellow"></i> Very long description here that may not fit into the
+                                            page and may cause design problems
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-users text-red"></i> 5 new members joined
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-shopping-cart text-green"></i> 25 sales made
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-user text-light-blue"></i> You changed your username
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="footer"><a href="#">View all</a></li>
+                        </ul>
+                    </li>
+                    <!-- Tasks: style can be found in dropdown.less -->
+                    <li class="dropdown tasks-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-flag-o"></i>
+                            <span class="label label-danger">9</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="header">You have 9 tasks</li>
+                            <li>
+                                <!-- inner menu: contains the actual data -->
+                                <ul class="menu">
+                                    <li><!-- Task item -->
+                                        <a href="#">
+                                            <h3>
+                                                Design some buttons
+                                                <small class="pull-right">20%</small>
+                                            </h3>
+                                            <div class="progress xs">
+                                                <div class="progress-bar progress-bar-aqua" style="width: 20%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                                                    <span class="sr-only">20% Complete</span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <!-- end task item -->
+                                    <li><!-- Task item -->
+                                        <a href="#">
+                                            <h3>
+                                                Create a nice theme
+                                                <small class="pull-right">40%</small>
+                                            </h3>
+                                            <div class="progress xs">
+                                                <div class="progress-bar progress-bar-green" style="width: 40%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                                                    <span class="sr-only">40% Complete</span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <!-- end task item -->
+                                    <li><!-- Task item -->
+                                        <a href="#">
+                                            <h3>
+                                                Some task I need to do
+                                                <small class="pull-right">60%</small>
+                                            </h3>
+                                            <div class="progress xs">
+                                                <div class="progress-bar progress-bar-red" style="width: 60%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                                                    <span class="sr-only">60% Complete</span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <!-- end task item -->
+                                    <li><!-- Task item -->
+                                        <a href="#">
+                                            <h3>
+                                                Make beautiful transitions
+                                                <small class="pull-right">80%</small>
+                                            </h3>
+                                            <div class="progress xs">
+                                                <div class="progress-bar progress-bar-yellow" style="width: 80%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                                                    <span class="sr-only">80% Complete</span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <!-- end task item -->
+                                </ul>
+                            </li>
+                            <li class="footer">
+                                <a href="#">View all tasks</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- User Account: style can be found in dropdown.less -->
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="../dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                            <span class="hidden-xs">Your ENOW</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <!-- User image -->
+                            <li class="user-header">
+                                <img src="../dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+
+                                <p>
+                                    Your ENOW
+                                    <small>2016</small>
+                                </p>
+                            </li>
+                            <!-- Menu Body -->
+                            <li class="user-body">
+                                <div class="row">
+                                    <div class="col-xs-4 text-center">
+                                        <a href="#">A</a>
+                                    </div>
+                                    <div class="col-xs-4 text-center">
+                                        <a href="#">B</a>
+                                    </div>
+                                    <div class="col-xs-4 text-center">
+                                        <a href="#">C</a>
+                                    </div>
+                                </div>
+                                <!-- /.row -->
+                            </li>
+                            <!-- Menu Footer-->
+                            <li class="user-footer">
+                                <div class="pull-left">
+                                    <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                </div>
+                                <div class="pull-right">
+                                    <a href="#" class="btn btn-default btn-flat">Disconnect</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- Control Sidebar Toggle Button -->
+                    <li>
+                        <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                    </li>
                 </ul>
-              </li>
-              <li class="footer"><a href="#">See All Messages</a></li>
-            </ul>
-          </li>
-          <!-- Notifications: style can be found in dropdown.less -->
-          <li class="dropdown notifications-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <i class="fa fa-bell-o"></i>
-              <span class="label label-warning">10</span>
-            </a>
-            <ul class="dropdown-menu">
-              <li class="header">You have 10 notifications</li>
-              <li>
-                <!-- inner menu: contains the actual data -->
-                <ul class="menu">
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-users text-aqua"></i> 5 new members joined today
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-warning text-yellow"></i> Very long description here that may not fit into the
-                      page and may cause design problems
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-users text-red"></i> 5 new members joined
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-shopping-cart text-green"></i> 25 sales made
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-user text-light-blue"></i> You changed your username
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="footer"><a href="#">View all</a></li>
-            </ul>
-          </li>
-          <!-- Tasks: style can be found in dropdown.less -->
-          <li class="dropdown tasks-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <i class="fa fa-flag-o"></i>
-              <span class="label label-danger">9</span>
-            </a>
-            <ul class="dropdown-menu">
-              <li class="header">You have 9 tasks</li>
-              <li>
-                <!-- inner menu: contains the actual data -->
-                <ul class="menu">
-                  <li><!-- Task item -->
-                    <a href="#">
-                      <h3>
-                        Design some buttons
-                        <small class="pull-right">20%</small>
-                      </h3>
-                      <div class="progress xs">
-                        <div class="progress-bar progress-bar-aqua" style="width: 20%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                          <span class="sr-only">20% Complete</span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                  <!-- end task item -->
-                  <li><!-- Task item -->
-                    <a href="#">
-                      <h3>
-                        Create a nice theme
-                        <small class="pull-right">40%</small>
-                      </h3>
-                      <div class="progress xs">
-                        <div class="progress-bar progress-bar-green" style="width: 40%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                          <span class="sr-only">40% Complete</span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                  <!-- end task item -->
-                  <li><!-- Task item -->
-                    <a href="#">
-                      <h3>
-                        Some task I need to do
-                        <small class="pull-right">60%</small>
-                      </h3>
-                      <div class="progress xs">
-                        <div class="progress-bar progress-bar-red" style="width: 60%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                          <span class="sr-only">60% Complete</span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                  <!-- end task item -->
-                  <li><!-- Task item -->
-                    <a href="#">
-                      <h3>
-                        Make beautiful transitions
-                        <small class="pull-right">80%</small>
-                      </h3>
-                      <div class="progress xs">
-                        <div class="progress-bar progress-bar-yellow" style="width: 80%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                          <span class="sr-only">80% Complete</span>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                  <!-- end task item -->
-                </ul>
-              </li>
-              <li class="footer">
-                <a href="#">View all tasks</a>
-              </li>
-            </ul>
-          </li>
-          <!-- User Account: style can be found in dropdown.less -->
-          <li class="dropdown user user-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src="../dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
-              <span class="hidden-xs">Your ENOW</span>
-            </a>
-            <ul class="dropdown-menu">
-              <!-- User image -->
-              <li class="user-header">
-                <img src="../dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-
-                <p>
-                  Your ENOW
-                  <small>2016</small>
-                </p>
-              </li>
-              <!-- Menu Body -->
-              <li class="user-body">
-                <div class="row">
-                  <div class="col-xs-4 text-center">
-                    <a href="#">A</a>
-                  </div>
-                  <div class="col-xs-4 text-center">
-                    <a href="#">B</a>
-                  </div>
-                  <div class="col-xs-4 text-center">
-                    <a href="#">C</a>
-                  </div>
-                </div>
-                <!-- /.row -->
-              </li>
-              <!-- Menu Footer-->
-              <li class="user-footer">
-                <div class="pull-left">
-                  <a href="#" class="btn btn-default btn-flat">Profile</a>
-                </div>
-                <div class="pull-right">
-                  <a href="#" class="btn btn-default btn-flat">Disconnect</a>
-                </div>
-              </li>
-            </ul>
-          </li>
-          <!-- Control Sidebar Toggle Button -->
-          <li>
-            <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
-          </li>
-        </ul>
-      </div>
-
-    </nav>
-  </header>
-  <!-- Left side column. contains the logo and sidebar -->
-  <aside class="main-sidebar">
-    <!-- sidebar: style can be found in sidebar.less -->
-    <section class="sidebar">
-      <!-- Sidebar user panel -->
-      <div class="user-panel">
-        <div class="pull-left image">
-          <img src="../dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-        </div>
-        <div class="pull-left info">
-          <p>Your ENOW</p>
-          <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
-        </div>
-      </div>
-      <!-- search form -->
-      <form action="#" method="get" class="sidebar-form">
-        <div class="input-group">
-          <input type="text" name="q" class="form-control" placeholder="Search...">
-          <span class="input-group-btn">
-            <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-            </button>
-          </span>
-        </div>
-      </form>
-      <!-- /.search form -->
-      <!-- sidebar menu: : style can be found in sidebar.less -->
-      <ul class="sidebar-menu">
-        <li class="header">MAIN NAVIGATION</li>
-        <li>
-          <a href="../pages/widgets.html">
-            <i class="fa fa-th"></i> <span>Widgets</span>
-            <span class="pull-right-container">
-              <small class="label pull-right bg-green">new</small>
-            </span>
-          </a>
-        </li>
-        <li>
-          <a href="../pages/stages.html">
-            <i class="fa fa-th"></i> <span>Stages</span>
-            <span class="pull-right-container">
-              <small class="label pull-right bg-green">new</small>
-            </span>
-          </a>
-        </li>
-        <li>
-          <a href="../pages/code_editor.html">
-            <i class="fa fa-th"></i> <span>Code Editor</span>
-            <span class="pull-right-container">
-              <small class="label pull-right bg-green">new</small>
-            </span>
-          </a>
-        </li>
-        <li>
-          <a href="../pages/statistics.html">
-            <i class="fa fa-th"></i> <span>Statistics</span>
-            <span class="pull-right-container">
-              <small class="label pull-right bg-green">new</small>
-            </span>
-          </a>
-        </li>
-        <li>
-          <a href="../pages/settings.html">
-            <i class="fa fa-th"></i> <span>Settings</span>
-            <span class="pull-right-container">
-              <small class="label pull-right bg-green">new</small>
-            </span>
-          </a>
-        </li>
-        <li><a href="../documentation/index.html"><i class="fa fa-book"></i> <span>Documentation</span></a></li>
-      </ul>
-    </section>
-    <!-- /.sidebar -->
-  </aside>
-
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section id="focal" class="content-header">
-      <h1>
-        Recipes
-        <small>Preview page</small>
-      </h1>
-      <ol class="breadcrumb">
-        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">Recipes</li>
-      </ol>
-    </section>
-    <!-- Main content -->
-    <section class="content" ng-controller="myCtrl">
-
-      <div class="col-lg-12 col-xs-12">
-        <div class="box box-warning" style="height:800px;">
-          <div class="box-header with-border">
-            <h2 class="box-title" style="margin-top:10px;">RoadMap</h2>
-            <button id="setting" style="height:30px;" class="fa fa-map pull-right"></button>
-            <button id="run" class="btn btn-info btn-flat pull-right">MakeDB</button>
-            <div class="button_add_window btn btn-info btn-flat pull-right">Add</div>
-          </div>
-            <div id="test" class="map" style="height:800px;">
-              <div class="canvas">
-              <div class="window box box-default collapsed-box" id="device0" style="display:none;">
-                <div class="box-header with-border">
-                  <div style="overflow:hidden;">
-                    <h3 class="box-title" id="devname">Device</h3>
-                  </div>
-                  <div class="box-tools pull-right">
-                    <button type="button" class="tog_button" data-widget="collapse"><i class="fa fa-plus"></i>
-                    </button>
-                  </div>
-                </div>
-                <div class="box-body">
-                  <div class="button_container">
-                    <div class="button_code">CodeEdit</div>
-                  </div>
-                </div>
-              </div>
             </div>
-          </div>
 
-        </div>
-      </div>
+        </nav>
+    </header>
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+            <!-- Sidebar user panel -->
+            <div class="user-panel">
+                <div class="pull-left image">
+                    <img src="../dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                </div>
+                <div class="pull-left info">
+                    <p>Your ENOW</p>
+                    <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                </div>
+            </div>
+            <!-- search form -->
+            <form action="#" method="get" class="sidebar-form">
+                <div class="input-group">
+                    <input type="text" name="q" class="form-control" placeholder="Search...">
+                    <span class="input-group-btn">
+                        <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </form>
+            <!-- /.search form -->
+            <!-- sidebar menu: : style can be found in sidebar.less -->
+            <ul class="sidebar-menu">
+                <li class="header">MAIN NAVIGATION</li>
+                <li>
+                    <a href="../pages/widgets.html">
+                        <i class="fa fa-th"></i> <span>Widgets</span>
+                        <span class="pull-right-container">
+                            <small class="label pull-right bg-green">new</small>
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="../pages/stages.html">
+                        <i class="fa fa-th"></i> <span>Stages</span>
+                        <span class="pull-right-container">
+                            <small class="label pull-right bg-green">new</small>
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="../pages/code_editor.html">
+                        <i class="fa fa-th"></i> <span>Code Editor</span>
+                        <span class="pull-right-container">
+                            <small class="label pull-right bg-green">new</small>
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="../pages/statistics.html">
+                        <i class="fa fa-th"></i> <span>Statistics</span>
+                        <span class="pull-right-container">
+                            <small class="label pull-right bg-green">new</small>
+                        </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="../pages/settings.html">
+                        <i class="fa fa-th"></i> <span>Settings</span>
+                        <span class="pull-right-container">
+                            <small class="label pull-right bg-green">new</small>
+                        </span>
+                    </a>
+                </li>
+                <li><a href="../documentation/index.html"><i class="fa fa-book"></i> <span>Documentation</span></a></li>
+            </ul>
+        </section>
+        <!-- /.sidebar -->
+    </aside>
 
-      <div class="modal fade" id="myModal" style="">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title">CodeEditor</h4>
-          </div>
-          <div class="modal-body">
-            <div id="editor"></div>
-          </div>
-          <div class="modal-footer">
-          </div>
-        </div>
-      </div>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section id="focal" class="content-header">
+            <h1>
+                Recipes
+                <small>Preview page</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li class="active">Recipes</li>
+            </ol>
+        </section>
+        <!-- Main content -->
+        <section class="content" ng-controller="myCtrl">
+            <input name="sendToAngular" id="jsonToScope" ng-model="list" ng-change="list"></input>
+            {{tree}}
+            <div class="col-lg-12 col-xs-12">
+                <div class="box box-warning" style="height:800px;">
+                    <div class="box-header with-border">
+                        <h2 class="box-title" style="margin-top:10px;">RoadMap</h2>
+                        <button id="setting" style="height:30px;" class="fa fa-map pull-right"></button>
+                        <button id="run" class="btn btn-info btn-flat pull-right">MakeDB</button>
+                        <div class="button_add_window btn btn-info btn-flat pull-right">Add</div>
+                    </div>
+                    <div id="test" class="map" style="height:800px;">
+                        <div class="canvas">
+                            <div class="window box box-default collapsed-box" id="device0" style="display:none;">
+                                <div class="box-header with-border">
+                                    <div style="overflow:hidden;">
+                                        <h3 class="box-title" id="devname">Device</h3>
+                                    </div>
+                                    <div class="box-tools pull-right">
+                                        <button type="button" class="tog_button" data-widget="collapse"><i class="fa fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="box-body">
+                                    <div class="button_container">
+                                        <div class="button_code">CodeEdit</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-    </section>
-  </div>
-  <!--- ------------------------------------------------------------------------------->
-  <!--- ------------------------------------------------------------------------------->
-  <footer class="main-footer">
-    <div class="pull-right hidden-xs">
-      <b>Version</b> 0.0.1
+                </div>
+            </div>
+
+            <div class="modal fade" id="myModal" style="">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">CodeEditor</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="editor"></div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+
+        </section>
     </div>
-    <strong>Copyright &copy; 2016-2016 <a href="https://ijiteam.slack.com">Team IjI</a>.</strong> All rights
-    reserved.
-  </footer>
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Create the tabs -->
-    <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-      <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
-      <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
-    </ul>
-    <!-- Tab panes -->
-    <div class="tab-content">
-      <!-- Home tab content -->
-      <div class="tab-pane" id="control-sidebar-home-tab">
-        <h3 class="control-sidebar-heading">Recent Activity</h3>
-        <ul class="control-sidebar-menu">
-          <li>
-            <a href="javascript:void(0)">
-              <i class="menu-icon fa fa-birthday-cake bg-red"></i>
-
-              <div class="menu-info">
-                <h4 class="control-sidebar-subheading">Langdon's Birthday</h4>
-
-                <p>Will be 23 on April 24th</p>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="javascript:void(0)">
-              <i class="menu-icon fa fa-user bg-yellow"></i>
-
-              <div class="menu-info">
-                <h4 class="control-sidebar-subheading">Frodo Updated His Profile</h4>
-
-                <p>New phone +1(800)555-1234</p>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="javascript:void(0)">
-              <i class="menu-icon fa fa-envelope-o bg-light-blue"></i>
-
-              <div class="menu-info">
-                <h4 class="control-sidebar-subheading">Nora Joined Mailing List</h4>
-
-                <p>nora@example.com</p>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="javascript:void(0)">
-              <i class="menu-icon fa fa-file-code-o bg-green"></i>
-
-              <div class="menu-info">
-                <h4 class="control-sidebar-subheading">Cron Job 254 Executed</h4>
-
-                <p>Execution time 5 seconds</p>
-              </div>
-            </a>
-          </li>
+    <!--- ------------------------------------------------------------------------------->
+    <!--- ------------------------------------------------------------------------------->
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs">
+            <b>Version</b> 0.0.1
+        </div>
+        <strong>Copyright &copy; 2016-2016 <a href="https://ijiteam.slack.com">Team IjI</a>.</strong> All rights
+        reserved.
+    </footer>
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Create the tabs -->
+        <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+            <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
+            <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
         </ul>
-        <!-- /.control-sidebar-menu -->
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <!-- Home tab content -->
+            <div class="tab-pane" id="control-sidebar-home-tab">
+                <h3 class="control-sidebar-heading">Recent Activity</h3>
+                <ul class="control-sidebar-menu">
+                    <li>
+                        <a href="javascript:void(0)">
+                            <i class="menu-icon fa fa-birthday-cake bg-red"></i>
 
-        <h3 class="control-sidebar-heading">Tasks Progress</h3>
-        <ul class="control-sidebar-menu">
-          <li>
-            <a href="javascript:void(0)">
-              <h4 class="control-sidebar-subheading">
-                Custom Template Design
-                <span class="label label-danger pull-right">70%</span>
-              </h4>
+                            <div class="menu-info">
+                                <h4 class="control-sidebar-subheading">Langdon's Birthday</h4>
 
-              <div class="progress progress-xxs">
-                <div class="progress-bar progress-bar-danger" style="width: 70%"></div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="javascript:void(0)">
-              <h4 class="control-sidebar-subheading">
-                Update Resume
-                <span class="label label-success pull-right">95%</span>
-              </h4>
+                                <p>Will be 23 on April 24th</p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">
+                            <i class="menu-icon fa fa-user bg-yellow"></i>
 
-              <div class="progress progress-xxs">
-                <div class="progress-bar progress-bar-success" style="width: 95%"></div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="javascript:void(0)">
-              <h4 class="control-sidebar-subheading">
-                Laravel Integration
-                <span class="label label-warning pull-right">50%</span>
-              </h4>
+                            <div class="menu-info">
+                                <h4 class="control-sidebar-subheading">Frodo Updated His Profile</h4>
 
-              <div class="progress progress-xxs">
-                <div class="progress-bar progress-bar-warning" style="width: 50%"></div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="javascript:void(0)">
-              <h4 class="control-sidebar-subheading">
-                Back End Framework
-                <span class="label label-primary pull-right">68%</span>
-              </h4>
+                                <p>New phone +1(800)555-1234</p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">
+                            <i class="menu-icon fa fa-envelope-o bg-light-blue"></i>
 
-              <div class="progress progress-xxs">
-                <div class="progress-bar progress-bar-primary" style="width: 68%"></div>
-              </div>
-            </a>
-          </li>
-        </ul>
-        <!-- /.control-sidebar-menu -->
+                            <div class="menu-info">
+                                <h4 class="control-sidebar-subheading">Nora Joined Mailing List</h4>
 
-      </div>
-      <!-- /.tab-pane -->
-      <!-- Stats tab content -->
-      <div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div>
-      <!-- /.tab-pane -->
-      <!-- Settings tab content -->
-      <div class="tab-pane" id="control-sidebar-settings-tab">
-        <form method="post">
-          <h3 class="control-sidebar-heading">General Settings</h3>
+                                <p>nora@example.com</p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">
+                            <i class="menu-icon fa fa-file-code-o bg-green"></i>
 
-          <div class="form-group">
-            <label class="control-sidebar-subheading">
-              Report panel usage
-              <input type="checkbox" class="pull-right" checked>
-            </label>
+                            <div class="menu-info">
+                                <h4 class="control-sidebar-subheading">Cron Job 254 Executed</h4>
 
-            <p>
-              Some information about this general settings option
-            </p>
-          </div>
-          <!-- /.form-group -->
+                                <p>Execution time 5 seconds</p>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+                <!-- /.control-sidebar-menu -->
 
-          <div class="form-group">
-            <label class="control-sidebar-subheading">
-              Allow mail redirect
-              <input type="checkbox" class="pull-right" checked>
-            </label>
+                <h3 class="control-sidebar-heading">Tasks Progress</h3>
+                <ul class="control-sidebar-menu">
+                    <li>
+                        <a href="javascript:void(0)">
+                            <h4 class="control-sidebar-subheading">
+                                Custom Template Design
+                                <span class="label label-danger pull-right">70%</span>
+                            </h4>
 
-            <p>
-              Other sets of options are available
-            </p>
-          </div>
-          <!-- /.form-group -->
+                            <div class="progress progress-xxs">
+                                <div class="progress-bar progress-bar-danger" style="width: 70%"></div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">
+                            <h4 class="control-sidebar-subheading">
+                                Update Resume
+                                <span class="label label-success pull-right">95%</span>
+                            </h4>
 
-          <div class="form-group">
-            <label class="control-sidebar-subheading">
-              Expose author name in posts
-              <input type="checkbox" class="pull-right" checked>
-            </label>
+                            <div class="progress progress-xxs">
+                                <div class="progress-bar progress-bar-success" style="width: 95%"></div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">
+                            <h4 class="control-sidebar-subheading">
+                                Laravel Integration
+                                <span class="label label-warning pull-right">50%</span>
+                            </h4>
 
-            <p>
-              Allow the user to show his name in blog posts
-            </p>
-          </div>
-          <!-- /.form-group -->
+                            <div class="progress progress-xxs">
+                                <div class="progress-bar progress-bar-warning" style="width: 50%"></div>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">
+                            <h4 class="control-sidebar-subheading">
+                                Back End Framework
+                                <span class="label label-primary pull-right">68%</span>
+                            </h4>
 
-          <h3 class="control-sidebar-heading">Chat Settings</h3>
+                            <div class="progress progress-xxs">
+                                <div class="progress-bar progress-bar-primary" style="width: 68%"></div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+                <!-- /.control-sidebar-menu -->
 
-          <div class="form-group">
-            <label class="control-sidebar-subheading">
-              Show me as online
-              <input type="checkbox" class="pull-right" checked>
-            </label>
-          </div>
-          <!-- /.form-group -->
+            </div>
+            <!-- /.tab-pane -->
+            <!-- Stats tab content -->
+            <div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div>
+            <!-- /.tab-pane -->
+            <!-- Settings tab content -->
+            <div class="tab-pane" id="control-sidebar-settings-tab">
+                <form method="post">
+                    <h3 class="control-sidebar-heading">General Settings</h3>
 
-          <div class="form-group">
-            <label class="control-sidebar-subheading">
-              Turn off notifications
-              <input type="checkbox" class="pull-right">
-            </label>
-          </div>
-          <!-- /.form-group -->
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">
+                            Report panel usage
+                            <input type="checkbox" class="pull-right" checked>
+                        </label>
 
-          <div class="form-group">
-            <label class="control-sidebar-subheading">
-              Delete chat history
-              <a href="javascript:void(0)" class="text-red pull-right"><i class="fa fa-trash-o"></i></a>
-            </label>
-          </div>
-          <!-- /.form-group -->
-        </form>
-      </div>
-      <!-- /.tab-pane -->
-    </div>
-  </aside>
-  <!-- /.control-sidebar -->
-  <!-- Add the sidebar's background. This div must be placed
-  immediately after the control sidebar -->
-  <div class="control-sidebar-bg"></div>
+                        <p>
+                            Some information about this general settings option
+                        </p>
+                    </div>
+                    <!-- /.form-group -->
+
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">
+                            Allow mail redirect
+                            <input type="checkbox" class="pull-right" checked>
+                        </label>
+
+                        <p>
+                            Other sets of options are available
+                        </p>
+                    </div>
+                    <!-- /.form-group -->
+
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">
+                            Expose author name in posts
+                            <input type="checkbox" class="pull-right" checked>
+                        </label>
+
+                        <p>
+                            Allow the user to show his name in blog posts
+                        </p>
+                    </div>
+                    <!-- /.form-group -->
+
+                    <h3 class="control-sidebar-heading">Chat Settings</h3>
+
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">
+                            Show me as online
+                            <input type="checkbox" class="pull-right" checked>
+                        </label>
+                    </div>
+                    <!-- /.form-group -->
+
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">
+                            Turn off notifications
+                            <input type="checkbox" class="pull-right">
+                        </label>
+                    </div>
+                    <!-- /.form-group -->
+
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">
+                            Delete chat history
+                            <a href="javascript:void(0)" class="text-red pull-right"><i class="fa fa-trash-o"></i></a>
+                        </label>
+                    </div>
+                    <!-- /.form-group -->
+                </form>
+            </div>
+            <!-- /.tab-pane -->
+        </div>
+    </aside>
+    <!-- /.control-sidebar -->
+    <!-- Add the sidebar's background. This div must be placed
+    immediately after the control sidebar -->
+    <div class="control-sidebar-bg"></div>
 </div>
 <!-- ./wrapper -->
 
@@ -722,147 +723,138 @@
 <script src="../dist/js/demo.js"></script>
 <script>
 
-$("#run").click(function(){
-  instance.getConnections().forEach(
-    function foo(value){
-      console.log(value['sourceId'].substring(6)+" -> "+value['targetId'].substring(6));
-    }
-  )
-});
-$("#setting").click(function(){
-});
 
 var instance = window.jsp = jsPlumb.getInstance({
-  // default drag options
-  DragOptions: { cursor: 'pointer', zIndex: 2000 },
-  // the overlays to decorate each connection with.  note that the label overlay uses a function to generate the label text; in this
-  // case it returns the 'labelText' member that we set on each connection in the 'init' method below.
-  ConnectionOverlays: [
-    [ "Arrow", {
-      location: 1,
-      visible:true,
-      id:"ARROW",
-      events:{
-        click:function() { alert("you clicked on the arrow overlay")}
-      }
-    } ],
-    [ "Label", {
-      location: 0.4,
-      id: "label",
-      cssClass: "aLabel",
-      events:{
-        tap:function() {
-          var ask = confirm("Delete this connection?");
-          if(ask==true){
-            var connection = $(this)[0].component;
-            instance.detach(connection);
-          }
-          else{
-            console.log("no");
-          }
-        }
-      }
-    }]
-  ],
+    // default drag options
+    DragOptions: { cursor: 'pointer', zIndex: 2000 },
+    // the overlays to decorate each connection with.  note that the label overlay uses a function to generate the label text; in this
+    // case it returns the 'labelText' member that we set on each connection in the 'init' method below.
+    ConnectionOverlays: [
+        [ "Arrow", {
+            location: 1,
+            visible:true,
+            id:"ARROW",
+            events:{
+                click:function() { alert("you clicked on the arrow overlay")}
+            }
+        } ],
+        [ "Label", {
+            location: 0.4,
+            id: "label",
+            cssClass: "aLabel",
+            events:{
+                tap:function() {
+                    var ask = confirm("Delete this connection?");
+                    if(ask==true){
+                        var connection = $(this)[0].component;
+                        instance.detach(connection);
+                    }
+                    else{
+                        console.log("no");
+                    }
+                }
+            }
+        }]
+    ],
 });
 var basicType = {
-  connector: "StateMachine",
-  overlays: [
-    "Arrow"
-  ]
+    connector: "StateMachine",
+    overlays: [
+        "Arrow"
+    ]
 };
 instance.registerConnectionType("basic", basicType);
 
 var connectorPaintStyle = {
-  lineWidth: 4,
-  strokeStyle: "#61B7CF",
-  joinstyle: "round",
+    lineWidth: 4,
+    strokeStyle: "#61B7CF",
+    joinstyle: "round",
 },
 // .. and this is the hover style.
 connectorHoverStyle = {
-  lineWidth: 4,
-  strokeStyle: "#216477",
+    lineWidth: 4,
+    strokeStyle: "#216477",
 },
 endpointHoverStyle = {
-  fillStyle: "#216477",
-  strokeStyle: "#216477"
+    fillStyle: "#216477",
+    strokeStyle: "#216477"
 },
 // the definition of source endpoints (the small blue ones)
 sourceEndpoint = {
-  endpoint: "Dot",
-  paintStyle: {
-    strokeStyle: "#7AB02C",
-    fillStyle: "transparent",
-    radius: 7,
-    lineWidth: 3
-  },
-  isSource: true,
-  maxConnections: 5,
-  connector: [ "Flowchart", { stub: [40, 60], gap: 10, cornerRadius: 5, alwaysRespectStubs: true } ],
-  connectorStyle: connectorPaintStyle,
-  hoverPaintStyle: endpointHoverStyle,
-  connectorHoverStyle: connectorHoverStyle,
-  dragOptions: {},
-  overlays: [
-    [ "Label", {
-      location: [0.5, 1.5],
-      label: "Drag",
-      cssClass: "endpointSourceLabel",
-      visible:false
-    } ]
-  ]
+    endpoint: "Dot",
+    paintStyle: {
+        strokeStyle: "#7AB02C",
+        fillStyle: "transparent",
+        radius: 7,
+        lineWidth: 3
+    },
+    isSource: true,
+    maxConnections: 5,
+    connector: [ "Flowchart", { stub: [40, 60], gap: 10, cornerRadius: 5, alwaysRespectStubs: true } ],
+    connectorStyle: connectorPaintStyle,
+    hoverPaintStyle: endpointHoverStyle,
+    connectorHoverStyle: connectorHoverStyle,
+    dragOptions: {},
+    overlays: [
+        [ "Label", {
+            location: [0.5, 1.5],
+            label: "Drag",
+            cssClass: "endpointSourceLabel",
+            visible:false
+        } ]
+    ]
 },
 // the definition of target endpoints (will appear when the user drags a connection)
 targetEndpoint = {
-  endpoint: "Dot",
-  paintStyle: {
-    fillStyle: "#7AB02C",
-    strokeStyle: "#7AB02C",
-    radius: 7,
-    lineWidth: 3
-  },
-  hoverPaintStyle: endpointHoverStyle,
-  maxConnections: 5,
-  dropOptions: { hoverClass: "hover", activeClass: "active" },
-  isTarget: true,
-  overlays: [
-    [ "Label", { location: [1, -0.5], label: "Drop", cssClass: "endpointTargetLabel", visible:false } ]
-  ]
+    endpoint: "Dot",
+    paintStyle: {
+        fillStyle: "#7AB02C",
+        strokeStyle: "#7AB02C",
+        radius: 7,
+        lineWidth: 3
+    },
+    hoverPaintStyle: endpointHoverStyle,
+    maxConnections: 5,
+    dropOptions: { hoverClass: "hover", activeClass: "active" },
+    isTarget: true,
+    overlays: [
+        [ "Label", { location: [1, -0.5], label: "Drop", cssClass: "endpointTargetLabel", visible:false } ]
+    ]
 },
 init = function (connection) {
-  connection.getOverlay("label").setLabel(connection.sourceId.substring(6) + "->" + connection.targetId.substring(6));
+    connection.getOverlay("label").setLabel(connection.sourceId.substring(6) + "->" + connection.targetId.substring(6));
 };
 instance.batch(function () {
-  // listen for new connections; initialise them the same way we initialise the connections at startup.
-  instance.bind("connection", function (connInfo, originalEvent) {
-    init(connInfo.connection);
-  });
+    // listen for new connections; initialise them the same way we initialise the connections at startup.
+    instance.bind("connection", function (connInfo, originalEvent) {
+        init(connInfo.connection);
+    });
 
-  // make all the window divs draggable
-  // THIS DEMO ONLY USES getSelector FOR CONVENIENCE. Use your library's appropriate selector
-  // method, or document.querySelectorAll:
-  // jsPlumb.draggable(document.querySelectorAll(".window"), { grid: [20, 20] });
+    // make all the window divs draggable
+    // THIS DEMO ONLY USES getSelector FOR CONVENIENCE. Use your library's appropriate selector
+    // method, or document.querySelectorAll:
+    // jsPlumb.draggable(document.querySelectorAll(".window"), { grid: [20, 20] });
 
-  //
-  // listen for clicks on connections, and offer to delete connections on click.
-  //
-  instance.bind("click", function (conn, originalEvent) {
-    // if (confirm("Delete connection from " + conn.sourceId + " to " + conn.targetId + "?"))
-    //   instance.detach(conn);
-    conn.toggleType("basic");
-  });
+    //
+    // listen for clicks on connections, and offer to delete connections on click.
+    //
+    instance.bind("click", function (conn, originalEvent) {
+        // if (confirm("Delete connection from " + conn.sourceId + " to " + conn.targetId + "?"))
+        //   instance.detach(conn);
+        conn.toggleType("basic");
+    });
 
-  instance.bind("connectionDrag", function (connection) {
-    instance.repaintEverything();
-  });
+    instance.bind("connectionDrag", function (connection) {
+        instance.repaintEverything();
+    });
 
-  instance.bind("connectionDragStop", function (connection) {
-    console.log("connection " + connection.id + " was dragged");
-  });
+    instance.bind("connectionDragStop", function (connection) {
+        console.log("connection " + connection.id + " was dragged");
+    });
 
-  instance.bind("connectionMoved", function (params) {
-    console.log("connection " + params.connection.id + " was moved");
-  });
+    instance.bind("connectionMoved", function (params) {
+        console.log("connection " + params.connection.id + " was moved");
+    });
 });
 var dynamicAnchors = [ [ 1, 0.5, 1, 0 ],[ 0.5, 0, 0, -1 ],
 [ 0.5, 1, 0, 1 ], [ 0, 0.5, -1, 0 ] ];
@@ -870,14 +862,14 @@ var dynamicAnchors = [ [ 1, 0.5, 1, 0 ],[ 0.5, 0, 0, -1 ],
 var dynamicAnchors2 = [  [ 0, 0.5, -1, 0 ],[ 1, 0.5, 1, 0 ], [ 0.5, 0, 0, -1 ],
 [ 0.5, 1, 0, 1 ] ];
 var _addEndpoints = function (toId) {
-  instance.addEndpoint(toId, sourceEndpoint, {
-    anchor: dynamicAnchors,
-    uuid: toId+"_source"
-  });
-  instance.addEndpoint(toId, targetEndpoint, {
-    anchor: dynamicAnchors2,
-    uuid: toId+"_target"
-  });
+    instance.addEndpoint(toId, sourceEndpoint, {
+        anchor: dynamicAnchors,
+        uuid: toId+"_source"
+    });
+    instance.addEndpoint(toId, targetEndpoint, {
+        anchor: dynamicAnchors2,
+        uuid: toId+"_target"
+    });
 };
 //Add additional anchor
 // $('#test').on("click",".button_add", function () {
@@ -886,42 +878,56 @@ var _addEndpoints = function (toId) {
 //     _addEndpoints(parentnode.id);
 // });
 
-//adds new window
+var connectInfo;
+var devices;
+var print;
+$("#run").click(function(){
+    connectInfo=[];
+    devices=$(".window").length-1;
+    instance.getConnections().forEach(
+        function foo(value){
+            var temp = new Object();
+            temp["source"] = value['sourceId'].substring(6);
+            temp["target"] = value['targetId'].substring(6);
+            console.log(value['sourceId'].substring(6)+" -> "+value['targetId'].substring(6));
+            connectInfo.push(temp);
+        }
+    )
+    angular.element(document.getElementById('jsonToScope')).scope().list = connectInfo;
+    angular.element(document.getElementById('jsonToScope')).scope().changeToTree(connectInfo);
+    console.log(angular.element(document.getElementById('jsonToScope')).scope().tree);
+    // angular.element(document.getElementById('jsonToScope')).scope().$apply();
+});
+
+
+
+$("#setting").click(function(){
+});
+
 $('#test').on("click",".tog_button", function () {
-  setTimeout(function () {
-    instance.repaintEverything();
-    console.log("cc");
-  }, 801);
+    setTimeout(function () {
+        instance.repaintEverything();
+        console.log("cc");
+    }, 801);
 });
 $('#test').on("click",".button_code", function () {
-  var node = $(this)[0].parentNode.parentNode.parentNode;
-  $('#myModal').modal('show');
-  console.log(node);
+    var node = $(this)[0].parentNode.parentNode.parentNode;
+    $('#myModal').modal('show');
+    console.log(node);
 });
 
 $(".button_add_window").click(function () {
-  var _id = "Device" + $(".window").length;
-  //create new window and add it to the body
-  var newnode = $('<div class="window box box-default collapsed-box" id="' + _id + '" >').appendTo("#test").html($(("#device0"))[0].innerHTML);
-  // var Div = $('<div>', { id: "aa" }, { class: 'window box box-default collapsed-box' }).appendTo('#test');
-  newnode.find('h3').text(_id);
-  // console.log(newnode[0].childNodes[1].childNodes[1].childNodes[1]);
-  // children('#devname').find('h3').text("hello");
-  // console.log(instance.getSelector(".window")[0]);
-  //set jsplumb properties
-  _addEndpoints(newnode);
-  // instance.draggable(instance.getSelector("#"+_id), { grid: [50, 50], containment:('#test') });
-  // $("#Device1").draggable({
-  //   containment:'parent'
-  // });
-  // var a = instance.getSelector(".window");
-  $(instance.getSelector("#"+_id)).draggable({
-    containment:'parent',
-    drag: function(e){
-      // console.log($(this).find('.jsPlumb_endpoint_anchor'));
-                 instance.repaintEverything();
-    }
-  });
+    var _id = "Device" + $(".window").length;
+    //create new window and add it to the body
+    var newnode = $('<div class="window box box-default collapsed-box" id="' + _id + '" >').appendTo("#test").html($(("#device0"))[0].innerHTML);
+    newnode.find('h3').text(_id);
+    _addEndpoints(newnode);
+    $(instance.getSelector("#"+_id)).draggable({
+        containment:'parent',
+        drag: function(e){
+            instance.repaintEverything();
+        }
+    });
 
 });
 jsPlumb.fire("jsPlumbDemoLoaded", instance);
@@ -931,7 +937,7 @@ var code="aaa";
 editor.setTheme("ace/theme/terminal");
 editor.getSession().setMode("ace/mode/python");
 editor.getSession().on("change", function () {
-  code = editor.getSession().getValue();
+    code = editor.getSession().getValue();
 });
 
 </script>
