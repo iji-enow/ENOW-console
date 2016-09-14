@@ -1,5 +1,5 @@
 
-var app = angular.module('mainModule', ['ngDragDrop']);
+var app = angular.module('mainModule', []);
 // var app = angular.module('mainModule',[]);
 app.controller('myCtrl', function($scope, $http){
     $scope.name = "kihwan";
