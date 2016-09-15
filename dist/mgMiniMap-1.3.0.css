@@ -1,0 +1,64 @@
+.mgNavigator{
+    position: fixed;
+    right: 10px;
+    top: 30px;
+    z-index: 30;
+    border: 2px solid #AAA;
+    width: 200px;
+    height: 200px;
+    background-color: #FFF;
+    box-shadow: 2px 2px 19px #aaa;
+    -o-box-shadow: 2px 2px 19px #aaa;
+    -webkit-box-shadow: 2px 2px 19px #aaa;
+    -moz-box-shadow: 2px 2px 19px #aaa;
+    -moz-border-radius:0.5em;
+    border-radius: 3px;  
+}
+
+.mgNavigator .mgViewport{
+    position: absolute;
+    border: 1px solid red;
+    border-radius: 3px;
+    z-index: 31;
+    cursor: move;
+    background-color: #AAA;
+    opacity:0.4;
+    filter:alpha(opacity=40); /* For IE8 and earlier */    
+}
+
+.mgResizing{
+    border: 1px dotted blue;
+}
+
+.mgNavigator .mgHandle{
+    cursor: move;
+    border-radius: 3px;
+    position: absolute;
+    top: -15px;
+    height: 15px;
+    width: 100%;
+    background-color: #AAA;
+    
+}
+
+.mgElement {
+    font-size: 11px;
+    width: 100px; height: 100px;
+    border:2px solid #346789;
+    text-align:center;
+    z-index:20;
+    position:absolute;
+    background-color:#eeeeef;
+    color:black;
+}
+
+.mgNavigator .mgCanvasDom{
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.mgNavigator .mgCanvasDom div{
+    position: absolute;
+    z-index: 20;
+}
