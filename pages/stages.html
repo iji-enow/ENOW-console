@@ -39,6 +39,67 @@
 
 
     <style>
+    /* The switch - the box around the slider */
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+
+    /* Hide default HTML checkbox */
+    .switch input {display:none;}
+
+    /* The slider */
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+    .slider.round:before {
+        border-radius: 50%;
+    }
+
+
+
     .thumbnail { height: 280px !important; }
     .btn-droppable { width: 100%; height: 100%;}
     .btn-draggable { width: 100%; }
@@ -81,7 +142,7 @@
     }
     .map{
         background-repeat: repeat;
-        background-image: url(../dist/img/grid.png);
+        background-image: url(../dist/img/grid3.png);
     }
     .item {
         height:8px; width: 8px;
@@ -90,15 +151,13 @@
     }
     .window {
         background-color: #EEEEEF;
-        border: 1px solid #346789;
-        border-radius: 0.5em;
-        box-shadow: 2px 2px 5px #AAAAAA;
+        box-shadow: 1px 1px 3px #AAAAAA;
         color: black;
         position: absolute;
         width: 16em;
     }
     .window:hover {
-        box-shadow: 2px 2px 19px #AAAAAA;
+        box-shadow: 2px 2px 5px #AAAAAA;
         cursor: pointer;
     }
     </style>
@@ -454,12 +513,16 @@
                 <div class="box box-warning" style="height:800px;">
                     <div class="box-header with-border">
                         <h2 class="box-title" style="margin-top:10px;">RoadMap</h2>
-                        <button id="openDeviceList" style="height:34px;" class="fa fa-list pull-right" data-toggle="tooltip" title="Show list of available devices"></button>
-                        <button id="run" class="btn btn-info btn-flat pull-right" data-toggle="tooltip" title="Save Roadmap to database">MakeDB</button>
+                        <button id="openDeviceList" class="btn btn-info btn-flat pull-right" data-toggle="tooltip" title="Show list of available devices">DeviceList</button>
+                        <button id="saveDB" class="btn btn-info btn-flat pull-right" data-toggle="tooltip" title="Save Roadmap to database">MakeDB</button>
                         <button id="addDevice" class="btn btn-info btn-flat pull-right" data-toggle="tooltip" title="Add custom device">Add</button>
+                        <button id="loadRoadMap" class="btn btn-info btn-flat pull-right" data-toggle="tooltip" title="Load RoadMap Recipes">RoadMaps</button>
+                        <label class="switch pull-right" style="margin-right:10px;">
+                            <input type="checkbox" id="run">
+                            <div class="slider round"></div>
+                        </label>
                     </div>
                     <div id="test" class="map" style="height:750px;">
-                        <div class="panzoom">
                             <div class="window box box-default collapsed-box" id="device0" style="display:none;">
                                 <div class="box-header with-border">
                                     <h3 class="box-title" id="devname">Device</h3>
@@ -480,12 +543,11 @@
                                     <label>Device Port number</label>
                                     <input id="port" class="form-control input-sm" type="text" placeholder="Device Port">
                                     <label>URL</label>
-                                    <input id="url" class="form-control input-sm" type="text" disabled="true" placeholder="url" style="margin-bottom:5px;">
+                                    <input id="url" class="form-control input-sm" type="text" disabled="true" placeholder="url" style="margin-bottom:18px;">
                                     <button id="devSettingSave" class="btn btn-info btn-flat" data-toggle="tooltip" title="Save settings">Save</button>
                                     <button id="codeEditor" class="btn btn-info btn-flat pull-right" data-toggle="tooltip" title="Add custom device">Edit code</button>
                                 </div>
                             </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -651,7 +713,6 @@
                             Report panel usage
                             <input type="checkbox" class="pull-right" checked>
                         </label>
-
                         <p>
                             Some information about this general settings option
                         </p>
@@ -740,6 +801,18 @@ var devices;
 var currentNode;
 var print;
 var deviceInfo={};
+$('#run').click(function(){
+    if($(this).is(':checked')){
+        var ask = confirm("Start Roadmap?");
+        if(ask==true){
+
+        }
+        else{
+            $(this).attr("checked",false);
+        }
+    }
+});
+
 $('#test').on("click","#protocolSelect", function () {
     var selected = $(this)[0].value;
     if(selected == "mqtt"){
@@ -899,7 +972,7 @@ var _addEndpoints = function (toId) {
     });
 };
 
-$("#run").click(function(){
+$("#saveDB").click(function(){
     connectInfo=[];
     devices=$(".window").length-1;
     instance.getConnections().forEach(
@@ -986,7 +1059,7 @@ $("#saveCode").click(function(){
     var temp = $('#parameters').val().split(",");
     deviceInfo[currentNode.substring(6)]['parameter']=[];
     for (var i = 0; i< temp.length ; ++i){
-        deviceInfo[currentNode.substring(6)]['parameter'].push(temp[i]);
+        deviceInfo[currentNode.substring(6)]['parameter'].push(temp[i].trim());
     }
     $('#myModal').append(toast);
     toast.stop().fadeIn(400).delay(2000).fadeOut(400); //fade out after 2 seconds

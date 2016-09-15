@@ -2,9 +2,9 @@
 var app = angular.module('mainModule', []);
 // var app = angular.module('mainModule',[]);
 app.controller('myCtrl', function($scope, $http){
-    $scope.name = "kihwan";
+    // $scope.name = "kihwan";
     // $http.get("/get_db").then(function(response, error){
-    //     $scope.list5 = response.data;
+    //     $scope.list = response.data;
     // })
     // $scope.maplist = [];
     $scope.listOfDevice = {};
