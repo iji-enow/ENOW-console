@@ -14,10 +14,8 @@ app.controller('myCtrl', function($scope, $http){
     $scope.tree;
     $scope.mapIds;
     // settings.html
-    $scope.brokerList=[
-    ];
+    $scope.brokerList=[];
     $scope.newnode ={};
-
     // ------------------------------------------
     $scope.saveDataBase = function(){
         $http({
@@ -31,7 +29,6 @@ app.controller('myCtrl', function($scope, $http){
         });
     }
     $scope.runRoadMap = function(){
-        console.log("zzzz");
         $http({
             withCredentials: false,
             method: 'post',
@@ -43,7 +40,6 @@ app.controller('myCtrl', function($scope, $http){
         });
     }
     $scope.killRoadMap = function(){
-        console.log("zzzz");
         $http({
             withCredentials: false,
             method: 'post',
@@ -52,6 +48,28 @@ app.controller('myCtrl', function($scope, $http){
             data: $scope.tree,
             contentType : 'application/json',
             dataType: "json"
+        });
+    }
+    $scope.addBroker = function(){
+        console.log($scope.newnode);
+        $http({
+            withCredentials: false,
+            method: 'post',
+            url: "/add_broker",
+            headers: {'Content-Type': 'application/json'},
+            data: $scope.newnode,
+            contentType : 'application/json',
+            dataType: "json"
+        });
+    }
+    $scope.getBroker = function(){
+        $http({
+            withCredentials: false,
+            method: 'get',
+            url: "/get_broker"
+        }).then(function(response){
+            // this.brokerList = response.data;
+            $scope.brokerList = response.data;
         });
     }
     $scope.changeToTree = function (arrayList) {
@@ -67,7 +85,7 @@ app.controller('myCtrl', function($scope, $http){
             rootNodes.outingNode[list.source].push(list.target);
         }
 
-        rootNodes.roadMapId = "1";
+        // rootNodes.roadMapId = "1";
         rootNodes.clientId = "1";
         rootNodes.initNode = this.listOfInitNode;
         rootNodes.lastNode = this.listOfLastNode;
