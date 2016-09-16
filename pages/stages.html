@@ -962,18 +962,20 @@ instance.batch(function () {
         // console.log("connection " + params.connection.id + " was moved");
     });
 });
-var dynamicAnchors = [ [ 0.98, 0.5, 1, 0 ],[ 0.3, 0.02, 0, -1 ],
-[ 0.3, 0.98, 0, 1 ], [ 0.02, 0.5, -1, 0 ] ];
+var dynamicAnchors = [ [ 0.99, 0.5, 1, 0 ],[ 0.3, 0.01, 0, -1 ],
+[ 0.3, 0.99, 0, 1 ], [ 0.01, 0.5, -1, 0 ] ];
 
-var dynamicAnchors2 = [  [ 0.02, 0.5, -1, 0 ],[ 0.98, 0.5, 1, 0 ], [ 0.7, 0.02, 0, -1 ],
-[ 0.7, 0.98, 0, 1 ] ];
+var dynamicAnchors2 = [  [ 0.01, 0.5, -1, 0 ],[ 0.99, 0.5, 1, 0 ], [ 0.7, 0.01, 0, -1 ],
+[ 0.7, 0.99, 0, 1 ] ];
 var _addEndpoints = function (toId) {
     instance.addEndpoint(toId, sourceEndpoint, {
-        anchor: dynamicAnchors,
+        // anchor: dynamicAnchors,
+        anchor: "Right",
         uuid: toId[0].id+"_source"
     });
     instance.addEndpoint(toId, targetEndpoint, {
-        anchor: dynamicAnchors2,
+        // anchor: dynamicAnchors2,
+        anchor: "Left",
         uuid: toId[0].id+"_target"
     });
 };
@@ -1029,20 +1031,28 @@ $("#loadRoadMap").click(function(){
     var a = {
    "roadMapId": "1",
    "clientId": "1",
-   "initNode": [
-      "1"
-   ],
-   "lastNode": [
-      "2"
-   ],
+   "initNode": [],
+   "lastNode": [],
    "incomingNode": {
+      "1": [
+         "3"
+      ],
       "2": [
          "1"
+      ],
+      "3": [
+         "2"
       ]
    },
    "outingNode": {
       "1": [
          "2"
+      ],
+      "2": [
+         "3"
+      ],
+      "3": [
+         "1"
       ]
    },
    "isInput": false,
@@ -1052,18 +1062,25 @@ $("#loadRoadMap").click(function(){
          "parameter": [],
          "code": "def eventHandler(event, context, callback):\n    ",
          "deviceId": "Device1",
-         "x": "80px",
+         "x": "100px",
          "y": "180px"
       },
       "2": {
          "parameter": [],
          "code": "def eventHandler(event, context, callback):\n    ",
          "deviceId": "Device2",
-         "x": "460px",
+         "x": "640px",
+         "y": "520px"
+      },
+      "3": {
+         "parameter": [],
+         "code": "def eventHandler(event, context, callback):\n    ",
+         "deviceId": "Device3",
+         "x": "1120px",
          "y": "300px"
       }
    }
-}
+};
 // console.log(Object.keys(a['mapIds']).length);
 for(var i=0; i<Object.keys(a['mapIds']).length; ++i){
     addnode();
@@ -1074,9 +1091,9 @@ var n = $('.window');
 for(var i=1 ; i< n.length; ++i){
     n[i].style['left'] = a['mapIds'][i]['x'];
     n[i].style['top'] = a['mapIds'][i]['y'];
-    instance.connect({
-        uuids:[n[i].id+'_source', 'Device2_target']
-    });
+    // instance.connect({
+    //     uuids:[n[i].id+'_source', 'Device2_target']
+    // });
 };
 // console.log(a['outingNode']['1']);
 for(var i=1; i< n.length ; ++i){
