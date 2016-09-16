@@ -8,7 +8,7 @@ var MongoClient = mongo.MongoClient;
 var expressapp = express();
 var device_data = new Array();
 
-expressapp.use(bodyparser.urlencoded({extended:true}));
+expressapp.use(bodyparser.json());
 expressapp.use(express.static(path.join(__dirname+"/../", 'console')));
 const port = 3000;
 
@@ -17,20 +17,26 @@ const port = 3000;
 // var server = http.createServer(function(req, res){
 expressapp.set('port', port);
 
-expressapp.get('/', function(req, res){
-	res.sendFile(__dirname + "/index.html");
-	console.log("zzzz");
-});
+// expressapp.get('/', function(req, res){
+// 	res.sendFile(__dirname + "/index.html");
+// 	console.log("zzzz");
+// });
 
-expressapp.get('/get_db', function(req, res){
-	getdevicedb(req, res);
-	console.log("zzz111z");
-});
+// expressapp.get('/get_db', function(req, res){
+// 	getdevicedb(req, res);
+// 	console.log("zzz111z");
+// });
 
 expressapp.post('/db', function(req, res){
 	console.log(req.param('name',null));
 	startdb(req.param('name',null), req.param('txtname',null));
 	res.sendFile(path.resolve(__dirname+'/../../index.html'));
+});
+
+expressapp.post('/post_db', function(req, res){
+	console.log("zzzz");
+	console.log(req.body);
+	startdb(req.body, "recipe");
 });
 
 var server = expressapp.listen(expressapp.get('port'), function(){

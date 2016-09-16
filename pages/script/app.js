@@ -2,17 +2,34 @@
 var app = angular.module('mainModule', []);
 // var app = angular.module('mainModule',[]);
 app.controller('myCtrl', function($scope, $http){
-    // $scope.name = "kihwan";
+    $scope.name = "kihwan";
+    $scope.na = "kihwan";
     // $http.get("/get_db").then(function(response, error){
     //     $scope.list = response.data;
     // })
-    // $scope.maplist = [];
+    // stages.html
     $scope.listOfDevice = {};
     $scope.listOfInitNode = [];
     $scope.listOfLastNode = [];
     $scope.list = [];
     $scope.tree;
     $scope.mapIds;
+    // settings.html
+    $scope.brokerList;
+    // $http.get("/get_db").then(function(res, error){
+    //     $scope.brokerList = res.data;
+    // });
+    $scope.saveDataBase = function(){
+        $http({
+            withCredentials: false,
+            method: 'post',
+            url: "/post_db",
+            headers: {'Content-Type': 'application/json'},
+            data: $scope.tree,
+            contentType : 'application/json',
+            dataType: "json"
+        });
+    }
 
     $scope.changeToTree = function (arrayList) {
         Object.setPrototypeOf(arrayList, Object.prototype);
@@ -40,7 +57,9 @@ app.controller('myCtrl', function($scope, $http){
             insert_incoming(arrayList[i]);
             insert_outcoming(arrayList[i]);
         }
+        // $scope.tree = rootNodes;
         $scope.tree = JSON.stringify(rootNodes, null, '   ');
         return rootNodes;
     };
+
 });
