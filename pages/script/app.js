@@ -3,7 +3,6 @@ var app = angular.module('mainModule', []);
 // var app = angular.module('mainModule',[]);
 app.controller('myCtrl', function($scope, $http){
     $scope.name = "kihwan";
-    $scope.na = "kihwan";
     // $http.get("/get_db").then(function(response, error){
     //     $scope.list = response.data;
     // })
@@ -15,10 +14,17 @@ app.controller('myCtrl', function($scope, $http){
     $scope.tree;
     $scope.mapIds;
     // settings.html
-    $scope.brokerList;
-    // $http.get("/get_db").then(function(res, error){
-    //     $scope.brokerList = res.data;
-    // });
+    $scope.brokerList=[
+        {
+            "brokerId" : "KKK",
+            "ipAddress" : "127.0.0.1",
+            "kafkaUrl" : "127.0.0.1",
+            "kafkaPort" : "9999"
+        }
+    ];
+    $scope.newnode ={};
+
+    // ------------------------------------------
     $scope.saveDataBase = function(){
         $http({
             withCredentials: false,

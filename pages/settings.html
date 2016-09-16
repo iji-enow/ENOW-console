@@ -439,15 +439,6 @@
                 </div>
             </div>
             <!-- search form -->
-            <form action="#" method="get" class="sidebar-form">
-                <div class="input-group">
-                    <input type="text" name="q" class="form-control" placeholder="Search...">
-                    <span class="input-group-btn">
-                        <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-                        </button>
-                    </span>
-                </div>
-            </form>
             <!-- /.search form -->
             <!-- sidebar menu: : style can be found in sidebar.less -->
             <ul class="sidebar-menu">
@@ -522,8 +513,9 @@
     <!-- Main content -->
 
     <section class="content" ng-controller="myCtrl">
+
         <br>
-            <input name="sendToAngular" type="hidden" id="jsonToScope" ng-model="list" ng-change="list"></input>
+        <input name="sendToAngular" type="hidden" id="jsonToScope" ng-model="list" ng-change="list"></input>
         <div class="row">
             <div class="col-lg-4 col-xs-4">
                 <div class="box box-danger">
@@ -631,9 +623,6 @@
                 </div>
             </div>
         </div>
-
-
-
         <div class="row">
             <div class="col-lg-12 col-xs-12">
                 <div class="box box-success">
@@ -647,8 +636,8 @@
                                 <div class="box">
                                     <div class="box-header">
                                         <h3 class="box-title">Broker lists</h3>
+                                        <button id="addBroker" class="btn btn-primary btn-flat pull-right">Add Broker</button>
                                     </div>
-                                    <!-- /.box-header -->
                                     <div class="box-body">
                                         <table id="broker_table" class="table table-bordered table-striped">
                                             <thead>
@@ -660,36 +649,48 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr ng-model="n in brokerList">
-                                                    <td>{{brokerList}}</td>
-                                                    <td>{{brokerList}}</td>
-                                                    <td>{{brokerList}}</td>
-                                                    <td>{{brokerList}}</td>
+                                                <tr ng-repeat = "n in brokerList">
+                                                    <td>{{n.brokerId}}</td>
+                                                    <td>{{n.ipAddress}}</td>
+                                                    <td>{{n.kafkaUrl}}</td>
+                                                    <td>{{n.kafkaPort}}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                     </div>
-                                    <!-- /.box-body -->
                                 </div>
-                                <!-- /.box -->
                             </div>
-                            <!-- /.col -->
                         </div>
-
-
                     </div>
                 </div>
             </div>
-
-
         </div>
-
-
-
-
+        <div id="myModal" class="modal fade">
+            <div class="modal-dialog" style="width:300px;">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Add Broker</h4>
+                    </div>
+                    <div class="modal-body">
+                        <h4>Broker Id</h4>
+                        <input type="text" id="s1" class="form-control" style="margin-bottom:5px;">
+                        <h4>Ip Address</h4>
+                        <input type="text" id="s2" class="form-control" style="margin-bottom:5px;">
+                        <h4>Kafka Url</h4>
+                        <input type="text" id="s3" class="form-control" style="margin-bottom:5px;">
+                        <h4>Kafka Port</h4>
+                        <input type="text" id="s4" class="form-control" style="margin-bottom:5px;">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-default" id="addBrokerSubmit">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
-
-
 </div>
 <!--- ------------------------------------------------------------------------------->
 <footer class="main-footer">
@@ -921,6 +922,24 @@ $(document).ready(function(){
     // setTimeout(function () {
     //     console.log(angular.element(document.getElementById('jsonToScope')).scope().tree);
     // }, 200);
+});
+
+$("#addBroker").click(function(){
+    $('#myModal').modal('show');
+});
+$("#addBrokerSubmit").click(function(){
+    if ( !($('#s1')[0].value)|| !($('#s2')[0].value)|| !($('#s3')[0].value)|| !($('#s4')[0].value) ){
+        console.log("input fields must be filled");
+    }else{
+        var temp = angular.element(document.getElementById('jsonToScope')).scope().newnode;
+        temp['brokerId'] = $('#s1')[0].value;
+        temp['ipAddress'] = $('#s2')[0].value;
+        temp['kafkaUrl'] = $('#s3')[0].value;
+        temp['kafkaPort'] = $('#s4')[0].value;
+        angular.element(document.getElementById('jsonToScope')).scope().brokerList.push(temp);
+        angular.element(document.getElementById('jsonToScope')).scope().newnode = {};
+        angular.element(document.getElementById('jsonToScope')).scope().$apply();
+    }
 });
 $(function () {
     $("[data-mask]").inputmask();
