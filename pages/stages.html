@@ -812,14 +812,23 @@ $('#run').click(function(){
     if($(this).is(':checked')){
         var ask = confirm("Start Roadmap?");
         if(ask==true){
+        saveTree();
             // console.log($('#formSave').submit());
-            angular.element(document.getElementById('formSave')).scope().runRoadMap();
+            console.log(angular.element(document.getElementById('jsonToScope')).scope().runRoadMap())
+            // angular.element(document.getElementById('formSave')).scope().runRoadMap();
         }
         else{
             $(this).attr("checked",false);
         }
     }
+    else{
+    angular.element(document.getElementById('jsonToScope')).scope().killRoadMap();
+    }
 });
+
+// $('#run').is(":checked"){
+//     console.log("die..");
+// }
 
 $('#test').on("click","#protocolSelect", function () {
     var selected = $(this)[0].value;
@@ -981,6 +990,10 @@ var _addEndpoints = function (toId) {
 };
 
 $("#saveDB").click(function(){
+    saveTree();
+});
+
+function saveTree(){
     connectInfo=[];
     instance.getConnections().forEach(
         function foo(value){
@@ -1016,8 +1029,7 @@ $("#saveDB").click(function(){
     angular.element(document.getElementById('jsonToScope')).scope().mapIds = deviceInfo;
     angular.element(document.getElementById('jsonToScope')).scope().changeToTree(connectInfo);
     console.log(angular.element(document.getElementById('jsonToScope')).scope().tree);
-});
-
+}
 
 
 $("#openDeviceList").click(function(){

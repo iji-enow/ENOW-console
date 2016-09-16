@@ -34,56 +34,74 @@ expressapp.set('port', port);
 // });
 
 expressapp.post('/post_db', function(req, res){
-	console.log("zzzz");
-	console.log(req.body);
-	connectDB(req.body, "recipe");
+	console.log("post");
+	connectDB(req.body, 'recipe', 'save');
 });
 expressapp.post('/run_db', function(req, res){
-	console.log("zzzz");
-	console.log(req.body);
-	connectDB(req.body, 'execute')
+	console.log("run");
+	connectDB(req.body, 'execute', 'run');
+
+
+});
+expressapp.post('/kill_db', function(req, res){
+	console.log("kill");
+	connectDB(req.body, 'execute', 'kill')
 });
 
 var server = expressapp.listen(expressapp.get('port'), function(){
-  console.log('Magic happens on ' + __dirname);
+	console.log('Magic happens on ' + __dirname);
 });
 
+function connectDB(source, collectionName, command){
+	MongoClient.connect('mongodb://localhost/source',function(err,db) {
+		console.log("connecting to db...");
+		// console.log("count : " + db.collection(collectionName).count());
 
-function getdevicedb(req, res){
-	MongoClient.connect('mongodb://52.68.183.120:9191/enow',function(err,db) {
-	        console.log("searching deviceid in db");
-			var findRestaurants = function(db, callback) {
-			   var cursor =db.collection('device').find();
-			   cursor.each(function(err, doc) {
-			      if (doc != null) {
-			         console.dir(doc);
-					 device_data.push(doc);
-			      } else {
-			         callback();
-			      }
-			   });
-			};
-			findRestaurants(db, function() {
-				res.send(device_data)
-		        db.close();
-		    });
+		var insertDocument = function(db, callback){
+			db.collection(collectionName).count({}, function(err, c) {
+				db.collection(collectionName).insertOne({
+					"roadMapId" : (c+1).toString(),
+					"clientId" : source['clientId'],
+					"initNode" : source['initNode'],
+					"lastNode" : source['lastNode'],
+					"incomingNode" : source['incomingNode'],
+					"outingNode" : source['outingNode'],
+					"isInput" : source['isInput'],
+					"isOutput" : source['isOutput'],
+					"mapIds" : source['mapIds']
+				},function(err, result){
+					callback();
+				});
+			});
+		};
+		var deleteDocument = function(db, callback){
+			db.collection(collectionName).deleteOne({
+			},function(err, result){
+				console.log("Running...");
+				callback();
+			});
+		};
+		var countDocument = function(db, callback){
+			db.collection(collectionName).count({
+			},function(err, result){
+				console.log("Running..." + result);
+				callback();
+			});
+		};
+		if(command=="save"){
+			countDocument(db, function(){
+				insertDocument(db, function(){
+					db.close();
+				});
+			});
+		}else if(command=="kill"){
+			deleteDocument(db,function(){
+				db.close();
+			});
+		}else if(command=="run"){
+			insertDocument(db, function(){
+				db.close();
+			});
+		}
 	});
-}
-
-function connectDB(source, collectionName){
-    MongoClient.connect('mongodb://localhost/source',function(err,db) {
-        console.log("connecting to db...");
-        var insertDocument = function(db, callback){
-            db.collection(collectionName).insertOne({
-                "name" : "active",
-                "source" : source
-            },function(err, result){
-                console.log("Running...");
-                callback();
-            });
-        };
-        insertDocument(db, function(){
-            db.close();
-        });
-    });
 };

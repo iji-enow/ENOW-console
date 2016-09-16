@@ -42,7 +42,18 @@ app.controller('myCtrl', function($scope, $http){
             dataType: "json"
         });
     }
-
+    $scope.killRoadMap = function(){
+        console.log("zzzz");
+        $http({
+            withCredentials: false,
+            method: 'post',
+            url: "/kill_db",
+            headers: {'Content-Type': 'application/json'},
+            data: $scope.tree,
+            contentType : 'application/json',
+            dataType: "json"
+        });
+    }
     $scope.changeToTree = function (arrayList) {
         Object.setPrototypeOf(arrayList, Object.prototype);
         var rootNodes = {};
