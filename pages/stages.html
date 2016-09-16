@@ -40,6 +40,11 @@
 
     <style>
     /* The switch - the box around the slider */
+    form {
+    display: inline;
+    padding: 0px;
+    spacing: 0px;
+}
     .switch {
         position: relative;
         display: inline-block;
@@ -517,10 +522,12 @@
                             <form ng-submit="saveDataBase()"><button id="saveDB" type="submit" class="btn btn-info btn-flat pull-right" data-toggle="tooltip" title="Save Roadmap to database">Save Recipe</button></form>
                         <button id="addDevice" class="btn btn-info btn-flat pull-right" data-toggle="tooltip" title="Add custom device">Add Device</button>
                         <button id="loadRoadMap" class="btn btn-info btn-flat pull-right" data-toggle="tooltip" title="Load RoadMap Recipes">Load Recipes</button>
-                        <label class="switch pull-right" style="margin-right:10px;">
+                        <form id="formRun" ng-submit="runRoadMap()">
+                            <label class="switch pull-right" style="margin-right:10px;">
                             <input type="checkbox" id="run">
                             <div class="slider round"></div>
                         </label>
+                    </form>
                     </div>
                     <div id="test" class="map" style="height:750px;">
                             <div class="window box box-default collapsed-box" id="device0" style="display:none;">
@@ -805,7 +812,8 @@ $('#run').click(function(){
     if($(this).is(':checked')){
         var ask = confirm("Start Roadmap?");
         if(ask==true){
-
+            // console.log($('#formSave').submit());
+            angular.element(document.getElementById('formSave')).scope().runRoadMap();
         }
         else{
             $(this).attr("checked",false);

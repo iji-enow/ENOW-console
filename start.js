@@ -27,16 +27,21 @@ expressapp.set('port', port);
 // 	console.log("zzz111z");
 // });
 
-expressapp.post('/db', function(req, res){
-	console.log(req.param('name',null));
-	startdb(req.param('name',null), req.param('txtname',null));
-	res.sendFile(path.resolve(__dirname+'/../../index.html'));
-});
+// expressapp.post('/db', function(req, res){
+// 	console.log(req.param('name',null));
+// 	connectDB(req.param('name',null), req.param('txtname',null));
+// 	res.sendFile(path.resolve(__dirname+'/../../index.html'));
+// });
 
 expressapp.post('/post_db', function(req, res){
 	console.log("zzzz");
 	console.log(req.body);
-	startdb(req.body, "recipe");
+	connectDB(req.body, "recipe");
+});
+expressapp.post('/run_db', function(req, res){
+	console.log("zzzz");
+	console.log(req.body);
+	connectDB(req.body, 'execute')
 });
 
 var server = expressapp.listen(expressapp.get('port'), function(){
@@ -48,7 +53,7 @@ function getdevicedb(req, res){
 	MongoClient.connect('mongodb://52.68.183.120:9191/enow',function(err,db) {
 	        console.log("searching deviceid in db");
 			var findRestaurants = function(db, callback) {
-			   var cursor =db.collection('device').find( );
+			   var cursor =db.collection('device').find();
 			   cursor.each(function(err, doc) {
 			      if (doc != null) {
 			         console.dir(doc);
@@ -65,15 +70,15 @@ function getdevicedb(req, res){
 	});
 }
 
-function startdb(source, txtname){
+function connectDB(source, collectionName){
     MongoClient.connect('mongodb://localhost/source',function(err,db) {
-        console.log("start db");
+        console.log("connecting to db...");
         var insertDocument = function(db, callback){
-            db.collection('codes').insertOne({
-                "name" : txtname,
+            db.collection(collectionName).insertOne({
+                "name" : "active",
                 "source" : source
             },function(err, result){
-                console.log("Inserted a document into logs collection.");
+                console.log("Running...");
                 callback();
             });
         };

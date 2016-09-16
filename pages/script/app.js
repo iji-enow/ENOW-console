@@ -30,6 +30,18 @@ app.controller('myCtrl', function($scope, $http){
             dataType: "json"
         });
     }
+    $scope.runRoadMap = function(){
+        console.log("zzzz");
+        $http({
+            withCredentials: false,
+            method: 'post',
+            url: "/run_db",
+            headers: {'Content-Type': 'application/json'},
+            data: $scope.tree,
+            contentType : 'application/json',
+            dataType: "json"
+        });
+    }
 
     $scope.changeToTree = function (arrayList) {
         Object.setPrototypeOf(arrayList, Object.prototype);
