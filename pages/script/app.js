@@ -15,12 +15,6 @@ app.controller('myCtrl', function($scope, $http){
     $scope.mapIds;
     // settings.html
     $scope.brokerList=[
-        {
-            "brokerId" : "KKK",
-            "ipAddress" : "127.0.0.1",
-            "kafkaUrl" : "127.0.0.1",
-            "kafkaPort" : "9999"
-        }
     ];
     $scope.newnode ={};
 

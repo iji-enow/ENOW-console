@@ -13,7 +13,7 @@
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
     <!-- DataTables -->
-    <link rel="stylesheet" href="../plugins/datatables/dataTables.bootstrap.css">
+    <!-- <link rel="stylesheet" href="../plugins/datatables/dataTables.bootstrap.css"> -->
     <!-- Theme style -->
     <link rel="stylesheet" href="../dist/css/AdminLTE.min.css">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
@@ -151,6 +151,10 @@
         color: black;
         position: absolute;
         width: 16em;
+    }
+    .canClick:hover{
+        font-size: 20px;
+        cursor:pointer;
     }
     .window:hover {
         box-shadow: 2px 2px 5px #AAAAAA;
@@ -649,7 +653,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr ng-repeat = "n in brokerList">
+                                                <tr class="canClick" ng-repeat = "n in brokerList">
                                                     <td>{{n.brokerId}}</td>
                                                     <td>{{n.ipAddress}}</td>
                                                     <td>{{n.kafkaUrl}}</td>
@@ -915,8 +919,8 @@ immediately after the control sidebar -->
 <script src="../plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
 <script src="../plugins/input-mask/jquery.inputmask.extensions.js"></script>
 <!-- DataTables -->
-<script src="../plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="../plugins/datatables/dataTables.bootstrap.min.js"></script>
+<!-- <script src="../plugins/datatables/jquery.dataTables.min.js"></script> -->
+<!-- <script src="../plugins/datatables/dataTables.bootstrap.min.js"></script> -->
 <script>
 $(document).ready(function(){
     // setTimeout(function () {
@@ -944,16 +948,16 @@ $("#addBrokerSubmit").click(function(){
 $(function () {
     $("[data-mask]").inputmask();
 });
-$(function () {
-    $('#broker_table').DataTable({
-        "paging": true,
-        "lengthChange": true,
-        "searching": true,
-        "ordering": true,
-        "info": true,
-        "autoWidth": true
-    });
-});
+// $(function () {
+//     $('#broker_table').DataTable({
+//         "paging": true,
+//         "lengthChange": true,
+//         "searching": true,
+//         "ordering": true,
+//         "info": true,
+//         "autoWidth": true
+//     });
+// });
 </script>
 </body>
 </html>
