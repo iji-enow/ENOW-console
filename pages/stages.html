@@ -834,6 +834,11 @@ $('#test').on("click","#devSettingSave", function () {
 
 $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();
+        setTimeout(function () {
+            angular.element(document.getElementById('jsonToScope')).scope().settings = localStorage;
+                angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings();
+                }, 200);
+
 });
 
 var instance = window.jsp = jsPlumb.getInstance({

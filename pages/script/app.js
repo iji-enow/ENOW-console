@@ -14,7 +14,12 @@ app.controller('myCtrl', function($scope, $http){
     $scope.tree;
     $scope.mapIds;
     // settings.html
-    $scope.brokerList=[];
+    $scope.brokerList=[{
+        "brokerId":"za",
+        "ipAddress":"127.9.9.9",
+        "kafkaUrl":"127.0.0.0",
+        "kafkaPort":"9000"
+    }];
     $scope.settings={};
     $scope.newnode ={};
     // ------------------------------------------
@@ -52,7 +57,6 @@ app.controller('myCtrl', function($scope, $http){
         });
     }
     $scope.addBroker = function(){
-        console.log($scope.newnode);
         $http({
             withCredentials: false,
             method: 'post',
@@ -81,6 +85,17 @@ app.controller('myCtrl', function($scope, $http){
         }).then(function(response){
             // this.brokerList = response.data;
             $scope.brokerList = response.data;
+        });
+    }
+    $scope.postUrlSettings = function(){
+        $http({
+            withCredentials: false,
+            method: 'post',
+            url: "/post_url_settings",
+            headers: {'Content-Type': 'application/json'},
+            data: $scope.settings,
+            contentType : 'application/json',
+            dataType: "json"
         });
     }
     $scope.changeToTree = function (arrayList) {

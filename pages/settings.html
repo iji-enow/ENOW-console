@@ -154,8 +154,8 @@
         width: 16em;
     }
     .canClick:hover{
-        font-size: 20px;
-        cursor:pointer;
+        border: 3px solid green;
+        cursor: pointer;
     }
     .window:hover {
         box-shadow: 2px 2px 5px #AAAAAA;
@@ -642,7 +642,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr class="canClick" ng-repeat = "n in brokerList">
+                                                <tr class="canClick" id="deviceAdd" ng-repeat = "n in brokerList">
                                                     <td>{{n.brokerId}}</td>
                                                     <td>{{n.ipAddress}}</td>
                                                     <td>{{n.kafkaUrl}}</td>
@@ -660,6 +660,31 @@
         </div>
         <div id="myModal" class="modal fade">
             <div class="modal-dialog" style="width:300px;">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Add Broker</h4>
+                    </div>
+                    <div class="modal-body">
+                        <h4>Broker Id</h4>
+                        <input type="text" id="s1" class="form-control" style="margin-bottom:5px;">
+                        <h4>Ip Address</h4>
+                        <input type="text" id="s2" class="form-control" style="margin-bottom:5px;">
+                        <h4>Kafka Url</h4>
+                        <input type="text" id="s3" class="form-control" style="margin-bottom:5px;">
+                        <h4>Kafka Port</h4>
+                        <input type="text" id="s4" class="form-control" style="margin-bottom:5px;">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-default" id="addBrokerSubmit">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="deviceModal" class="modal fade">
+            <div class="modal-dialog" style="width:600px;">
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
@@ -912,8 +937,9 @@ immediately after the control sidebar -->
 <!-- <script src="../plugins/datatables/dataTables.bootstrap.min.js"></script> -->
 <script>
 $(document).ready(function(){
-    console.log(localStorage);
     setTimeout(function () {
+        angular.element(document.getElementById('jsonToScope')).scope().settings = localStorage;
+        angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings();
         angular.element(document.getElementById('jsonToScope')).scope().getBroker();
         $('#zookeeperUrl')[0].value=localStorage['zookeeperUrl'];
         $('#zookeeperPort')[0].value=localStorage['zookeeperPort'];
@@ -955,6 +981,13 @@ $("#addBrokerSubmit").click(function(){
         angular.element(document.getElementById('jsonToScope')).scope().$apply();
     }
 });
+$('.box-body').on("click","#deviceAdd",function(){
+    $("#deviceModal").modal('show');
+});
+// $(".canClick").click(function(){
+//     console.log("zz");
+//     $("#deviceModal").modal('show');
+// });
 $(function () {
     $("[data-mask]").inputmask();
 });
