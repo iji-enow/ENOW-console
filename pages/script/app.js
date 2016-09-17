@@ -15,6 +15,7 @@ app.controller('myCtrl', function($scope, $http){
     $scope.mapIds;
     // settings.html
     $scope.brokerList=[];
+    $scope.settings={};
     $scope.newnode ={};
     // ------------------------------------------
     $scope.saveDataBase = function(){
@@ -67,6 +68,16 @@ app.controller('myCtrl', function($scope, $http){
             withCredentials: false,
             method: 'get',
             url: "/get_broker"
+        }).then(function(response){
+            // this.brokerList = response.data;
+            $scope.brokerList = response.data;
+        });
+    }
+    $scope.getSettings = function(){
+        $http({
+            withCredentials: false,
+            method: 'get',
+            url: "/get_settings"
         }).then(function(response){
             // this.brokerList = response.data;
             $scope.brokerList = response.data;

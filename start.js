@@ -12,9 +12,6 @@ expressapp.use(bodyparser.json());
 expressapp.use(express.static(path.join(__dirname+"/../", 'console')));
 const port = 3000;
 
-// http.createServer(expressapp).listen(port);
-// server.listen(port);
-// var server = http.createServer(function(req, res){
 expressapp.set('port', port);
 
 expressapp.post('/post_db', function(req, res){
@@ -26,13 +23,18 @@ expressapp.post('/run_db', function(req, res){
 expressapp.post('/kill_db', function(req, res){
 	connectDB(req.body, 'source', 'execute', 'kill', null)
 });
+expressapp.post('/add_broker', function(req, res){
+	connectDB(req.body, 'connectionData', 'brokerList', 'saveBroker', null);
+});
 expressapp.get('/get_broker', function(req, res){
 	// console.log(req.body);
 	connectDB(null, 'connectionData', 'brokerList', 'find', res);
 });
-expressapp.post('/add_broker', function(req, res){
-	connectDB(req.body, 'connectionData', 'brokerList', 'saveBroker', null);
+expressapp.get('/get_settings', function(req, res){
+	// console.log(req.body);
+	connectDB(null, 'connectionData', 'settings', 'find', res);
 });
+
 var server = expressapp.listen(expressapp.get('port'), function(){
 	console.log("start enow console...");
 });
@@ -50,9 +52,9 @@ function connectDB(source, dbName, collectionName, command, response){
 			});
 		};
 		var insertDocument = function(db, callback){
-			db.collection(collectionName).count({}, function(err, c) {
+			db.collection(collectionName).count({}, function(err, cnt) {
 				db.collection(collectionName).insertOne({
-					"roadMapId" : (c+1).toString(),
+					"roadMapId" : (cnt+1).toString(),
 					"clientId" : source['clientId'],
 					"initNode" : source['initNode'],
 					"lastNode" : source['lastNode'],
@@ -67,9 +69,9 @@ function connectDB(source, dbName, collectionName, command, response){
 			});
 		};
 		var insertDocumentBroker = function(db, callback){
-			db.collection(collectionName).count({}, function(err, c) {
+			db.collection(collectionName).count({}, function(err, cnt) {
 				db.collection(collectionName).insertOne({
-					"brokerNum" : (c+1).toString(),
+					"brokerNum" : (cnt+1).toString(),
 					"brokerId" : source['brokerId'],
 					"ipAddress" : source['ipAddress'],
 					"kafkaUrl" : source['kafkaUrl'],

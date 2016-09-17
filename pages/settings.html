@@ -467,33 +467,21 @@
 <li>
     <a href="../pages/widgets.html">
         <i class="fa fa-th"></i> <span>Widgets</span>
-        <span class="pull-right-container">
-            <small class="label pull-right bg-green">new</small>
-        </span>
     </a>
 </li>
 <li>
     <a href="../pages/stages.html">
         <i class="fa fa-th"></i> <span>Stages</span>
-        <span class="pull-right-container">
-            <small class="label pull-right bg-green">new</small>
-        </span>
     </a>
 </li>
 <li>
     <a href="../pages/statistics.html">
         <i class="fa fa-th"></i> <span>Statistics</span>
-        <span class="pull-right-container">
-            <small class="label pull-right bg-green">new</small>
-        </span>
     </a>
 </li>
 <li>
     <a href="../pages/settings.html">
         <i class="fa fa-th"></i> <span>Settings</span>
-        <span class="pull-right-container">
-            <small class="label pull-right bg-green">new</small>
-        </span>
     </a>
 </li>
 <li><a href="../documentation/index.html"><i class="fa fa-book"></i> <span>Documentation</span></a></li>
@@ -535,24 +523,24 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-laptop"></i>
                                     </div>
-                                    <input type="text" class="form-control"  data-inputmask="'alias': 'ip'" data-mask>
+                                    <input id="zookeeperUrl" type="text" class="form-control"  data-inputmask="'alias': 'ip'" data-mask>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-4 col-xs-4">
+                            <div class="col-lg-8 col-xs-8">
                                 <label>Zookeeper Port</label>
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="ion ion-network"></i>
                                     </div>
-                                    <input type="text" class="form-control">
+                                    <input id="zookeeperPort" type="text" class="form-control">
                                 </div>
                             </div>
                         </div>
                         <br>
                         <div class="box-footer">
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button id="submit1" type="submit" class="btn btn-primary">Save</button>
                         </div>
                     </div>
                 </div>
@@ -564,30 +552,30 @@
                     </div>
                     <div class="box-body">
                         <div class="row">
-                            <div class="col-lg-8 col-xs-8">
+                            <div class="col-lg-8 col-xs-6">
                                 <label>MongoDB Url</label>
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-database"></i>
                                     </div>
-                                    <input type="text" class="form-control"  data-inputmask="'alias': 'ip'" data-mask>
+                                    <input id="mongoUrl" type="text" class="form-control"  data-inputmask="'alias': 'ip'" data-mask>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-4 col-xs-4">
+                            <div class="col-lg-8 col-xs-8">
                                 <label>MongoDB Port</label>
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="ion ion-network"></i>
                                     </div>
-                                    <input type="text" class="form-control">
+                                    <input id="mongoPort" type="text" class="form-control">
                                 </div>
                             </div>
                         </div>
                         <br>
                         <div class="box-footer">
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button id="submit2" type="submit" class="btn btn-primary">Save</button>
                         </div>
                     </div>
                 </div>
@@ -599,30 +587,30 @@
                     </div>
                     <div class="box-body">
                         <div class="row">
-                            <div class="col-lg-4 col-xs-4">
+                            <div class="col-lg-8 col-xs-8">
                                 <label>Number of Workers</label>
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-user"></i>
                                     </div>
-                                    <input type="text" class="form-control">
+                                    <input id="numWorker" type="text" class="form-control">
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-4 col-xs-4">
+                            <div class="col-lg-8 col-xs-8">
                                 <label>Max Task Parallelism</label>
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-cubes"></i>
                                     </div>
-                                    <input type="text" class="form-control">
+                                    <input id="maxTask" type="text" class="form-control">
                                 </div>
                             </div>
                         </div>
                         <br>
                         <div class="box-footer">
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button id="submit3" type="submit" class="btn btn-primary">Save</button>
                         </div>
                     </div>
                 </div>
@@ -924,9 +912,28 @@ immediately after the control sidebar -->
 <!-- <script src="../plugins/datatables/dataTables.bootstrap.min.js"></script> -->
 <script>
 $(document).ready(function(){
+    console.log(localStorage);
     setTimeout(function () {
         angular.element(document.getElementById('jsonToScope')).scope().getBroker();
+        $('#zookeeperUrl')[0].value=localStorage['zookeeperUrl'];
+        $('#zookeeperPort')[0].value=localStorage['zookeeperPort'];
+        $('#mongoUrl')[0].value=localStorage['mongoUrl'];
+        $('#mongoPort')[0].value=localStorage['mongoPort'];
+        $('#numWorker')[0].value=localStorage['numberOfWorkers'];
+        $('#maxTask')[0].value=localStorage['maxTaskParallelism'];
     }, 200);
+});
+$("#submit1").click(function(){
+    localStorage['zookeeperUrl'] = $('#zookeeperUrl')[0].value;
+    localStorage['zookeeperPort'] = $('#zookeeperPort')[0].value;
+});
+$("#submit2").click(function(){
+    localStorage['mongoUrl'] = $('#mongoUrl')[0].value;
+    localStorage['mongoPort'] = $('#mongoPort')[0].value;
+});
+$("#submit3").click(function(){
+    localStorage['numberOfWorkers'] = $('#numWorker')[0].value;
+    localStorage['maxTaskParallelism'] = $('#maxTask')[0].value;
 });
 
 $("#addBroker").click(function(){
@@ -951,16 +958,6 @@ $("#addBrokerSubmit").click(function(){
 $(function () {
     $("[data-mask]").inputmask();
 });
-// $(function () {
-//     $('#broker_table').DataTable({
-//         "paging": true,
-//         "lengthChange": true,
-//         "searching": true,
-//         "ordering": true,
-//         "info": true,
-//         "autoWidth": true
-//     });
-// });
 </script>
 </body>
 </html>
