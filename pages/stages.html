@@ -826,9 +826,7 @@ $(document).ready(function(){
         angular.element(document.getElementById('jsonToScope')).scope().settings = localStorage;
         angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings();
     }, 200);
-
 });
-
 $('#run').click(function(){
     if($(this).is(':checked')){
         var ask = confirm("Start Roadmap?");
@@ -871,7 +869,7 @@ $('#test').on("click","#devSettingSave", function () {
     // console.log($(this).parent().find("#ip")[0].value)
 });
 
-$('#broker_table').on("click","#loadRoadMapItem",function(){
+$('#broker_table').on('click','#loadRoadMapItem', function(){
     console.log($(this)[0].childNodes[1].innerText);
     var ask = confirm('Load '+$(this)[0].childNodes[1].innerText +' RoadMap?');
     if(ask){
@@ -879,26 +877,38 @@ $('#broker_table').on("click","#loadRoadMapItem",function(){
         angular.element(document.getElementById('jsonToScope')).scope().loadRoadMap();
         setTimeout(function () {
             var currentRoadMap = angular.element(document.getElementById('jsonToScope')).scope().getTarget;
-            console.log(currentRoadMap);
-
-                for(var i=0; i<Object.keys(a['mapIds']).length; ++i){
-                    addnode();
-                };
-
-                var n = $('.window');
-                // console.log(n);
-                for(var i=1 ; i< n.length; ++i){
-                    n[i].style['left'] = a['mapIds'][i]['x'];
-                    n[i].style['top'] = a['mapIds'][i]['y'];
-                    // instance.connect({
-                    //     uuids:[n[i].id+'_source', 'Device2_target']
-                    // });
-                };
-                // console.log(a['outingNode']['1']);
-                for(var i=1; i< n.length ; ++i){
-
+            console.log(JSON.stringify(currentRoadMap));
+            var temp = JSON.parse(JSON.stringify(currentRoadMap[0], null, '   '));
+            
+            for(var i=0; i<Object.keys(temp['mapIds']).length; ++i){
+                addnode();
+            };
+            var n = $('.window');
+            // console.log(n);
+            for(var i=1 ; i< n.length; ++i){
+                n[i].style['left'] = temp['mapIds'][i]['x'];
+                n[i].style['top'] = temp['mapIds'][i]['y'];
+            };
+            var arr = Object.keys(temp['outingNode']).map(function(key){
+                return temp['outingNode'][key];
+            });
+            // console.log(arr);
+            for(var i = 0 ; i< Object.keys(temp['outingNode']).length ; ++i){
+                for(var j = 0 ; j < arr[i].length; ++j){
+                    instance.connect({
+                        uuids:['Device'+Object.keys(temp['outingNode'])[i]+'_source','Device'+arr[i][j]+'_target']
+                    });
                 }
-                instance.repaintEverything();
+            }
+            var arr = Object.keys(temp['mapIds']).map(function(key){
+                return temp['mapIds'][key];
+            });
+            for(var i=0; i < arr.length ; ++i){
+                // console.log(arr[i]['deviceId'].substring(6));
+                deviceInfo[arr[i]['deviceId'].substring(6)]['code'] = arr[i].code;
+                deviceInfo[arr[i]['deviceId'].substring(6)]['parameter'] = arr[i].parameter;
+            }
+            instance.repaintEverything();
         }, 200);
 
     }else{}
@@ -1064,8 +1074,6 @@ function saveTree(){
     //position values
     for(var i=1; i <= Object.keys(deviceInfo).length ; ++i){
         var temp = $('#test').find('#'+deviceInfo[i]['deviceId'])[0];
-        // console.log(temp.style['left']);
-        // console.log(temp.style['top']);
         deviceInfo[i]['x'] = temp.style['left'];
         deviceInfo[i]['y'] = temp.style['top'];
     }
@@ -1073,6 +1081,7 @@ function saveTree(){
     angular.element(document.getElementById('jsonToScope')).scope().listOfLastNode = lastNode;
     angular.element(document.getElementById('jsonToScope')).scope().list = connectInfo;
     angular.element(document.getElementById('jsonToScope')).scope().mapIds = deviceInfo;
+    console.log(deviceInfo);
     angular.element(document.getElementById('jsonToScope')).scope().changeToTree(connectInfo);
     console.log(angular.element(document.getElementById('jsonToScope')).scope().tree);
 }
@@ -1121,6 +1130,7 @@ $('#test').on("click","#codeEditor", function () {
         editor.resize();
     }, 300);
     if(deviceInfo[currentNode.substring(6)]['code']!==undefined){
+        console.log(deviceInfo);
         code = deviceInfo[currentNode.substring(6)]['code'];
         setTimeout(function () {
             editor.getSession().setValue(code);
