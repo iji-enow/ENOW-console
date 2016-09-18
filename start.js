@@ -2,10 +2,10 @@ const http = require('http');
 const express = require('express');
 const mongo = require('mongodb');
 const bodyparser = require('body-parser');
+const BSON = require('bson').BSONPure;
 var path = require('path');
 var MongoClient = mongo.MongoClient;
 var expressapp = express();
-var temp = new Array();
 var mongoUrl;
 var mongoPort;
 var roadMapIdTemp;
@@ -28,22 +28,22 @@ expressapp.set('port', port);
 
 
 expressapp.post('/post_db', function(req, res){
-    connectDB(req.body, 'source', 'recipe', 'save', null);
+    connectDB(req.body, 'source', 'recipes', 'save', null);
 });
 expressapp.post('/run_db', function(req, res){
     connectDB(req.body, 'source', 'execute', 'run', null);
-    setTimeout(function () {
-        payloads[0]['messages']='{"roadMapId":"'+roadMapIdTemp+'"}';
-        payloads[0]['topic']='test';
-    }, 500);
-    setTimeout(function () {
-        producer.send(payloads, function (err, data) {
-            console.log(payloads);
-        });
-        producer.on('error', function (err) {
-            console.log(err);
-        });
-    }, 700);
+    // setTimeout(function () {
+    //     payloads[0]['messages']='{"roadMapId":"'+roadMapIdTemp+'"}';
+    //     payloads[0]['topic']='test';
+    // }, 500);
+    // setTimeout(function () {
+    //     producer.send(payloads, function (err, data) {
+    //         console.log(payloads);
+    //     });
+    //     producer.on('error', function (err) {
+    //         console.log(err);
+    //     });
+    // }, 700);
 });
 expressapp.post('/kill_db', function(req, res){
     connectDB(req.body, 'source', 'execute', 'kill', null)
@@ -56,44 +56,58 @@ expressapp.post('/post_url_settings', function(req, res){
     mongoPort = req.body['mongoPort'];
     producer.client.connectionString = req.body['zookeeperUrl']+':'+req.body['zookeeperPort'];
 });
+expressapp.post('/load_roadmap', function(req, res){
+    console.log("---------------------------------------\n"+req.body['_id']+"-------------------------------\n");
+    connectDB(req.body, 'source', 'recipes', 'findTarget', res);
+});
 expressapp.get('/get_broker', function(req, res){
     connectDB(null, 'connectionData', 'brokerList', 'find', res);
 });
 expressapp.get('/get_settings', function(req, res){
     connectDB(null, 'connectionData', 'settings', 'find', res);
 });
+expressapp.get('/get_roadmaps', function(req, res){
+    connectDB(null, 'source', 'recipes', 'find', res);
+});
 
 var server = expressapp.listen(expressapp.get('port'), function(){
     console.log("start enow console...");
-    // connectDB(null, 'source', 'execute', 'find', null);
+    // connectDB(null, 'source', 'recipes', 'findTarget', null);
 });
 
 function connectDB(source, dbName, collectionName, command, response){
     MongoClient.connect('mongodb://'+mongoUrl+':'+mongoPort+'/'+dbName,function(err,db) {
-        // MongoClient.connect('mongodb://127.0.0.1:27017/'+dbName,function(err,db) {
+    // MongoClient.connect('mongodb://127.0.0.1:27017/'+dbName,function(err,db) {
 
 
         var findDocument = function(db, callback){
-            var cursor = db.collection(collectionName).find();
-            // var cursor = db.collection(collectionName).find({
-            //     "limit":1,
-            //     "sort": {$natural:-1}
-            // });
-            cursor.each(function(err, doc){
-                if(doc != null){
-                    temp.push(doc);
-                }else{
-                    callback();
-                }
+            db.collection(collectionName).find({}).toArray(function(err,result){
+                response.send(result);
             });
         };
 
+        var findTarget = function(db, callback){
+            console.log(source['_id']);
+            var o_id = BSON.ObjectID.createFromHexString(source['_id']);
+            db.collection(collectionName).find({_id:o_id}).toArray(function(err,result){
+                console.log(result);
+                response.send(result);
+                o_id = null;
+            });
+        }
 
         var insertDocument = function(db, callback){
-            db.collection(collectionName).count({}, function(err, cnt) {
-                roadMapIdTemp = cnt+1;
+            var cursor = db.collection(collectionName).find({}).toArray(function(err,result){
+                // console.log(result.length);
+                if(result.length!=0){
+                    roadMapIdTemp = parseInt(result[result.length-1]['roadMapId'])+1;
+                }
+                else{
+                    roadMapIdTemp = 1;
+                }
+                console.log(roadMapIdTemp);
                 db.collection(collectionName).insertOne({
-                    "roadMapId" : (cnt+1).toString(),
+                    "roadMapId" : roadMapIdTemp.toString(),
                     "clientId" : source['clientId'],
                     "initNode" : source['initNode'],
                     "lastNode" : source['lastNode'],
@@ -106,8 +120,8 @@ function connectDB(source, dbName, collectionName, command, response){
                     callback();
                 });
             });
-        };
 
+        };
 
         var insertDocumentBroker = function(db, callback){
             db.collection(collectionName).count({}, function(err, cnt) {
@@ -123,22 +137,12 @@ function connectDB(source, dbName, collectionName, command, response){
             });
         };
 
-
         var deleteDocument = function(db, callback){
             db.collection(collectionName).deleteOne({
             },function(err, result){
                 callback();
             });
         };
-
-
-        var countDocument = function(db, callback){
-            db.collection(collectionName).count({
-            },function(err, result){
-                callback();
-            });
-        };
-
 
         if(command=="save"){
             insertDocument(db, function(){
@@ -158,9 +162,10 @@ function connectDB(source, dbName, collectionName, command, response){
             });
         }else if(command=="find"){
             findDocument(db, function(){
-                response.send(temp);
-                // console.log(temp);
-                temp=[];
+                db.close();
+            });
+        }else if(command=="findTarget"){
+            findTarget(db, function(){
                 db.close();
             });
         }

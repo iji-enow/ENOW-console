@@ -41,10 +41,10 @@
     <style>
     /* The switch - the box around the slider */
     form {
-    display: inline;
-    padding: 0px;
-    spacing: 0px;
-}
+        display: inline;
+        padding: 0px;
+        spacing: 0px;
+    }
     .switch {
         position: relative;
         display: inline-block;
@@ -163,6 +163,10 @@
     }
     .window:hover {
         box-shadow: 2px 2px 5px #AAAAAA;
+        cursor: pointer;
+    }
+    .canClick:hover{
+        border: 3px solid green;
         cursor: pointer;
     }
     </style>
@@ -496,50 +500,48 @@
                     <div class="box-header with-border">
                         <h2 class="box-title" style="margin-top:10px;">RoadMap</h2>
                         <button id="openDeviceList" class="btn btn-primary btn-flat pull-right" data-toggle="tooltip" title="Show list of available devices">DeviceList</button>
-                            <form ng-submit="saveDataBase()"><button id="saveDB" type="submit" class="btn btn-primary btn-flat pull-right" data-toggle="tooltip" title="Save Roadmap to database">Save Recipe</button></form>
+                        <form ng-submit="saveDataBase()"><button id="saveDB" type="submit" class="btn btn-primary btn-flat pull-right" data-toggle="tooltip" title="Save Roadmap to database">Save Recipe</button></form>
                         <button id="addDevice" class="btn btn-primary btn-flat pull-right" data-toggle="tooltip" title="Add custom device">Add Device</button>
                         <button id="loadRoadMap" class="btn btn-primary btn-flat pull-right" data-toggle="tooltip" title="Load RoadMap Recipes">Load Recipes</button>
                         <form id="formRun" ng-submit="runRoadMap()">
                             <label class="switch pull-right" style="margin-right:10px;">
-                            <input type="checkbox" id="run">
-                            <div class="slider round"></div>
-                        </label>
-                    </form>
+                                <input type="checkbox" id="run">
+                                <div class="slider round"></div>
+                            </label>
+                        </form>
                     </div>
                     <div id="test" class="map" style="height:750px;">
-                            <div class="window box box-default collapsed-box" id="device0" style="display:none;">
-                                <div class="box-header with-border">
-                                    <h3 class="box-title" id="devname">Device</h3>
-                                    <div class="box-tools pull-right">
-                                        <button type="button" class="tog_button" data-widget="collapse"><i class="fa fa-plus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="box-body">
-                                    <label>Protocol</label>
-                                    <select id="protocolSelect" class="form-control">
-                                        <option value="mqtt">MQTT</option>
-                                        <option value="http">HTTP</option>
-                                        <option value="coap">COAP</option>
-                                    </select>
-                                    <label>Device IP address</label>
-                                    <input id="ip" class="form-control input-sm" type="text">
-                                    <label>Device Port number</label>
-                                    <input id="port" class="form-control input-sm" type="text" placeholder="Device Port">
-                                    <label>URL</label>
-                                    <input id="url" class="form-control input-sm" type="text" disabled="true" placeholder="url" style="margin-bottom:18px;">
-                                    <button id="devSettingSave" class="btn btn-info btn-flat" data-toggle="tooltip" title="Save settings">Save</button>
-                                    <button id="codeEditor" class="btn btn-info btn-flat pull-right" data-toggle="tooltip" title="Add custom device">Edit code</button>
+                        <div class="window box box-default collapsed-box" id="device0" style="display:none;">
+                            <div class="box-header with-border">
+                                <h3 class="box-title" id="devname">Device</h3>
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="tog_button" data-widget="collapse"><i class="fa fa-plus"></i>
+                                    </button>
                                 </div>
                             </div>
+                            <div class="box-body">
+                                <label>Protocol</label>
+                                <select id="protocolSelect" class="form-control">
+                                    <option value="mqtt">MQTT</option>
+                                    <option value="http">HTTP</option>
+                                    <option value="coap">COAP</option>
+                                </select>
+                                <label>Device IP address</label>
+                                <input id="ip" class="form-control input-sm" type="text">
+                                <label>Device Port number</label>
+                                <input id="port" class="form-control input-sm" type="text" placeholder="Device Port">
+                                <label>URL</label>
+                                <input id="url" class="form-control input-sm" type="text" disabled="true" placeholder="url" style="margin-bottom:18px;">
+                                <button id="devSettingSave" class="btn btn-info btn-flat" data-toggle="tooltip" title="Save settings">Save</button>
+                                <button id="codeEditor" class="btn btn-info btn-flat pull-right" data-toggle="tooltip" title="Add custom device">Edit code</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div id="myModal" class="modal fade">
                 <div class="modal-dialog">
-
-                    <!-- Modal content-->
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -554,7 +556,39 @@
                             <button type="button" class="btn btn-default" id="saveCode">Save</button>
                         </div>
                     </div>
+                </div>
+            </div>
 
+            <div id="roadMapModal" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">RoadMap List</h4>
+                        </div>
+                        <div class="modal-body" style="height:500px; margin-left:20px;margin-right:20px;overflow:auto;">
+                            <table id="broker_table" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>_Id</th>
+                                        <th>RoadMap Id</th>
+                                        <th>Client Id</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="canClick" id="loadRoadMapItem" ng-repeat = "n in listOfRoadMap">
+                                        <td>{{n._id}}</td>
+                                        <td>{{n.roadMapId}}</td>
+                                        <td>{{n.clientId}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-default" id="saveCode">Save</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -785,27 +819,32 @@ var devices;
 var currentNode;
 var print;
 var deviceInfo={};
+
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+    setTimeout(function () {
+        angular.element(document.getElementById('jsonToScope')).scope().settings = localStorage;
+        angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings();
+    }, 200);
+
+});
+
 $('#run').click(function(){
     if($(this).is(':checked')){
         var ask = confirm("Start Roadmap?");
         if(ask==true){
-        saveTree();
-            // console.log($('#formSave').submit());
+            saveTree();
             console.log(angular.element(document.getElementById('jsonToScope')).scope().runRoadMap())
-            // angular.element(document.getElementById('formSave')).scope().runRoadMap();
         }
         else{
             $(this).attr("checked",false);
         }
     }
     else{
-    angular.element(document.getElementById('jsonToScope')).scope().killRoadMap();
+        angular.element(document.getElementById('jsonToScope')).scope().killRoadMap();
     }
 });
 
-// $('#run').is(":checked"){
-//     console.log("die..");
-// }
 
 $('#test').on("click","#protocolSelect", function () {
     var selected = $(this)[0].value;
@@ -832,13 +871,37 @@ $('#test').on("click","#devSettingSave", function () {
     // console.log($(this).parent().find("#ip")[0].value)
 });
 
-$(document).ready(function(){
-    $('[data-toggle="tooltip"]').tooltip();
+$('#broker_table').on("click","#loadRoadMapItem",function(){
+    console.log($(this)[0].childNodes[1].innerText);
+    var ask = confirm('Load '+$(this)[0].childNodes[1].innerText +' RoadMap?');
+    if(ask){
+        angular.element(document.getElementById('jsonToScope')).scope().loadTarget['_id'] = $(this)[0].childNodes[1].innerText;
+        angular.element(document.getElementById('jsonToScope')).scope().loadRoadMap();
         setTimeout(function () {
-            angular.element(document.getElementById('jsonToScope')).scope().settings = localStorage;
-                angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings();
-                }, 200);
+            var currentRoadMap = angular.element(document.getElementById('jsonToScope')).scope().getTarget;
+            console.log(currentRoadMap);
 
+                for(var i=0; i<Object.keys(a['mapIds']).length; ++i){
+                    addnode();
+                };
+
+                var n = $('.window');
+                // console.log(n);
+                for(var i=1 ; i< n.length; ++i){
+                    n[i].style['left'] = a['mapIds'][i]['x'];
+                    n[i].style['top'] = a['mapIds'][i]['y'];
+                    // instance.connect({
+                    //     uuids:[n[i].id+'_source', 'Device2_target']
+                    // });
+                };
+                // console.log(a['outingNode']['1']);
+                for(var i=1; i< n.length ; ++i){
+
+                }
+                instance.repaintEverything();
+        }, 200);
+
+    }else{}
 });
 
 var instance = window.jsp = jsPlumb.getInstance({
@@ -976,7 +1039,6 @@ var _addEndpoints = function (toId) {
 $("#saveDB").click(function(){
     saveTree();
 });
-
 function saveTree(){
     connectInfo=[];
     instance.getConnections().forEach(
@@ -1021,78 +1083,9 @@ $("#openDeviceList").click(function(){
 
 
 $("#loadRoadMap").click(function(){
-    var a = {
-   "roadMapId": "1",
-   "clientId": "1",
-   "initNode": [],
-   "lastNode": [],
-   "incomingNode": {
-      "1": [
-         "3"
-      ],
-      "2": [
-         "1"
-      ],
-      "3": [
-         "2"
-      ]
-   },
-   "outingNode": {
-      "1": [
-         "2"
-      ],
-      "2": [
-         "3"
-      ],
-      "3": [
-         "1"
-      ]
-   },
-   "isInput": false,
-   "isOutput": false,
-   "mapIds": {
-      "1": {
-         "parameter": [],
-         "code": "def eventHandler(event, context, callback):\n    ",
-         "deviceId": "Device1",
-         "x": "100px",
-         "y": "180px"
-      },
-      "2": {
-         "parameter": [],
-         "code": "def eventHandler(event, context, callback):\n    ",
-         "deviceId": "Device2",
-         "x": "640px",
-         "y": "520px"
-      },
-      "3": {
-         "parameter": [],
-         "code": "def eventHandler(event, context, callback):\n    ",
-         "deviceId": "Device3",
-         "x": "1120px",
-         "y": "300px"
-      }
-   }
-};
-// console.log(Object.keys(a['mapIds']).length);
-for(var i=0; i<Object.keys(a['mapIds']).length; ++i){
-    addnode();
-};
-
-var n = $('.window');
-// console.log(n);
-for(var i=1 ; i< n.length; ++i){
-    n[i].style['left'] = a['mapIds'][i]['x'];
-    n[i].style['top'] = a['mapIds'][i]['y'];
-    // instance.connect({
-    //     uuids:[n[i].id+'_source', 'Device2_target']
-    // });
-};
-// console.log(a['outingNode']['1']);
-for(var i=1; i< n.length ; ++i){
-
-}
-instance.repaintEverything();
+    angular.element(document.getElementById('jsonToScope')).scope().getRoadMaps();
+    angular.element(document.getElementById('jsonToScope')).scope().$apply();
+    $('#roadMapModal').modal('show');
 });
 
 

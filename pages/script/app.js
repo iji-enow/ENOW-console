@@ -11,15 +11,13 @@ app.controller('myCtrl', function($scope, $http){
     $scope.listOfInitNode = [];
     $scope.listOfLastNode = [];
     $scope.list = [];
+    $scope.listOfRoadMap = [];
     $scope.tree;
     $scope.mapIds;
+    $scope.loadTarget ={};
+    $scope.getTarget;
     // settings.html
-    $scope.brokerList=[{
-        "brokerId":"za",
-        "ipAddress":"127.9.9.9",
-        "kafkaUrl":"127.0.0.0",
-        "kafkaPort":"9000"
-    }];
+    $scope.brokerList=[];
     $scope.settings={};
     $scope.newnode ={};
     // ------------------------------------------
@@ -67,6 +65,25 @@ app.controller('myCtrl', function($scope, $http){
             dataType: "json"
         });
     }
+    $scope.loadRoadMap = function(){
+        console.log($scope.loadTarget);
+        $http({
+            withCredentials: false,
+            method: 'post',
+            url: "/load_roadmap",
+            headers: {'Content-Type': 'application/json'},
+            data: $scope.loadTarget,
+            contentType : 'application/json',
+            dataType: "json"
+        }).then(function(response){
+            $scope.getTarget = response.data;
+            console.log(response.data);
+            console.log("---------------------------------------------------------")
+            console.log($scope.getTarget);
+        });
+    }
+
+    // get
     $scope.getBroker = function(){
         $http({
             withCredentials: false,
@@ -84,7 +101,17 @@ app.controller('myCtrl', function($scope, $http){
             url: "/get_settings"
         }).then(function(response){
             // this.brokerList = response.data;
-            $scope.brokerList = response.data;
+            $scope.settings = response.data;
+        });
+    }
+    $scope.getRoadMaps = function(){
+        $http({
+            withCredentials: false,
+            method: 'get',
+            url: "/get_roadmaps"
+        }).then(function(response){
+            // this.brokerList = response.data;
+            $scope.listOfRoadMap = response.data;
         });
     }
     $scope.postUrlSettings = function(){
@@ -111,7 +138,7 @@ app.controller('myCtrl', function($scope, $http){
             rootNodes.outingNode[list.source].push(list.target);
         }
 
-        // rootNodes.roadMapId = "1";
+        rootNodes.roadMapId = "";
         rootNodes.clientId = "1";
         rootNodes.initNode = this.listOfInitNode;
         rootNodes.lastNode = this.listOfLastNode;
