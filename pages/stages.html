@@ -560,30 +560,34 @@
                             </div>
                             <div class="box-body">
                                 <label id="deviceOrLambdaText"></label>
-                                <label class="switch_slim pull-right" style="margin-right:15px;">
+                                <label class="switch_slim pull-right" data-toggle="tooltip" title="select device or lambda" style="margin-right:5px;">
                                     <input type="checkbox" id="deviceOrLambda">
                                     <div class="slider_slim round"></div>
                                 </label>
+                                <div id="hideIfLambda" style="">
                                 <br>
                                     <label>Broker List</label>
                                     <select id="brokerSelect" class="form-control">
                                         <option disabled selected> --Select Broker-- </option>
                                         <option ng-repeat = "n in brokerList">{{n.brokerId}}</option>
                                     </select>
-                                    <label>Device List</label>
+                                    <!-- <label>Device List</label>
                                     <select id="deviceSelect" class="form-control">
-                                        <option disabled selected value> --Select Device-- </option>
-                                        <option ng-repeat = "n in brokerList">{{n.brokerId}}</option>
-                                    </select>
-                                <label>Device IP address</label>
+                                        <option disabled selected value> Select Device </option>
+                                        <option id="deviceToBroker" ng-repeat="n in brokerList">{{n.devices}}
+                                        </option>
+                                    </select> -->
+                                <label>Device Id</label>
                                 <input id="ip" class="form-control input-sm" type="text">
-                                <label>Device Port number</label>
-                                <input id="port" class="form-control input-sm" type="text" placeholder="Device Port">
-                                <label>URL</label>
-                                <input id="url" class="form-control input-sm" type="text" disabled="true" placeholder="url" style="margin-bottom:18px;">
-                                <button id="devSettingSave" class="btn btn-info btn-flat" data-toggle="tooltip" title="Save settings">Save</button>
-                                <button id="codeEditor" class="btn btn-info btn-flat pull-right" data-toggle="tooltip" title="Add custom device">Edit code</button>
                             </div>
+                                <!-- <label>Device Port number</label>
+                                <input id="port" class="form-control input-sm" type="text" placeholder="Device Port"> -->
+                                <!-- <label>URL</label>
+                                <input id="url" class="form-control input-sm" type="text" disabled="true" placeholder="url" style="margin-bottom:18px;"> -->
+                                <button id="devSettingSave" class="btn btn-info btn-flat col-xs-12 col-lg-12" data-toggle="tooltip" title="Save settings" style="margin-top:18px;">Save</button>
+                                <button id="codeEditor" class="btn btn-info btn-flat col-xs-12 col-lg-12" data-toggle="tooltip" title="Add custom device" style="margin-top:2px;">Edit code</button>
+
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -879,9 +883,40 @@ $(document).ready(function(){
     }, 200);
 
 });
+
+
+
+
+
+
+
+
 $(document).on("change","#brokerSelect", function(){
-    console.log("a");
+    console.log($(this)[0].value);
+    // console.log($('#deviceToBroker'));
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 $('#run').click(function(){
     if($(this).is(':checked')){
         var ask = confirm("Start Roadmap?");
@@ -900,9 +935,13 @@ $('#run').click(function(){
 $('#test').on("click",'#deviceOrLambda', function(){
     if($(this).is(':checked')){
             $("#"+$(this).parent().parent().parent()[0].id).find('h3').text("Lambda"+$(this).parent().parent().parent()[0].id.substring(6));
-    }
+            $("#"+$(this).parent().parent().parent()[0].id).find('#hideIfLambda').hide();
+            deviceInfo[$(this).parent().parent().parent()[0].id.substring(6)]['lambda'] = "true";
+        }
     else{
         $("#"+$(this).parent().parent().parent()[0].id).find('h3').text("Device"+$(this).parent().parent().parent()[0].id.substring(6));
+        $("#"+$(this).parent().parent().parent()[0].id).find('#hideIfLambda').show();
+        deviceInfo[$(this).parent().parent().parent()[0].id.substring(6)]['lambda'] = "false";
     }
 });
 
@@ -1112,6 +1151,7 @@ $("#saveDB").click(function(){
     saveTree();
 });
 function saveTree(){
+    console.log(deviceInfo);
     connectInfo=[];
     instance.getConnections().forEach(
         function foo(value){
@@ -1134,7 +1174,7 @@ function saveTree(){
         }
     }
     //position values
-    for(var i=1; i <= Object.keys(deviceInfo).length ; ++i)$("#selectBox option:selected").text();{
+    for(var i=1; i <= Object.keys(deviceInfo).length ; ++i){
         var temp = $('#test').find('#'+deviceInfo[i]['deviceId'])[0];
         deviceInfo[i]['x'] = temp.style['left'];
         deviceInfo[i]['y'] = temp.style['top'];
@@ -1202,7 +1242,6 @@ $('#test').on("click","#codeEditor", function () {
 });
 
 
-
 $("#saveCode").click(function(){
     code = editor.getSession().getValue();
     deviceInfo[currentNode.substring(6)]['code'] = code;
@@ -1215,6 +1254,7 @@ $("#saveCode").click(function(){
     $('#myModal').append(toast);
     toast.stop().fadeIn(400).delay(2000).fadeOut(400); //fade out after 2 seconds
 });
+
 var toast = $('<div class="error" style="display:none">Code Saved..</div>');
 
 $("#addDevice").click(function () {
@@ -1226,9 +1266,12 @@ function addnode(){
     newnode.find('h3').text(_id);
     _addEndpoints(newnode);
     var temp = deviceInfo[_id.substring(6)] = deviceInfo[_id.substring(6)] || new Object();
-    temp['parameter'] = temp['parameter'] || new Array();
-    temp['code'] = temp['code'] || "def eventHandler(event, context, callback):\n    ";
-    temp["deviceId"] = _id;
+    deviceInfo[_id.substring(6)]['parameter'] = deviceInfo[_id.substring(6)]['parameter'] || new Array();
+    deviceInfo[_id.substring(6)]['code'] = deviceInfo[_id.substring(6)]['code'] || "def eventHandler(event, context, callback):\n    ";
+    deviceInfo[_id.substring(6)]['deviceId']= _id;
+    deviceInfo[_id.substring(6)]['lambda'] = "false";
+    deviceInfo[_id.substring(6)]['x'] = "10px";
+    deviceInfo[_id.substring(6)]['y'] = "10px";
 
     $(instance.getSelector("#"+_id)).draggable({
         containment:'parent',
