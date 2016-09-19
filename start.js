@@ -34,7 +34,7 @@ expressapp.post('/run_db', function(req, res){
     connectDB(req.body, 'source', 'execute', 'run', null);
     setTimeout(function () {
         payloads[0]['messages']='{"roadMapId":"'+roadMapIdTemp+'"}';
-        payloads[0]['topic']='test';
+        payloads[0]['topic']='event';
     }, 300);
     setTimeout(function () {
         producer.send(payloads, function (err, data) {
@@ -52,22 +52,20 @@ expressapp.post('/add_broker', function(req, res){
     connectDB(req.body, 'connectionData', 'brokerList', 'saveBroker', null);
 });
 expressapp.post('/add_device', function(req, res){
-    connectDB(req.body, 'connectionData', 'brokerList', 'saveDevice', res);
+    connectDB(req.body, 'connectionData', 'brokerList', 'saveDevice', null);
 });
 expressapp.post('/find_device', function(req, res){
-    console.log("aaa");
     connectDB(req.body, 'connectionData', 'brokerList', 'findDevice', res);
 });
 expressapp.post('/post_url_settings', function(req, res){
     mongoUrl = req.body['mongoUrl'];
     mongoPort = req.body['mongoPort'];
-    producer.client.connectionString = req.body['zookeeperUrl']+':'+req.body['zookeeperPort'];
+    producer.client.connectionString = req.body['kafkaUrl']+':'+req.body['kafkaPort'];
 });
 expressapp.post('/load_roadmap', function(req, res){
     connectDB(req.body, 'source', 'recipes', 'findTarget', res);
 });
 expressapp.post('/get_broker', function(req, res){
-    // console.log(req.body);
     connectDB(req.body, 'connectionData', 'brokerList', 'findBroker', res);
 });
 expressapp.get('/get_brokers', function(req, res){
@@ -98,9 +96,7 @@ function connectDB(source, dbName, collectionName, command, response){
             });
         };
         var findBroker = function(db, callback){
-            console.log("asdfadsfadsfasd   "+ source['deviceId']);
             db.collection(collectionName).find({brokerId:source['brokerId']}).toArray(function(err,result){
-                console.log(result);
                 response.send(result);
             });
         };
@@ -144,15 +140,12 @@ function connectDB(source, dbName, collectionName, command, response){
             });
 
         };
+
+
         var insertDocumentDevice = function(db, callback){
-            db.collection(collectionName).updateOne(
-           {
-               'brokerId':source['brokerId']
-           },{
-               $push: { "deviceId": source['deviceId']}
-           }, function(err, results) {
-           callback();
-        });
+            db.collection(collectionName).updateOne({'brokerId':source['brokerId']},{
+                '$push' : { 'deviceId': source['deviceId']}
+            });
      };
 
         var insertDocumentBroker = function(db, callback){
@@ -161,7 +154,8 @@ function connectDB(source, dbName, collectionName, command, response){
                     "brokerNum" : (cnt+1).toString(),
                     "brokerId" : source['brokerId'],
                     "ipAddress" : source['ipAddress'],
-                    "devices" : source['devices'],
+                    "port" : source['port'],
+                    "deviceId" : source['deviceId'],
                 },function(err, result){
                     callback();
                 });

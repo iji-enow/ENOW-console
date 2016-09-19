@@ -876,7 +876,7 @@ $(document).ready(function(){
     setTimeout(function () {
         angular.element(document.getElementById('jsonToScope')).scope().settings = localStorage;
         angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings();
-        angular.element(document.getElementById('jsonToScope')).scope().getBroker();
+        angular.element(document.getElementById('jsonToScope')).scope().getBrokers();
         angular.element(document.getElementById('jsonToScope')).scope().$apply();
     }, 200);
 

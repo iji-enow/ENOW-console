@@ -513,28 +513,28 @@
             <div class="col-lg-4 col-xs-4">
                 <div class="box box-danger">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Zookeeper Settings</h3>
+                        <h3 class="box-title">Apache Kafka Settings</h3>
                     </div>
                     <div class="box-body">
                         <div class="row">
                             <div class="col-lg-8 col-xs-8">
-                                <label>Zookeeper Url</label>
+                                <label>Kafka Url</label>
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-laptop"></i>
                                     </div>
-                                    <input id="zookeeperUrl" type="text" class="form-control"  data-inputmask="'alias': 'ip'" data-mask>
+                                    <input id="kafkaUrl" type="text" class="form-control"  data-inputmask="'alias': 'ip'" data-mask>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-8 col-xs-8">
-                                <label>Zookeeper Port</label>
+                                <label>Kafka Port</label>
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="ion ion-network"></i>
                                     </div>
-                                    <input id="zookeeperPort" type="text" class="form-control">
+                                    <input id="kafkaPort" type="text" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -646,7 +646,7 @@
                                                     <td>{{n.brokerId}}</td>
                                                     <td>{{n.ipAddress}}</td>
                                                     <td>{{n.port}}</td>
-                                                    <td>{{n.devices.length}}</td>
+                                                    <td>{{n.deviceId.length}}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -945,8 +945,8 @@ $(document).ready(function(){
         angular.element(document.getElementById('jsonToScope')).scope().settings = localStorage;
         angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings();
         angular.element(document.getElementById('jsonToScope')).scope().getBrokers();
-        $('#zookeeperUrl')[0].value=localStorage['zookeeperUrl'];
-        $('#zookeeperPort')[0].value=localStorage['zookeeperPort'];
+        $('#kafkaUrl')[0].value=localStorage['kafkaUrl'];
+        $('#kafkaPort')[0].value=localStorage['kafkaPort'];
         $('#mongoUrl')[0].value=localStorage['mongoUrl'];
         $('#mongoPort')[0].value=localStorage['mongoPort'];
         $('#numWorker')[0].value=localStorage['numberOfWorkers'];
@@ -969,30 +969,33 @@ $("#submit3").click(function(){
 $("#addBroker").click(function(){
     $('#myModal').modal('show');
 });
+// add broker to list
 $("#addBrokerSubmit").click(function(){
     if ( !($('#s1')[0].value)|| !($('#s2')[0].value)|| !($('#s3')[0].value) ){
         console.log("input fields must be filled");
     }else{
-        var temp = angular.element(document.getElementById('jsonToScope')).scope().newnode;
-        temp['brokerId'] = $('#s1')[0].value;
-        temp['ipAddress'] = $('#s2')[0].value;
-        temp['devices'] = $('#s3')[0].value;
+        angular.element(document.getElementById('jsonToScope')).scope().newnode['brokerId'] = $('#s1')[0].value;
+        angular.element(document.getElementById('jsonToScope')).scope().newnode['ipAddress'] = $('#s2')[0].value;
+        angular.element(document.getElementById('jsonToScope')).scope().newnode['port'] = $('#s3')[0].value;
+        angular.element(document.getElementById('jsonToScope')).scope().newnode['deviceId'] = [];
         angular.element(document.getElementById('jsonToScope')).scope().addBroker();
         angular.element(document.getElementById('jsonToScope')).scope().newnode = {};
         angular.element(document.getElementById('jsonToScope')).scope().getBrokers();
         angular.element(document.getElementById('jsonToScope')).scope().$apply();
     }
 });
+
+//add device to current broker
 $("#addDeviceSubmit").click(function(){
     var ask = prompt("Add Device. (Type Device Id)");
     var temp = angular.element(document.getElementById('jsonToScope')).scope().currentBroker['brokerId'];
     if(ask){
-        console.log(ask);
         angular.element(document.getElementById('jsonToScope')).scope().newdevice['deviceId'] = ask;
         angular.element(document.getElementById('jsonToScope')).scope().newdevice['brokerId'] = temp;
         angular.element(document.getElementById('jsonToScope')).scope().findDevice();
         setTimeout(function () {
         angular.element(document.getElementById('jsonToScope')).scope().getBroker();
+        angular.element(document.getElementById('jsonToScope')).scope().getBrokers();
         }, 200);
         setTimeout(function () {
             angular.element(document.getElementById('jsonToScope')).scope().$apply();
@@ -1007,14 +1010,6 @@ $('.box-body').on("click","#deviceAdd",function(){
     angular.element(document.getElementById('jsonToScope')).scope().$apply();
     angular.element(document.getElementById('jsonToScope')).scope().currentBroker['brokerId'] = arr[0];
     angular.element(document.getElementById('jsonToScope')).scope().getBroker();
-    console.log(arr[0]);
-    // angular.element(document.getElementById('jsonToScope')).scope().currentDeviceList = angular.element(document.getElementById('jsonToScope')).scope().brokerList[0]['deviceId'];
-    // angular.element(document.getElementById('jsonToScope')).scope().getDevices();
-    // for(var i=0; i< angular.element(document.getElementById('jsonToScope')).scope().brokerList.length ; ++i){
-    //     if(angular.element(document.getElementById('jsonToScope')).scope().brokerList[i].brokerId==arr[0]){
-    //     angular.element(document.getElementById('jsonToScope')).scope().currentDeviceList = angular.element(document.getElementById('jsonToScope')).scope().brokerList[i].devices
-    //     }
-    // }
     angular.element(document.getElementById('jsonToScope')).scope().$apply();
     $("#deviceModal").modal('show');
 });

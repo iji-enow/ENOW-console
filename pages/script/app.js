@@ -38,7 +38,6 @@ $scope.currentBroker={
 $scope.settings={};
 $scope.newnode ={};
 $scope.newdevice={
-    deviceId:""
 };
 // ------------------------------------------
 $scope.saveDataBase = function(){
@@ -86,7 +85,6 @@ $scope.addBroker = function(){
     });
 }
 $scope.loadRoadMap = function(){
-    console.log($scope.loadTarget);
     $http({
         withCredentials: false,
         method: 'post',
@@ -100,7 +98,7 @@ $scope.loadRoadMap = function(){
     });
 }
 $scope.addDevice = function(){
-    console.log($scope.newnode);
+    console.log("after...    "+ $scope.newdevice);
     $http({
         withCredentials: false,
         method: 'post',
@@ -112,7 +110,7 @@ $scope.addDevice = function(){
     });
 }
 $scope.findDevice = function(){
-    console.log($scope.newdevice);
+    console.log("before...    "+ $scope.newdevice);
     $http({
         withCredentials: false,
         method: 'post',
@@ -122,7 +120,7 @@ $scope.findDevice = function(){
         contentType : 'application/json',
         dataType: "json"
     }).then(function(response){
-        console.log(response.data);
+        console.log("good       "+response.data.length);
         if(response.data.length==0){
             $scope.addDevice();
         }
@@ -151,9 +149,8 @@ $scope.getBrokers = function(){
         method: 'get',
         url: "/get_brokers"
     }).then(function(response){
-        // this.brokerList = response.data;
+        console.log(response.data);
         $scope.brokerList = response.data;
-        console.log("brokerlist : "+ response.data);
     });
 }
 $scope.getSettings = function(){
@@ -166,15 +163,15 @@ $scope.getSettings = function(){
         $scope.settings = response.data;
     });
 }
-$scope.getDevices = function(){
-    $http({
-        withCredentials: false,
-        method: 'get',
-        url: "/get_devices"
-    }).then(function(response){
-        console.log(response.data);
-    });
-}
+// $scope.getDevices = function(){
+//     $http({
+//         withCredentials: false,
+//         method: 'get',
+//         url: "/get_devices"
+//     }).then(function(response){
+//         console.log(response.data);
+//     });
+// }
 $scope.getRoadMaps = function(){
     $http({
         withCredentials: false,
