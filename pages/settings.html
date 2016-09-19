@@ -698,7 +698,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr id="showDeviceList" ng-repeat = "n in currentDeviceList">
+                                <tr id="showDeviceList" ng-repeat = "n in currentDeviceList track by $index">
                                     <td>{{$index+1}}</td>
                                     <td>{{n}}</td>
                                 </tr>
@@ -944,7 +944,7 @@ $(document).ready(function(){
     setTimeout(function () {
         angular.element(document.getElementById('jsonToScope')).scope().settings = localStorage;
         angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings();
-        angular.element(document.getElementById('jsonToScope')).scope().getBroker();
+        angular.element(document.getElementById('jsonToScope')).scope().getBrokers();
         $('#zookeeperUrl')[0].value=localStorage['zookeeperUrl'];
         $('#zookeeperPort')[0].value=localStorage['zookeeperPort'];
         $('#mongoUrl')[0].value=localStorage['mongoUrl'];
@@ -979,21 +979,20 @@ $("#addBrokerSubmit").click(function(){
         temp['devices'] = $('#s3')[0].value;
         angular.element(document.getElementById('jsonToScope')).scope().addBroker();
         angular.element(document.getElementById('jsonToScope')).scope().newnode = {};
-        angular.element(document.getElementById('jsonToScope')).scope().getBroker();
+        angular.element(document.getElementById('jsonToScope')).scope().getBrokers();
         angular.element(document.getElementById('jsonToScope')).scope().$apply();
     }
 });
 $("#addDeviceSubmit").click(function(){
     var ask = prompt("Add Device. (Type Device Id)");
-    var temp = angular.element(document.getElementById('jsonToScope')).scope().currentBroker;
+    var temp = angular.element(document.getElementById('jsonToScope')).scope().currentBroker['brokerId'];
     if(ask){
         console.log(ask);
         angular.element(document.getElementById('jsonToScope')).scope().newdevice['deviceId'] = ask;
         angular.element(document.getElementById('jsonToScope')).scope().newdevice['brokerId'] = temp;
-        angular.element(document.getElementById('jsonToScope')).scope().addDevice();
-        angular.element(document.getElementById('jsonToScope')).scope().getBroker();
+        angular.element(document.getElementById('jsonToScope')).scope().findDevice();
         setTimeout(function () {
-            angular.element(document.getElementById('jsonToScope')).scope().currentDeviceList = angular.element(document.getElementById('jsonToScope')).scope().brokerList[0]['deviceId'];
+        angular.element(document.getElementById('jsonToScope')).scope().getBroker();
         }, 200);
         setTimeout(function () {
             angular.element(document.getElementById('jsonToScope')).scope().$apply();
@@ -1004,10 +1003,13 @@ $("#addDeviceSubmit").click(function(){
 
 $('.box-body').on("click","#deviceAdd",function(){
     var arr = $(this)[0].innerText.split("	");
-    angular.element(document.getElementById('jsonToScope')).scope().currentBroker = arr[0];
+    angular.element(document.getElementById('jsonToScope')).scope().currentDeviceList =[];
+    angular.element(document.getElementById('jsonToScope')).scope().$apply();
+    angular.element(document.getElementById('jsonToScope')).scope().currentBroker['brokerId'] = arr[0];
     angular.element(document.getElementById('jsonToScope')).scope().getBroker();
-    angular.element(document.getElementById('jsonToScope')).scope().currentDeviceList = angular.element(document.getElementById('jsonToScope')).scope().brokerList[0]['deviceId'];
-    //
+    console.log(arr[0]);
+    // angular.element(document.getElementById('jsonToScope')).scope().currentDeviceList = angular.element(document.getElementById('jsonToScope')).scope().brokerList[0]['deviceId'];
+    // angular.element(document.getElementById('jsonToScope')).scope().getDevices();
     // for(var i=0; i< angular.element(document.getElementById('jsonToScope')).scope().brokerList.length ; ++i){
     //     if(angular.element(document.getElementById('jsonToScope')).scope().brokerList[i].brokerId==arr[0]){
     //     angular.element(document.getElementById('jsonToScope')).scope().currentDeviceList = angular.element(document.getElementById('jsonToScope')).scope().brokerList[i].devices

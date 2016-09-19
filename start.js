@@ -52,8 +52,11 @@ expressapp.post('/add_broker', function(req, res){
     connectDB(req.body, 'connectionData', 'brokerList', 'saveBroker', null);
 });
 expressapp.post('/add_device', function(req, res){
-    // console.log(req.body);
-    connectDB(req.body, 'connectionData', 'brokerList', 'saveDevice', null);
+    connectDB(req.body, 'connectionData', 'brokerList', 'saveDevice', res);
+});
+expressapp.post('/find_device', function(req, res){
+    console.log("aaa");
+    connectDB(req.body, 'connectionData', 'brokerList', 'findDevice', res);
 });
 expressapp.post('/post_url_settings', function(req, res){
     mongoUrl = req.body['mongoUrl'];
@@ -63,7 +66,11 @@ expressapp.post('/post_url_settings', function(req, res){
 expressapp.post('/load_roadmap', function(req, res){
     connectDB(req.body, 'source', 'recipes', 'findTarget', res);
 });
-expressapp.get('/get_broker', function(req, res){
+expressapp.post('/get_broker', function(req, res){
+    // console.log(req.body);
+    connectDB(req.body, 'connectionData', 'brokerList', 'findBroker', res);
+});
+expressapp.get('/get_brokers', function(req, res){
     connectDB(null, 'connectionData', 'brokerList', 'find', res);
 });
 expressapp.get('/get_settings', function(req, res){
@@ -71,6 +78,9 @@ expressapp.get('/get_settings', function(req, res){
 });
 expressapp.get('/get_roadmaps', function(req, res){
     connectDB(null, 'source', 'recipes', 'find', res);
+});
+expressapp.get('/get_devices', function(req, res){
+    connectDB(null, 'connectionData', 'brokerList', 'find', res);
 });
 
 var server = expressapp.listen(expressapp.get('port'), function(){
@@ -88,9 +98,15 @@ function connectDB(source, dbName, collectionName, command, response){
                 response.send(result);
             });
         };
+        var findBroker = function(db, callback){
+            console.log("asdfadsfadsfasd   "+ source['deviceId']);
+            db.collection(collectionName).find({brokerId:source['brokerId']}).toArray(function(err,result){
+                console.log(result);
+                response.send(result);
+            });
+        };
 
         var findTarget = function(db, callback){
-            console.log(source['_id']);
             var o_id = BSON.ObjectID.createFromHexString(source['_id']);
             db.collection(collectionName).find({_id:o_id}).toArray(function(err,result){
                 console.log(result);
@@ -99,16 +115,20 @@ function connectDB(source, dbName, collectionName, command, response){
             });
         }
 
+        var findDevice = function(db, callback){
+            db.collection(collectionName).find({deviceId:source['deviceId']}).toArray(function(err,result){
+                response.send(result);
+            });
+        }
+
         var insertDocument = function(db, callback){
             var cursor = db.collection(collectionName).find({}).toArray(function(err,result){
-                // console.log(result.length);
                 if(result.length!=0){
                     roadMapIdTemp = parseInt(result[result.length-1]['roadMapId'])+1;
                 }
                 else{
                     roadMapIdTemp = 1;
                 }
-                console.log(roadMapIdTemp);
                 db.collection(collectionName).insertOne({
                     "roadMapId" : roadMapIdTemp.toString(),
                     "clientId" : source['clientId'],
@@ -126,11 +146,11 @@ function connectDB(source, dbName, collectionName, command, response){
 
         };
         var insertDocumentDevice = function(db, callback){
-            // db.collection(collectionName).find({})
             db.collection(collectionName).updateOne(
-           {'brokerId':source['brokerId']},
            {
-             $push: { "deviceId": source['deviceId']}
+               'brokerId':source['brokerId']
+           },{
+               $push: { "deviceId": source['deviceId']}
            }, function(err, results) {
            callback();
         });
@@ -156,7 +176,7 @@ function connectDB(source, dbName, collectionName, command, response){
             });
         };
 
-        if(command=="save"){
+        if(command=="save" || command=="run"){
             insertDocument(db, function(){
                 db.close();
             });
@@ -168,12 +188,12 @@ function connectDB(source, dbName, collectionName, command, response){
             insertDocumentDevice(db, function(){
                 db.close();
             });
-        }else if(command=="kill"){
-            deleteDocument(db,function(){
+        }else if(command=="findDevice"){
+            findDevice(db, function(){
                 db.close();
             });
-        }else if(command=="run"){
-            insertDocument(db, function(){
+        }else if(command=="kill"){
+            deleteDocument(db,function(){
                 db.close();
             });
         }else if(command=="find"){
@@ -184,6 +204,12 @@ function connectDB(source, dbName, collectionName, command, response){
             findTarget(db, function(){
                 db.close();
             });
+        }else if(command=="findBroker"){
+            findBroker(db, function(){
+                db.close();
+            });
         }
+
+
     });
 };

@@ -32,7 +32,9 @@ app.controller('myCtrl', function($scope, $http){
 
 ];
 $scope.currentDeviceList;
-$scope.currentBroker;
+$scope.currentBroker={
+    brokerId:""
+};
 $scope.settings={};
 $scope.newnode ={};
 $scope.newdevice={
@@ -109,15 +111,49 @@ $scope.addDevice = function(){
         dataType: "json"
     });
 }
-// get
+$scope.findDevice = function(){
+    console.log($scope.newdevice);
+    $http({
+        withCredentials: false,
+        method: 'post',
+        url: "/find_device",
+        headers: {'Content-Type': 'application/json'},
+        data: $scope.newdevice,
+        contentType : 'application/json',
+        dataType: "json"
+    }).then(function(response){
+        console.log(response.data);
+        if(response.data.length==0){
+            $scope.addDevice();
+        }
+    });
+}
+
 $scope.getBroker = function(){
     $http({
         withCredentials: false,
+        method: 'post',
+        url: "/get_broker",
+        headers: {'Content-Type': 'application/json'},
+        data: $scope.currentBroker,
+        contentType : 'application/json',
+        dataType: "json"
+    }).then(function(response){
+        // this.brokerList = response.data;
+        // $scope.brokerList = response.data;
+        $scope.currentDeviceList = response.data[0]['deviceId'];
+    });
+}
+// get
+$scope.getBrokers = function(){
+    $http({
+        withCredentials: false,
         method: 'get',
-        url: "/get_broker"
+        url: "/get_brokers"
     }).then(function(response){
         // this.brokerList = response.data;
         $scope.brokerList = response.data;
+        console.log("brokerlist : "+ response.data);
     });
 }
 $scope.getSettings = function(){
@@ -128,6 +164,15 @@ $scope.getSettings = function(){
     }).then(function(response){
         // this.brokerList = response.data;
         $scope.settings = response.data;
+    });
+}
+$scope.getDevices = function(){
+    $http({
+        withCredentials: false,
+        method: 'get',
+        url: "/get_devices"
+    }).then(function(response){
+        console.log(response.data);
     });
 }
 $scope.getRoadMaps = function(){
