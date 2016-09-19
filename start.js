@@ -85,12 +85,11 @@ expressapp.get('/get_devices', function(req, res){
 
 var server = expressapp.listen(expressapp.get('port'), function(){
     console.log("start enow console...");
-    // connectDB(null, 'source', 'recipes', 'findTarget', null);
 });
 
 function connectDB(source, dbName, collectionName, command, response){
-    // MongoClient.connect('mongodb://'+mongoUrl+':'+mongoPort+'/'+dbName,function(err,db) {
-    MongoClient.connect('mongodb://127.0.0.1:27017/'+dbName,function(err,db) {
+    MongoClient.connect('mongodb://'+mongoUrl+':'+mongoPort+'/'+dbName,function(err,db) {
+    // MongoClient.connect('mongodb://127.0.0.1:27017/'+dbName,function(err,db) {
 
 
         var findDocument = function(db, callback){
