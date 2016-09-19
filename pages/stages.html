@@ -567,18 +567,16 @@
                                 <div id="hideIfLambda" style="">
                                 <br>
                                     <label>Broker List</label>
-                                    <select id="brokerSelect" class="form-control">
-                                        <option disabled selected> --Select Broker-- </option>
+                                    <select id="brokerSelect" class="form-control" style="margin-bottom:5px;">
+                                        <option disabled selected>----Select Broker----</option>
                                         <option ng-repeat = "n in brokerList">{{n.brokerId}}</option>
                                     </select>
-                                    <!-- <label>Device List</label>
+                                    <label>Device List</label>
                                     <select id="deviceSelect" class="form-control">
-                                        <option disabled selected value> Select Device </option>
-                                        <option id="deviceToBroker" ng-repeat="n in brokerList">{{n.devices}}
+                                        <option disabled selected value>----Select Device----</option>
+                                        <option id="deviceToBroker" ng-repeat="n in currentDeviceList">{{n}}
                                         </option>
-                                    </select> -->
-                                <label>Device Id</label>
-                                <input id="ip" class="form-control input-sm" type="text">
+                                    </select>
                             </div>
                                 <!-- <label>Device Port number</label>
                                 <input id="port" class="form-control input-sm" type="text" placeholder="Device Port"> -->
@@ -893,7 +891,18 @@ $(document).ready(function(){
 
 $(document).on("change","#brokerSelect", function(){
     console.log($(this)[0].value);
-    // console.log($('#deviceToBroker'));
+    for(var i=0; i< angular.element(document.getElementById('jsonToScope')).scope().brokerList.length ; ++i){
+        if(angular.element(document.getElementById('jsonToScope')).scope().brokerList[i].brokerId==$(this)[0].value){
+        angular.element(document.getElementById('jsonToScope')).scope().currentDeviceList = angular.element(document.getElementById('jsonToScope')).scope().brokerList[i].devices
+        }
+    }
+    angular.element(document.getElementById('jsonToScope')).scope().$apply();
+
+
+
+});
+$(document).on("click","#deviceToBroker", function(){
+    angular.element(document.getElementById('jsonToScope')).scope().$apply();
 });
 
 
@@ -964,10 +973,11 @@ $('#test').on("click","#protocolSelect", function () {
 
 $('#test').on("click","#devSettingSave", function () {
     var node = deviceInfo[$(this).parent().parent().get(0).id.substring(6)];
-    node['ipAddress'] = $(this).parent().find("#ip")[0].value;
-    node['port'] = $(this).parent().find("#port")[0].value;
-    node['url'] = $(this).parent().find("#url")[0].value;
+    // node['ipAddress'] = $(this).parent().find("#ip")[0].value;
+    // node['port'] = $(this).parent().find("#port")[0].value;
+    // node['url'] = $(this).parent().find("#url")[0].value;
     // console.log($(this).parent().find("#ip")[0].value)
+    console.log(node);
 });
 
 $('#broker_table').on('click','#loadRoadMapItem', function(){
@@ -1176,8 +1186,8 @@ function saveTree(){
     //position values
     for(var i=1; i <= Object.keys(deviceInfo).length ; ++i){
         var temp = $('#test').find('#'+deviceInfo[i]['deviceId'])[0];
-        deviceInfo[i]['x'] = temp.style['left'];
-        deviceInfo[i]['y'] = temp.style['top'];
+        deviceInfo[i]['x'] = temp.style['left'] || "0px";
+        deviceInfo[i]['y'] = temp.style['top'] || "0px";
     }
     angular.element(document.getElementById('jsonToScope')).scope().listOfInitNode = initNode;
     angular.element(document.getElementById('jsonToScope')).scope().listOfLastNode = lastNode;
@@ -1201,11 +1211,6 @@ $("#loadRoadMap").click(function(){
 
 
 
-$('#test').ready(function(){
-    // setTimeout(function () {
-    //     console.log(angular.element(document.getElementById('jsonToScope')).scope().tree);
-    // }, 200);
-});
 
 $('#test').on("click",".tog_button", function () {
     setTimeout(function () {
@@ -1270,8 +1275,6 @@ function addnode(){
     deviceInfo[_id.substring(6)]['code'] = deviceInfo[_id.substring(6)]['code'] || "def eventHandler(event, context, callback):\n    ";
     deviceInfo[_id.substring(6)]['deviceId']= _id;
     deviceInfo[_id.substring(6)]['lambda'] = "false";
-    deviceInfo[_id.substring(6)]['x'] = "10px";
-    deviceInfo[_id.substring(6)]['y'] = "10px";
 
     $(instance.getSelector("#"+_id)).draggable({
         containment:'parent',

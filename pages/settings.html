@@ -637,16 +637,16 @@
                                                 <tr>
                                                     <th>Broker Id</th>
                                                     <th>Ip Address</th>
-                                                    <th>Kafka Url</th>
-                                                    <th>Kafka Port</th>
+                                                    <th>Port</th>
+                                                    <th>Devices</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr class="canClick" id="deviceAdd" ng-repeat = "n in brokerList">
                                                     <td>{{n.brokerId}}</td>
                                                     <td>{{n.ipAddress}}</td>
-                                                    <td>{{n.kafkaUrl}}</td>
-                                                    <td>{{n.kafkaPort}}</td>
+                                                    <td>{{n.port}}</td>
+                                                    <td>{{n.devices.length}}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -671,10 +671,8 @@
                         <input type="text" id="s1" class="form-control" style="margin-bottom:5px;">
                         <h4>Ip Address</h4>
                         <input type="text" id="s2" class="form-control" style="margin-bottom:5px;">
-                        <h4>Kafka Url</h4>
+                        <h4>Port</h4>
                         <input type="text" id="s3" class="form-control" style="margin-bottom:5px;">
-                        <h4>Kafka Port</h4>
-                        <input type="text" id="s4" class="form-control" style="margin-bottom:5px;">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -689,21 +687,27 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Add Broker</h4>
+                        <h4 class="modal-title">Device</h4>
                     </div>
                     <div class="modal-body">
-                        <h4>Broker Id</h4>
-                        <input type="text" id="s1" class="form-control" style="margin-bottom:5px;">
-                        <h4>Ip Address</h4>
-                        <input type="text" id="s2" class="form-control" style="margin-bottom:5px;">
-                        <h4>Kafka Url</h4>
-                        <input type="text" id="s3" class="form-control" style="margin-bottom:5px;">
-                        <h4>Kafka Port</h4>
-                        <input type="text" id="s4" class="form-control" style="margin-bottom:5px;">
+                        <table id="device_table" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Device Id</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr id="showDeviceList" ng-repeat = "n in currentDeviceList">
+                                    <td>{{$index+1}}</td>
+                                    <td>{{n}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-default" id="addBrokerSubmit">Submit</button>
+                        <button type="button" class="btn btn-default" id="addDeviceSubmit">Add Device</button>
                     </div>
                 </div>
             </div>
@@ -966,28 +970,52 @@ $("#addBroker").click(function(){
     $('#myModal').modal('show');
 });
 $("#addBrokerSubmit").click(function(){
-    if ( !($('#s1')[0].value)|| !($('#s2')[0].value)|| !($('#s3')[0].value)|| !($('#s4')[0].value) ){
+    if ( !($('#s1')[0].value)|| !($('#s2')[0].value)|| !($('#s3')[0].value) ){
         console.log("input fields must be filled");
     }else{
         var temp = angular.element(document.getElementById('jsonToScope')).scope().newnode;
         temp['brokerId'] = $('#s1')[0].value;
         temp['ipAddress'] = $('#s2')[0].value;
-        temp['kafkaUrl'] = $('#s3')[0].value;
-        temp['kafkaPort'] = $('#s4')[0].value;
-        // angular.element(document.getElementById('jsonToScope')).scope().brokerList;
+        temp['devices'] = $('#s3')[0].value;
         angular.element(document.getElementById('jsonToScope')).scope().addBroker();
         angular.element(document.getElementById('jsonToScope')).scope().newnode = {};
         angular.element(document.getElementById('jsonToScope')).scope().getBroker();
         angular.element(document.getElementById('jsonToScope')).scope().$apply();
     }
 });
+$("#addDeviceSubmit").click(function(){
+    var ask = prompt("Add Device. (Type Device Id)");
+    var temp = angular.element(document.getElementById('jsonToScope')).scope().currentBroker;
+    if(ask){
+        console.log(ask);
+        angular.element(document.getElementById('jsonToScope')).scope().newdevice['deviceId'] = ask;
+        angular.element(document.getElementById('jsonToScope')).scope().newdevice['brokerId'] = temp;
+        angular.element(document.getElementById('jsonToScope')).scope().addDevice();
+        angular.element(document.getElementById('jsonToScope')).scope().getBroker();
+        setTimeout(function () {
+            angular.element(document.getElementById('jsonToScope')).scope().currentDeviceList = angular.element(document.getElementById('jsonToScope')).scope().brokerList[0]['deviceId'];
+        }, 200);
+        setTimeout(function () {
+            angular.element(document.getElementById('jsonToScope')).scope().$apply();
+        }, 200);
+
+    }
+});
+
 $('.box-body').on("click","#deviceAdd",function(){
+    var arr = $(this)[0].innerText.split("	");
+    angular.element(document.getElementById('jsonToScope')).scope().currentBroker = arr[0];
+    angular.element(document.getElementById('jsonToScope')).scope().getBroker();
+    angular.element(document.getElementById('jsonToScope')).scope().currentDeviceList = angular.element(document.getElementById('jsonToScope')).scope().brokerList[0]['deviceId'];
+    //
+    // for(var i=0; i< angular.element(document.getElementById('jsonToScope')).scope().brokerList.length ; ++i){
+    //     if(angular.element(document.getElementById('jsonToScope')).scope().brokerList[i].brokerId==arr[0]){
+    //     angular.element(document.getElementById('jsonToScope')).scope().currentDeviceList = angular.element(document.getElementById('jsonToScope')).scope().brokerList[i].devices
+    //     }
+    // }
+    angular.element(document.getElementById('jsonToScope')).scope().$apply();
     $("#deviceModal").modal('show');
 });
-// $(".canClick").click(function(){
-//     console.log("zz");
-//     $("#deviceModal").modal('show');
-// });
 $(function () {
     $("[data-mask]").inputmask();
 });

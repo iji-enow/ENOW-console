@@ -2,7 +2,7 @@
 var app = angular.module('mainModule', []);
 // var app = angular.module('mainModule',[]);
 app.controller('myCtrl', function($scope, $http){
-    $scope.name = "kihwan";
+    $scope.name = "a";
     // $http.get("/get_db").then(function(response, error){
     //     $scope.list = response.data;
     // })
@@ -18,17 +18,26 @@ app.controller('myCtrl', function($scope, $http){
     $scope.getTarget;
     // settings.html
     $scope.brokerList=[
-        {
-            brokerId:"a",
-            devices:["aaaa","aaa","aa","a"]
-    },{
-        brokerId:"b",
-        devices:["bbbb","bbb","bb","b"]
-    }
+    //     {
+    //         brokerId:"aaaaa",
+    //         ipAddress:"127.0.0.1",
+    //         port:"1111",
+    //         devices:["aaaa","aaa","aa","a"]
+    // },{
+    //     brokerId:"bbbbb",
+    //     ipAddress:"127.0.0.1",
+    //     port:"2222",
+    //     devices:["bbbb","bbb","bb","b"]
+    // }
 
 ];
+$scope.currentDeviceList;
+$scope.currentBroker;
 $scope.settings={};
 $scope.newnode ={};
+$scope.newdevice={
+    deviceId:""
+};
 // ------------------------------------------
 $scope.saveDataBase = function(){
     $http({
@@ -86,12 +95,20 @@ $scope.loadRoadMap = function(){
         dataType: "json"
     }).then(function(response){
         $scope.getTarget = response.data;
-        console.log(response.data);
-        console.log("---------------------------------------------------------")
-        console.log($scope.getTarget);
     });
 }
-
+$scope.addDevice = function(){
+    console.log($scope.newnode);
+    $http({
+        withCredentials: false,
+        method: 'post',
+        url: "/add_device",
+        headers: {'Content-Type': 'application/json'},
+        data: $scope.newdevice,
+        contentType : 'application/json',
+        dataType: "json"
+    });
+}
 // get
 $scope.getBroker = function(){
     $http({
@@ -151,6 +168,8 @@ $scope.changeToTree = function (arrayList) {
     rootNodes.clientId = "1";
     rootNodes.initNode = this.listOfInitNode;
     rootNodes.lastNode = this.listOfLastNode;
+    rootNodes.isInput = 'false';
+    rootNodes.isOutput = 'false';
     rootNodes.incomingNode = rootNodes.incomingNode || {};
     rootNodes.outingNode = rootNodes.outingNode || {};
     rootNodes.clientId = "1";

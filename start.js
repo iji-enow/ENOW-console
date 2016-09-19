@@ -32,18 +32,18 @@ expressapp.post('/post_db', function(req, res){
 });
 expressapp.post('/run_db', function(req, res){
     connectDB(req.body, 'source', 'execute', 'run', null);
-    // setTimeout(function () {
-    //     payloads[0]['messages']='{"roadMapId":"'+roadMapIdTemp+'"}';
-    //     payloads[0]['topic']='test';
-    // }, 500);
-    // setTimeout(function () {
-    //     producer.send(payloads, function (err, data) {
-    //         console.log(payloads);
-    //     });
-    //     producer.on('error', function (err) {
-    //         console.log(err);
-    //     });
-    // }, 700);
+    setTimeout(function () {
+        payloads[0]['messages']='{"roadMapId":"'+roadMapIdTemp+'"}';
+        payloads[0]['topic']='test';
+    }, 300);
+    setTimeout(function () {
+        producer.send(payloads, function (err, data) {
+            console.log(payloads);
+        });
+        producer.on('error', function (err) {
+            console.log(err);
+        });
+    }, 500);
 });
 expressapp.post('/kill_db', function(req, res){
     connectDB(req.body, 'source', 'execute', 'kill', null)
@@ -51,13 +51,16 @@ expressapp.post('/kill_db', function(req, res){
 expressapp.post('/add_broker', function(req, res){
     connectDB(req.body, 'connectionData', 'brokerList', 'saveBroker', null);
 });
+expressapp.post('/add_device', function(req, res){
+    // console.log(req.body);
+    connectDB(req.body, 'connectionData', 'brokerList', 'saveDevice', null);
+});
 expressapp.post('/post_url_settings', function(req, res){
     mongoUrl = req.body['mongoUrl'];
     mongoPort = req.body['mongoPort'];
     producer.client.connectionString = req.body['zookeeperUrl']+':'+req.body['zookeeperPort'];
 });
 expressapp.post('/load_roadmap', function(req, res){
-    console.log("---------------------------------------\n"+req.body['_id']+"-------------------------------\n");
     connectDB(req.body, 'source', 'recipes', 'findTarget', res);
 });
 expressapp.get('/get_broker', function(req, res){
@@ -76,8 +79,8 @@ var server = expressapp.listen(expressapp.get('port'), function(){
 });
 
 function connectDB(source, dbName, collectionName, command, response){
-    MongoClient.connect('mongodb://'+mongoUrl+':'+mongoPort+'/'+dbName,function(err,db) {
-    // MongoClient.connect('mongodb://127.0.0.1:27017/'+dbName,function(err,db) {
+    // MongoClient.connect('mongodb://'+mongoUrl+':'+mongoPort+'/'+dbName,function(err,db) {
+    MongoClient.connect('mongodb://127.0.0.1:27017/'+dbName,function(err,db) {
 
 
         var findDocument = function(db, callback){
@@ -122,6 +125,16 @@ function connectDB(source, dbName, collectionName, command, response){
             });
 
         };
+        var insertDocumentDevice = function(db, callback){
+            // db.collection(collectionName).find({})
+            db.collection(collectionName).updateOne(
+           {'brokerId':source['brokerId']},
+           {
+             $push: { "deviceId": source['deviceId']}
+           }, function(err, results) {
+           callback();
+        });
+     };
 
         var insertDocumentBroker = function(db, callback){
             db.collection(collectionName).count({}, function(err, cnt) {
@@ -129,8 +142,7 @@ function connectDB(source, dbName, collectionName, command, response){
                     "brokerNum" : (cnt+1).toString(),
                     "brokerId" : source['brokerId'],
                     "ipAddress" : source['ipAddress'],
-                    "kafkaUrl" : source['kafkaUrl'],
-                    "kafkaPort" : source['kafkaPort'],
+                    "devices" : source['devices'],
                 },function(err, result){
                     callback();
                 });
@@ -150,6 +162,10 @@ function connectDB(source, dbName, collectionName, command, response){
             });
         }else if(command=="saveBroker"){
             insertDocumentBroker(db, function(){
+                db.close();
+            });
+        }else if(command=="saveDevice"){
+            insertDocumentDevice(db, function(){
                 db.close();
             });
         }else if(command=="kill"){
