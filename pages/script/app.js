@@ -17,7 +17,14 @@ app.controller('myCtrl', function($scope, $http){
     $scope.loadTarget ={};
     $scope.getTarget;
     // settings.html
-    $scope.brokerList=[];
+    $scope.brokerList=[
+        {
+        "brokerId": "a"
+    },{
+        "brokerId":"b"
+    }
+
+];
     $scope.settings={};
     $scope.newnode ={};
     // ------------------------------------------

@@ -51,9 +51,15 @@
         width: 60px;
         height: 34px;
     }
-
+    .switch_slim {
+        position: relative;
+        display: inline-block;
+        width: 30px;
+        height: 17px;
+    }
     /* Hide default HTML checkbox */
     .switch input {display:none;}
+    .switch_slim input {display:none;}
 
     /* The slider */
     .slider {
@@ -67,7 +73,17 @@
         -webkit-transition: .4s;
         transition: .4s;
     }
-
+    .slider_slim{
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .2s;
+        transition: .2s;
+    }
     .slider:before {
         position: absolute;
         content: "";
@@ -79,27 +95,50 @@
         -webkit-transition: .4s;
         transition: .4s;
     }
-
+    .slider_slim:before {
+        position: absolute;
+        content: "";
+        height: 13px;
+        width: 13px;
+        left: 2px;
+        bottom: 2px;
+        background-color: white;
+        -webkit-transition: .2s;
+        transition: .2s;
+    }
     input:checked + .slider {
         background-color: #2196F3;
     }
-
+    input:checked + .slider_slim {
+        background-color: #2196F3;
+    }
     input:focus + .slider {
         box-shadow: 0 0 1px #2196F3;
     }
-
+    input:focus + .slider_slim {
+        box-shadow: 0 0 1px #2196F3;
+    }
     input:checked + .slider:before {
         -webkit-transform: translateX(26px);
         -ms-transform: translateX(26px);
         transform: translateX(26px);
     }
-
+    input:checked + .slider_slim:before {
+        -webkit-transform: translateX(13px);
+        -ms-transform: translateX(13px);
+        transform: translateX(13px);
+    }
     /* Rounded sliders */
     .slider.round {
         border-radius: 34px;
     }
-
+    .slider_slim.round {
+        border-radius: 17px;
+    }
     .slider.round:before {
+        border-radius: 50%;
+    }
+    .slider_slim.round:before {
         border-radius: 50%;
     }
 
@@ -520,12 +559,22 @@
                                 </div>
                             </div>
                             <div class="box-body">
-                                <label>Protocol</label>
-                                <select id="protocolSelect" class="form-control">
-                                    <option value="mqtt">MQTT</option>
-                                    <option value="http">HTTP</option>
-                                    <option value="coap">COAP</option>
-                                </select>
+                                <label id="deviceOrLambdaText"></label>
+                                <label class="switch_slim pull-right" style="margin-right:15px;">
+                                    <input type="checkbox" id="deviceOrLambda">
+                                    <div class="slider_slim round"></div>
+                                </label>
+                                <br>
+                                    <label>Broker List</label>
+                                    <select id="brokerSelect" class="form-control">
+                                        <option disabled selected> --Select Broker-- </option>
+                                        <option ng-repeat = "n in brokerList">{{n.brokerId}}</option>
+                                    </select>
+                                    <label>Device List</label>
+                                    <select id="deviceSelect" class="form-control">
+                                        <option disabled selected value> --Select Device-- </option>
+                                        <option ng-repeat = "n in brokerList">{{n.brokerId}}</option>
+                                    </select>
                                 <label>Device IP address</label>
                                 <input id="ip" class="form-control input-sm" type="text">
                                 <label>Device Port number</label>
@@ -825,7 +874,13 @@ $(document).ready(function(){
     setTimeout(function () {
         angular.element(document.getElementById('jsonToScope')).scope().settings = localStorage;
         angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings();
+        angular.element(document.getElementById('jsonToScope')).scope().getBroker();
+        angular.element(document.getElementById('jsonToScope')).scope().$apply();
     }, 200);
+
+});
+$(document).on("change","#brokerSelect", function(){
+    console.log("a");
 });
 $('#run').click(function(){
     if($(this).is(':checked')){
@@ -842,7 +897,14 @@ $('#run').click(function(){
         angular.element(document.getElementById('jsonToScope')).scope().killRoadMap();
     }
 });
-
+$('#test').on("click",'#deviceOrLambda', function(){
+    if($(this).is(':checked')){
+            $("#"+$(this).parent().parent().parent()[0].id).find('h3').text("Lambda"+$(this).parent().parent().parent()[0].id.substring(6));
+    }
+    else{
+        $("#"+$(this).parent().parent().parent()[0].id).find('h3').text("Device"+$(this).parent().parent().parent()[0].id.substring(6));
+    }
+});
 
 $('#test').on("click","#protocolSelect", function () {
     var selected = $(this)[0].value;
@@ -879,7 +941,7 @@ $('#broker_table').on('click','#loadRoadMapItem', function(){
             var currentRoadMap = angular.element(document.getElementById('jsonToScope')).scope().getTarget;
             console.log(JSON.stringify(currentRoadMap));
             var temp = JSON.parse(JSON.stringify(currentRoadMap[0], null, '   '));
-            
+
             for(var i=0; i<Object.keys(temp['mapIds']).length; ++i){
                 addnode();
             };
@@ -1072,7 +1134,7 @@ function saveTree(){
         }
     }
     //position values
-    for(var i=1; i <= Object.keys(deviceInfo).length ; ++i){
+    for(var i=1; i <= Object.keys(deviceInfo).length ; ++i)$("#selectBox option:selected").text();{
         var temp = $('#test').find('#'+deviceInfo[i]['deviceId'])[0];
         deviceInfo[i]['x'] = temp.style['left'];
         deviceInfo[i]['y'] = temp.style['top'];
@@ -1118,7 +1180,6 @@ $('#test').on("mousewheel", function (e) {
         console.log("zz");
     }
 });
-
 
 $('#test').on("click","#codeEditor", function () {
     var node = $(this)[0].parentNode.parentNode.id;
