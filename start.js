@@ -80,14 +80,11 @@ expressapp.use(function(req,res,next){
 expressapp.use(express.static(path.join(__dirname+"/../", 'console')));
 const port = 3000;
 expressapp.set('port', port);
-
-
-
 expressapp.post('/post_db', function(req, res){
-    connectDB(req.body, 'source', 'recipes', 'save', res);
+    connectDB(req.body, 'enow', 'recipes', 'save', res);
 });
 expressapp.post('/run_db', function(req, res){
-    connectDB(req.body, 'source', 'execute', 'run', res);
+    connectDB(req.body, 'enow', 'execute', 'run', res);
     payloads[0]['messages']='{"roadMapId":"'+roadMapIdTemp+'"}';
     setTimeout(function () {
         producer.send(payloads, function (err, data) {
@@ -100,7 +97,7 @@ expressapp.post('/run_db', function(req, res){
 });
 expressapp.post('/kill_db', function(req, res){
     console.log('kill execute...');
-    connectDB(req.body, 'source', 'execute', 'kill', res)
+    connectDB(req.body, 'enow', 'execute', 'kill', res)
 });
 expressapp.post('/add_broker', function(req, res){
     console.log('add broker...');
@@ -135,7 +132,7 @@ expressapp.post('/post_url_settings', function(req, res){
 });
 expressapp.post('/load_roadmap', function(req, res){
     console.log('load roadmap...');
-    connectDB(req.body, 'source', 'recipes', 'findTarget', res);
+    connectDB(req.body, 'enow', 'recipes', 'findTarget', res);
 });
 expressapp.post('/get_broker', function(req, res){
     console.log('get broker...');
@@ -151,7 +148,7 @@ expressapp.get('/get_settings', function(req, res){
 });
 expressapp.get('/get_roadmaps', function(req, res){
     console.log('get roadmaps...');
-    connectDB(null, 'source', 'recipes', 'find', res);
+    connectDB(null, 'enow', 'recipes', 'find', res);
 });
 expressapp.get('/get_devices', function(req, res){
     console.log('get devices...');

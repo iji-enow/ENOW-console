@@ -206,14 +206,12 @@ app.controller('myCtrl', function($scope, $http){
             rootNodes.outingNode[list.source].push(list.target);
         }
         rootNodes.roadMapId = "";
-        rootNodes.clientId = "1";
         rootNodes.initNode = this.listOfInitNode;
         rootNodes.lastNode = this.listOfLastNode;
-        rootNodes.isInput = 'false';
-        rootNodes.isOutput = 'false';
+        rootNodes.isInput = false;
+        rootNodes.isOutput = false;
         rootNodes.incomingNode = rootNodes.incomingNode || {};
         rootNodes.outingNode = rootNodes.outingNode || {};
-        rootNodes.clientId = "1";
         rootNodes.mapIds = this.mapIds || {};
         for(var i=0; i<arrayList.length; ++i){
             insert_incoming(arrayList[i]);

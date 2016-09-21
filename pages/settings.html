@@ -576,13 +576,15 @@
                         <h3 class="box-title">Broker Settings</h3>
                     </div>
                     <div class="box-body">
-
                         <div class="row">
                             <div class="col-lg-12 col-xs-12">
                                 <div class="box">
                                     <div class="box-header">
                                         <h3 class="box-title">Broker lists</h3>
                                         <button id="addBroker" class="btn btn-primary btn-flat pull-right">Add Broker</button>
+                                        <input type="file" class="btn btn-default" id="addSecurityFile1">CA.crt</input>
+                                        <input type="file" class="btn btn-default" id="addSecurityFile2">HostName.crt</input>
+                                        <input type="file" class="btn btn-default" id="addSecurityFile3">HostName.key</input>
                                     </div>
                                     <div class="box-body">
                                         <table id="broker_table" class="table table-bordered table-striped">
@@ -611,9 +613,9 @@
                 </div>
             </div>
         </div>
+        <!-- adding broker -->
         <div id="myModal" class="modal fade">
             <div class="modal-dialog" style="width:300px;">
-                <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -634,9 +636,9 @@
                 </div>
             </div>
         </div>
+        <!-- device add from broker window -->
         <div id="deviceModal" class="modal fade">
             <div class="modal-dialog" style="width:600px;">
-                <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -661,6 +663,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="file" class="btn btn-default" id="addSecurityFile">Security</button>
                         <button type="button" class="btn btn-default" id="addDeviceSubmit">Add Device</button>
                         <button type="button" class="btn btn-default" id="removeDeviceSubmit">Remove Device</button>
                     </div>
@@ -669,7 +672,7 @@
         </div>
     </section>
 </div>
-<!--- ------------------------------------------------------------------------------->
+<!---------------------------------------------------------------------------------->
 <footer class="main-footer">
     <div class="pull-right hidden-xs">
         <b>Version</b> 0.0.1
@@ -884,32 +887,24 @@ immediately after the control sidebar -->
 <script src="../dist/js/demo.js"></script>
 <script>
 $(document).ready(function(){
-
-        setTimeout(function () {
-            angular.element(document.getElementById('jsonToScope')).scope().settings = localStorage;
-            console.log(angular.element(document.getElementById('jsonToScope')).scope().settings);
-            $.when(angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings()).done(
-                angular.element(document.getElementById('jsonToScope')).scope().getBrokers()
-            );
-            
-            }, 200);
-
-            $('#kafkaUrl')[0].value = localStorage['kafkaUrl'] || "";
-            $('#kafkaPort')[0].value = localStorage['kafkaPort'] || "";
-            $('#mongoUrl')[0].value = localStorage['mongoUrl'] || "";
-            $('#mongoPort')[0].value = localStorage['mongoPort'] || "";
-            $('#numWorker')[0].value = localStorage['numberOfWorkers'] || "";
-            $('#maxTask')[0].value = localStorage['maxTaskParallelism'] || "";
+    setTimeout(function () {
+        angular.element(document.getElementById('jsonToScope')).scope().settings = localStorage;
+        console.log(angular.element(document.getElementById('jsonToScope')).scope().settings);
+        $.when(angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings()).done(
+            angular.element(document.getElementById('jsonToScope')).scope().getBrokers()
+        );
+    }, 200);
+    $('#kafkaUrl')[0].value = localStorage['kafkaUrl'] || "";
+    $('#kafkaPort')[0].value = localStorage['kafkaPort'] || "";
+    $('#mongoUrl')[0].value = localStorage['mongoUrl'] || "";
+    $('#mongoPort')[0].value = localStorage['mongoPort'] || "";
+    $('#numWorker')[0].value = localStorage['numberOfWorkers'] || "";
+    $('#maxTask')[0].value = localStorage['maxTaskParallelism'] || "";
 });
-jQuery('#jsonToScope').load(function(){
-    console.log("zzz");
-});
-
 $("#submit1").click(function(){
     localStorage['kafkaUrl'] = $('#kafkaUrl')[0].value;
     localStorage['kafkaPort'] = $('#kafkaPort')[0].value;
     alert('Saved.');
-
 });
 $("#submit2").click(function(){
     localStorage['mongoUrl'] = $('#mongoUrl')[0].value;
@@ -940,7 +935,10 @@ $("#addBrokerSubmit").click(function(){
         angular.element(document.getElementById('jsonToScope')).scope().$apply();
     }
 });
-
+//add security file
+$('#addSecurityFile1').click(function(){
+    console.log($(this));
+});
 //add device to current broker
 $("#addDeviceSubmit").click(function(){
     var ask = prompt("Add Device. (Type Device Id)");
@@ -956,10 +954,8 @@ $("#addDeviceSubmit").click(function(){
         setTimeout(function () {
             angular.element(document.getElementById('jsonToScope')).scope().$apply();
         }, 200);
-
     }
 });
-
 $("#removeDeviceSubmit").click(function(){
     alert("nope");
 });
