@@ -708,6 +708,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-default" id="addDeviceSubmit">Add Device</button>
+                        <button type="button" class="btn btn-default" id="removeDeviceSubmit">Remove Device</button>
                     </div>
                 </div>
             </div>
@@ -943,8 +944,10 @@ immediately after the control sidebar -->
 $(document).ready(function(){
     setTimeout(function () {
         angular.element(document.getElementById('jsonToScope')).scope().settings = localStorage;
-        angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings();
-        angular.element(document.getElementById('jsonToScope')).scope().getBrokers();
+        ;
+        $.when(angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings()).done(
+            angular.element(document.getElementById('jsonToScope')).scope().getBrokers()
+        );
         $('#kafkaUrl')[0].value=localStorage['kafkaUrl'];
         $('#kafkaPort')[0].value=localStorage['kafkaPort'];
         $('#mongoUrl')[0].value=localStorage['mongoUrl'];
@@ -954,16 +957,19 @@ $(document).ready(function(){
     }, 200);
 });
 $("#submit1").click(function(){
-    localStorage['zookeeperUrl'] = $('#zookeeperUrl')[0].value;
-    localStorage['zookeeperPort'] = $('#zookeeperPort')[0].value;
+    localStorage['kafkaUrl'] = $('#kafkaUrl')[0].value;
+    localStorage['kafkaPort'] = $('#kafkaPort')[0].value;
+    alert('Saved.');
 });
 $("#submit2").click(function(){
     localStorage['mongoUrl'] = $('#mongoUrl')[0].value;
     localStorage['mongoPort'] = $('#mongoPort')[0].value;
+    alert('Saved.');
 });
 $("#submit3").click(function(){
     localStorage['numberOfWorkers'] = $('#numWorker')[0].value;
     localStorage['maxTaskParallelism'] = $('#maxTask')[0].value;
+    alert('Saved.');
 });
 
 $("#addBroker").click(function(){
@@ -978,9 +984,10 @@ $("#addBrokerSubmit").click(function(){
         angular.element(document.getElementById('jsonToScope')).scope().newnode['ipAddress'] = $('#s2')[0].value;
         angular.element(document.getElementById('jsonToScope')).scope().newnode['port'] = $('#s3')[0].value;
         angular.element(document.getElementById('jsonToScope')).scope().newnode['deviceId'] = [];
-        angular.element(document.getElementById('jsonToScope')).scope().addBroker();
+        $.when(angular.element(document.getElementById('jsonToScope')).scope().addBroker()).done(
+            angular.element(document.getElementById('jsonToScope')).scope().getBrokers()
+        )
         angular.element(document.getElementById('jsonToScope')).scope().newnode = {};
-        angular.element(document.getElementById('jsonToScope')).scope().getBrokers();
         angular.element(document.getElementById('jsonToScope')).scope().$apply();
     }
 });
@@ -1002,6 +1009,10 @@ $("#addDeviceSubmit").click(function(){
         }, 200);
 
     }
+});
+
+$("#removeDeviceSubmit").click(function(){
+    alert("nope");
 });
 
 $('.box-body').on("click","#deviceAdd",function(){

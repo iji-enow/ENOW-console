@@ -1139,11 +1139,6 @@ instance.batch(function () {
         // console.log("connection " + params.connection.id + " was moved");
     });
 });
-var dynamicAnchors = [ [ 0.99, 0.5, 1, 0 ],[ 0.3, 0.01, 0, -1 ],
-[ 0.3, 0.99, 0, 1 ], [ 0.01, 0.5, -1, 0 ] ];
-
-var dynamicAnchors2 = [  [ 0.01, 0.5, -1, 0 ],[ 0.99, 0.5, 1, 0 ], [ 0.7, 0.01, 0, -1 ],
-[ 0.7, 0.99, 0, 1 ] ];
 var _addEndpoints = function (toId) {
     instance.addEndpoint(toId, sourceEndpoint, {
         // anchor: dynamicAnchors,
