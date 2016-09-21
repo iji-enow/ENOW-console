@@ -884,23 +884,27 @@ immediately after the control sidebar -->
 <script src="../dist/js/demo.js"></script>
 <script>
 $(document).ready(function(){
-    console.log("start");
-    $('#jsonToScope').ready(function(){
-        console.log("done");
-        angular.element(document.getElementById('jsonToScope')).scope().settings = localStorage;
-        console.log(angular.element(document.getElementById('jsonToScope')).scope().settings);
-    });
-    
-    // $.when(angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings()).done(
-    //     angular.element(document.getElementById('jsonToScope')).scope().getBrokers()
-    // );
-    $('#kafkaUrl')[0].value = localStorage['kafkaUrl'] || "";
-    $('#kafkaPort')[0].value = localStorage['kafkaPort'] || "";
-    $('#mongoUrl')[0].value = localStorage['mongoUrl'] || "";
-    $('#mongoPort')[0].value = localStorage['mongoPort'] || "";
-    $('#numWorker')[0].value = localStorage['numberOfWorkers'] || "";
-    $('#maxTask')[0].value = localStorage['maxTaskParallelism'] || "";
+
+        setTimeout(function () {
+            angular.element(document.getElementById('jsonToScope')).scope().settings = localStorage;
+            console.log(angular.element(document.getElementById('jsonToScope')).scope().settings);
+            $.when(angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings()).done(
+                angular.element(document.getElementById('jsonToScope')).scope().getBrokers()
+            );
+
+            }, 200);
+
+            $('#kafkaUrl')[0].value = localStorage['kafkaUrl'] || "";
+            $('#kafkaPort')[0].value = localStorage['kafkaPort'] || "";
+            $('#mongoUrl')[0].value = localStorage['mongoUrl'] || "";
+            $('#mongoPort')[0].value = localStorage['mongoPort'] || "";
+            $('#numWorker')[0].value = localStorage['numberOfWorkers'] || "";
+            $('#maxTask')[0].value = localStorage['maxTaskParallelism'] || "";
+
+
 });
+
+
 $("#submit1").click(function(){
     localStorage['kafkaUrl'] = $('#kafkaUrl')[0].value;
     localStorage['kafkaPort'] = $('#kafkaPort')[0].value;
