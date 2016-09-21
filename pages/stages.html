@@ -895,14 +895,12 @@ $('#test').on("click",'#deviceOrLambda', function(){
             $("#"+$(this).parent().parent().parent()[0].id).find('h3').text("Lambda"+$(this).parent().parent().parent()[0].id.substring(8));
             $("#"+$(this).parent().parent().parent()[0].id).find('#hideIfLambda').hide();
             deviceInfo[$(this).parent().parent().parent()[0].id.substring(8)]['lambda'] = "true";
-            deviceInfo[$(this).parent().parent().parent()[0].id.substring(8)]['deviceId'] = "null";
             deviceInfo[$(this).parent().parent().parent()[0].id.substring(8)]['brokerId'] = "null";
         }
     else{
         $("#"+$(this).parent().parent().parent()[0].id).find('h3').text("Device"+$(this).parent().parent().parent()[0].id.substring(8));
         $("#"+$(this).parent().parent().parent()[0].id).find('#hideIfLambda').show();
         deviceInfo[$(this).parent().parent().parent()[0].id.substring(8)]['lambda'] = "false";
-        deviceInfo[$(this).parent().parent().parent()[0].id.substring(8)]['deviceId'] = $(this).parent().parent().parent()[0].id;
         deviceInfo[$(this).parent().parent().parent()[0].id.substring(8)]['brokerId'] = "gay";
     }
 });
@@ -1132,9 +1130,11 @@ function saveTree(){
     }
     //position values
     for(var i=1; i <= Object.keys(deviceInfo).length ; ++i){
+        console.log(deviceInfo[i]['deviceId']);
         var temp = $('#test').find('#'+deviceInfo[i]['deviceId'])[0];
         deviceInfo[i]['x'] = temp.style['left'] || "0px";
-        deviceInfo[i]['y'] = temp.style['top'] || "0px";
+        deviceInfo[i]['y'] = temp.style[
+            'top'] || "0px";
     }
     angular.element(document.getElementById('jsonToScope')).scope().listOfInitNode = initNode;
     angular.element(document.getElementById('jsonToScope')).scope().listOfLastNode = lastNode;

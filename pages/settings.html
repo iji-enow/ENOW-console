@@ -891,7 +891,6 @@ $(document).ready(function(){
             $.when(angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings()).done(
                 angular.element(document.getElementById('jsonToScope')).scope().getBrokers()
             );
-
             }, 200);
 
             $('#kafkaUrl')[0].value = localStorage['kafkaUrl'] || "";
@@ -900,10 +899,10 @@ $(document).ready(function(){
             $('#mongoPort')[0].value = localStorage['mongoPort'] || "";
             $('#numWorker')[0].value = localStorage['numberOfWorkers'] || "";
             $('#maxTask')[0].value = localStorage['maxTaskParallelism'] || "";
-
-
 });
-
+jQuery('#jsonToScope').load(function(){
+    console.log("zzz");
+});
 
 $("#submit1").click(function(){
     localStorage['kafkaUrl'] = $('#kafkaUrl')[0].value;
