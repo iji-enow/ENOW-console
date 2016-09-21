@@ -894,13 +894,13 @@ $('#test').on("click",'#deviceOrLambda', function(){
     if($(this).is(':checked')){
             $("#"+$(this).parent().parent().parent()[0].id).find('h3').text("Lambda"+$(this).parent().parent().parent()[0].id.substring(8));
             $("#"+$(this).parent().parent().parent()[0].id).find('#hideIfLambda').hide();
-            deviceInfo[$(this).parent().parent().parent()[0].id.substring(8)]['lambda'] = "true";
+            deviceInfo[$(this).parent().parent().parent()[0].id.substring(8)]['lambda'] = true;
             deviceInfo[$(this).parent().parent().parent()[0].id.substring(8)]['brokerId'] = "null";
         }
     else{
         $("#"+$(this).parent().parent().parent()[0].id).find('h3').text("Device"+$(this).parent().parent().parent()[0].id.substring(8));
         $("#"+$(this).parent().parent().parent()[0].id).find('#hideIfLambda').show();
-        deviceInfo[$(this).parent().parent().parent()[0].id.substring(8)]['lambda'] = "false";
+        deviceInfo[$(this).parent().parent().parent()[0].id.substring(8)]['lambda'] = false;
         deviceInfo[$(this).parent().parent().parent()[0].id.substring(8)]['brokerId'] = "gay";
     }
 });
@@ -1221,7 +1221,7 @@ function addnode(){
     deviceInfo[_id.substring(8)]['parameter'] = deviceInfo[_id.substring(8)]['parameter'] || new Array();
     deviceInfo[_id.substring(8)]['code'] = deviceInfo[_id.substring(8)]['code'] || "def eventHandler(event, context, callback):\n    ";
     deviceInfo[_id.substring(8)]['deviceId']= _id;
-    deviceInfo[_id.substring(8)]['lambda'] = "false";
+    deviceInfo[_id.substring(8)]['lambda'] = false;
     deviceInfo[_id.substring(8)]['brokerId'] = "null";
     deviceInfo[_id.substring(8)]['serverId'] = "null";
 

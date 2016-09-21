@@ -891,6 +891,7 @@ $(document).ready(function(){
             $.when(angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings()).done(
                 angular.element(document.getElementById('jsonToScope')).scope().getBrokers()
             );
+            
             }, 200);
 
             $('#kafkaUrl')[0].value = localStorage['kafkaUrl'] || "";
