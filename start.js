@@ -1,6 +1,7 @@
 const http = require('http');
 const express = require('express');
 const mongo = require('mongodb');
+const fs = require('fs');
 const bodyparser = require('body-parser');
 const BSON = require('bson').BSONPure;
 var path = require('path');
@@ -43,15 +44,16 @@ consumer = new Consumer(
 
 offset.fetchLatestOffsets(['log'], function (error, offsets) {
     if (error)
-        return handleError(error);
+    return handleError(error);
     console.log('start from...\n\tkafka topic: log\n\toffset : '+offsets['log'][0]);
     latestOffset = offsets['log'][0];
     consumer.on('message', function (message) {
         console.log(message);
+        fs.appendFile('logfile.txt', JSON.stringify(message)+'\r\n', 'utf8', function(err) {
+        });
     });
 });
 
-// km = new KeyedMessage('key', 'message');
 expressapp.use(bodyparser.json());
 expressapp.use(function(req,res,next){
     res.setTimeout(5000, function(){
@@ -190,7 +192,6 @@ function connectDB(source, dbName, collectionName, command, response){
                 "isOutput" : source['isOutput'],
                 "mapIds" : source['mapIds']
             },function(err, result){
-                // callback();
                 response.send("done");
             });
         });
@@ -216,7 +217,6 @@ function connectDB(source, dbName, collectionName, command, response){
                 "deviceId" : source['deviceId'],
             },function(err, result){
                 response.send("done");
-                // callback();
             });
         });
     };
@@ -225,7 +225,6 @@ function connectDB(source, dbName, collectionName, command, response){
         db.db(dbName).collection(collectionName).deleteOne({
         },function(err, result){
             response.send("done");
-            // callback();
         });
     };
 

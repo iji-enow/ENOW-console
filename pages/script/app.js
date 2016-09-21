@@ -205,7 +205,6 @@ app.controller('myCtrl', function($scope, $http){
             rootNodes.outingNode[list.source] = rootNodes.outingNode[list.source] || [];
             rootNodes.outingNode[list.source].push(list.target);
         }
-
         rootNodes.roadMapId = "";
         rootNodes.clientId = "1";
         rootNodes.initNode = this.listOfInitNode;
