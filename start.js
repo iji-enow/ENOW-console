@@ -122,8 +122,11 @@ expressapp.post('/post_url_settings', function(req, res){
     if(db){
         db.close();
     }
-    MongoClient.connect('mongodb://'+ mongoUrl+'/'+mongoPort, function(err, database) {
-        if(err) throw err;
+    MongoClient.connect('mongodb://'+ mongoUrl+'/'+mongoPort, function(err, database, callback) {
+        if(err){
+            console.log(err);
+            return;
+        }
         db = database;
         console.log('connected to mongodb://'+ mongoUrl+'/'+mongoPort);
         res.send("done");

@@ -882,14 +882,6 @@ immediately after the control sidebar -->
 <script src="../dist/js/app.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="../dist/js/demo.js"></script>
-<!-- mongodb, ace editor -->
-<!-- mask -->
-<script src="../plugins/input-mask/jquery.inputmask.js"></script>
-<script src="../plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
-<script src="../plugins/input-mask/jquery.inputmask.extensions.js"></script>
-<!-- DataTables -->
-<!-- <script src="../plugins/datatables/jquery.dataTables.min.js"></script> -->
-<!-- <script src="../plugins/datatables/dataTables.bootstrap.min.js"></script> -->
 <script>
 $(document).ready(function(){
     setTimeout(function () {
@@ -973,9 +965,6 @@ $('.box-body').on("click","#deviceAdd",function(){
     angular.element(document.getElementById('jsonToScope')).scope().getBroker();
     angular.element(document.getElementById('jsonToScope')).scope().$apply();
     $("#deviceModal").modal('show');
-});
-$(function () {
-    $("[data-mask]").inputmask();
 });
 </script>
 </body>
