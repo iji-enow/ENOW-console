@@ -11,16 +11,46 @@ var mongoUrl;
 var mongoPort;
 var roadMapIdTemp;
 var db;
+var latestOffset;
 var kafka = require('kafka-node'),
 Producer = kafka.Producer,
-// KeyedMessage = kafka.KeyedMessage,
-client = new kafka.Client('127.0.0.1:2181'),
+Consumer = kafka.Consumer,
+client = new kafka.Client(),
 producer = new Producer(client),
-payloads = [{
-    topic: '',
-    messages: '',
-    partition: 0
-}];
+payloads = [
+    {
+        topic:'event',
+        messages: '',
+        partition: 0
+    }
+],
+offset = new kafka.Offset(client),
+consumer = new Consumer(
+    client,
+    [
+        {
+            topic: 'log',
+            partition: 0,
+            offset: latestOffset
+        }
+    ],
+    {
+        autoCommit: false,
+        fromOffset: true
+
+    }
+);
+
+offset.fetchLatestOffsets(['log'], function (error, offsets) {
+    if (error)
+        return handleError(error);
+    console.log('start from...\n\tkafka topic: log\n\toffset : '+offsets['log'][0]);
+    latestOffset = offsets['log'][0];
+    consumer.on('message', function (message) {
+        console.log(message);
+    });
+});
+
 // km = new KeyedMessage('key', 'message');
 expressapp.use(bodyparser.json());
 expressapp.use(function(req,res,next){
@@ -32,8 +62,8 @@ expressapp.use(function(req,res,next){
 });
 expressapp.use(express.static(path.join(__dirname+"/../", 'console')));
 const port = 3000;
-
 expressapp.set('port', port);
+
 
 
 expressapp.post('/post_db', function(req, res){
@@ -41,10 +71,7 @@ expressapp.post('/post_db', function(req, res){
 });
 expressapp.post('/run_db', function(req, res){
     connectDB(req.body, 'source', 'execute', 'run', res);
-    setTimeout(function () {
-        payloads[0]['messages']='{"roadMapId":"'+roadMapIdTemp+'"}';
-        payloads[0]['topic']='event';
-    }, 500);
+    payloads[0]['messages']='{"roadMapId":"'+roadMapIdTemp+'"}';
     setTimeout(function () {
         producer.send(payloads, function (err, data) {
             console.log(payloads);

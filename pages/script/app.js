@@ -179,7 +179,6 @@ app.controller('myCtrl', function($scope, $http){
             }
         });
     }
-
     $scope.getRoadMaps = function(){
         $http({
             withCredentials: false,
