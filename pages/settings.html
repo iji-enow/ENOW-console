@@ -884,10 +884,12 @@ immediately after the control sidebar -->
 <script src="../dist/js/demo.js"></script>
 <script>
 $(document).ready(function(){
+    setTimeout(function () {
         angular.element(document.getElementById('jsonToScope')).scope().settings = localStorage;
         $.when(angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings()).done(
             angular.element(document.getElementById('jsonToScope')).scope().getBrokers()
         );
+    }, 200);
         $('#kafkaUrl')[0].value=localStorage['kafkaUrl'];
         $('#kafkaPort')[0].value=localStorage['kafkaPort'];
         $('#mongoUrl')[0].value=localStorage['mongoUrl'];
