@@ -2,6 +2,7 @@
 *.log
 *.zip
 .idea
+.git
 .sass-cache/
 /nbproject/
 /nbproject/private/
