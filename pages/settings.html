@@ -31,9 +31,9 @@
 
 
     <!-- jsplumb -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
-    <script src="script/jsPlumb-2.1.7-min.js"></script>
+    <script src="script/jsPlumb-2.1.7-min.js"></script> -->
     <link rel="stylesheet" href="../dist/css/demo.css">
     <style>
     /* The switch - the box around the slider */
@@ -884,27 +884,28 @@ immediately after the control sidebar -->
 <script src="../dist/js/demo.js"></script>
 <script>
 $(document).ready(function(){
-    setTimeout(function () {
+    console.log("start");
+    $('#jsonToScope').ready(function(){
+        console.log("done");
         angular.element(document.getElementById('jsonToScope')).scope().settings = localStorage;
-        $.when(angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings()).done(
-            angular.element(document.getElementById('jsonToScope')).scope().getBrokers()
-        );
-    }, 200);
-        $('#kafkaUrl')[0].value=localStorage['kafkaUrl'];
-        $('#kafkaPort')[0].value=localStorage['kafkaPort'];
-        $('#mongoUrl')[0].value=localStorage['mongoUrl'];
-        $('#mongoPort')[0].value=localStorage['mongoPort'];
-        $('#numWorker')[0].value=localStorage['numberOfWorkers'];
-        $('#maxTask')[0].value=localStorage['maxTaskParallelism'];
+        console.log(angular.element(document.getElementById('jsonToScope')).scope().settings);
+    });
+    
+    // $.when(angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings()).done(
+    //     angular.element(document.getElementById('jsonToScope')).scope().getBrokers()
+    // );
+    $('#kafkaUrl')[0].value = localStorage['kafkaUrl'] || "";
+    $('#kafkaPort')[0].value = localStorage['kafkaPort'] || "";
+    $('#mongoUrl')[0].value = localStorage['mongoUrl'] || "";
+    $('#mongoPort')[0].value = localStorage['mongoPort'] || "";
+    $('#numWorker')[0].value = localStorage['numberOfWorkers'] || "";
+    $('#maxTask')[0].value = localStorage['maxTaskParallelism'] || "";
 });
-// $(window).load(function(){
-//         console.log('aaa');
-// });
 $("#submit1").click(function(){
     localStorage['kafkaUrl'] = $('#kafkaUrl')[0].value;
     localStorage['kafkaPort'] = $('#kafkaPort')[0].value;
     alert('Saved.');
-    
+
 });
 $("#submit2").click(function(){
     localStorage['mongoUrl'] = $('#mongoUrl')[0].value;
@@ -916,7 +917,6 @@ $("#submit3").click(function(){
     localStorage['maxTaskParallelism'] = $('#maxTask')[0].value;
     alert('Saved.');
 });
-
 $("#addBroker").click(function(){
     $('#myModal').modal('show');
 });
@@ -946,8 +946,8 @@ $("#addDeviceSubmit").click(function(){
         angular.element(document.getElementById('jsonToScope')).scope().newdevice['brokerId'] = temp;
         angular.element(document.getElementById('jsonToScope')).scope().findDevice();
         setTimeout(function () {
-        angular.element(document.getElementById('jsonToScope')).scope().getBroker();
-        angular.element(document.getElementById('jsonToScope')).scope().getBrokers();
+            angular.element(document.getElementById('jsonToScope')).scope().getBroker();
+            angular.element(document.getElementById('jsonToScope')).scope().getBrokers();
         }, 200);
         setTimeout(function () {
             angular.element(document.getElementById('jsonToScope')).scope().$apply();

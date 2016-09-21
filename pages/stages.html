@@ -892,14 +892,18 @@ $('#run').click(function(){
 });
 $('#test').on("click",'#deviceOrLambda', function(){
     if($(this).is(':checked')){
-            $("#"+$(this).parent().parent().parent()[0].id).find('h3').text("Lambda"+$(this).parent().parent().parent()[0].id.substring(6));
+            $("#"+$(this).parent().parent().parent()[0].id).find('h3').text("Lambda"+$(this).parent().parent().parent()[0].id.substring(8));
             $("#"+$(this).parent().parent().parent()[0].id).find('#hideIfLambda').hide();
-            deviceInfo[$(this).parent().parent().parent()[0].id.substring(6)]['lambda'] = "true";
+            deviceInfo[$(this).parent().parent().parent()[0].id.substring(8)]['lambda'] = "true";
+            deviceInfo[$(this).parent().parent().parent()[0].id.substring(8)]['deviceId'] = "null";
+            deviceInfo[$(this).parent().parent().parent()[0].id.substring(8)]['brokerId'] = "null";
         }
     else{
-        $("#"+$(this).parent().parent().parent()[0].id).find('h3').text("Device"+$(this).parent().parent().parent()[0].id.substring(6));
+        $("#"+$(this).parent().parent().parent()[0].id).find('h3').text("Device"+$(this).parent().parent().parent()[0].id.substring(8));
         $("#"+$(this).parent().parent().parent()[0].id).find('#hideIfLambda').show();
-        deviceInfo[$(this).parent().parent().parent()[0].id.substring(6)]['lambda'] = "false";
+        deviceInfo[$(this).parent().parent().parent()[0].id.substring(8)]['lambda'] = "false";
+        deviceInfo[$(this).parent().parent().parent()[0].id.substring(8)]['deviceId'] = $(this).parent().parent().parent()[0].id;
+        deviceInfo[$(this).parent().parent().parent()[0].id.substring(8)]['brokerId'] = "gay";
     }
 });
 
@@ -921,7 +925,7 @@ $('#test').on("click","#protocolSelect", function () {
 });
 
 $('#test').on("click","#devSettingSave", function () {
-    var node = deviceInfo[$(this).parent().parent().get(0).id.substring(6)];
+    var node = deviceInfo[$(this).parent().parent().get(0).id.substring(8)];
     // node['ipAddress'] = $(this).parent().find("#ip")[0].value;
     // node['port'] = $(this).parent().find("#port")[0].value;
     // node['url'] = $(this).parent().find("#url")[0].value;
@@ -964,9 +968,9 @@ $('#broker_table').on('click','#loadRoadMapItem', function(){
                 return temp['mapIds'][key];
             });
             for(var i=0; i < arr.length ; ++i){
-                // console.log(arr[i]['deviceId'].substring(6));
-                deviceInfo[arr[i]['deviceId'].substring(6)]['code'] = arr[i].code;
-                deviceInfo[arr[i]['deviceId'].substring(6)]['parameter'] = arr[i].parameter;
+                // console.log(arr[i]['deviceId'].substring(8));
+                deviceInfo[arr[i]['deviceId'].substring(8)]['code'] = arr[i].code;
+                deviceInfo[arr[i]['deviceId'].substring(8)]['parameter'] = arr[i].parameter;
             }
             instance.repaintEverything();
         }, 200);
@@ -1063,7 +1067,7 @@ targetEndpoint = {
     overlays: []
 },
 init = function (connection) {
-    connection.getOverlay("label").setLabel(connection.sourceId.substring(6) + "->" + connection.targetId.substring(6));
+    connection.getOverlay("label").setLabel(connection.sourceId.substring(8) + "->" + connection.targetId.substring(8));
 };
 instance.batch(function () {
     // listen for new connections; initialise them the same way we initialise the connections at startup.
@@ -1105,13 +1109,12 @@ $("#saveDB").click(function(){
     saveTree();
 });
 function saveTree(){
-    console.log(deviceInfo);
     connectInfo=[];
     instance.getConnections().forEach(
         function foo(value){
             var temp = new Object();
-            temp["source"] = value['sourceId'].substring(6);
-            temp["target"] = value['targetId'].substring(6);
+            temp["source"] = value['sourceId'].substring(8);
+            temp["target"] = value['targetId'].substring(8);
             connectInfo.push(temp);
         }
     )
@@ -1174,14 +1177,14 @@ $('#test').on("click","#codeEditor", function () {
     var node = $(this)[0].parentNode.parentNode.id;
     currentNode = node;
     code="def eventHandler(event, context, callback):\n    ";
-    $('#parameters').val(deviceInfo[currentNode.substring(6)]['parameter']);
+    $('#parameters').val(deviceInfo[currentNode.substring(8)]['parameter']);
     setTimeout(function () {
         editor.getSession().setValue(code);
         editor.resize();
     }, 300);
-    if(deviceInfo[currentNode.substring(6)]['code']!==undefined){
+    if(deviceInfo[currentNode.substring(8)]['code']!==undefined){
         console.log(deviceInfo);
-        code = deviceInfo[currentNode.substring(6)]['code'];
+        code = deviceInfo[currentNode.substring(8)]['code'];
         setTimeout(function () {
             editor.getSession().setValue(code);
             editor.resize();
@@ -1193,12 +1196,12 @@ $('#test').on("click","#codeEditor", function () {
 
 $("#saveCode").click(function(){
     code = editor.getSession().getValue();
-    deviceInfo[currentNode.substring(6)]['code'] = code;
+    deviceInfo[currentNode.substring(8)]['code'] = code;
     editor.setValue(code);
     var temp = $('#parameters').val().split(",");
-    deviceInfo[currentNode.substring(6)]['parameter']=[];
+    deviceInfo[currentNode.substring(8)]['parameter']=[];
     for (var i = 0; i< temp.length ; ++i){
-        deviceInfo[currentNode.substring(6)]['parameter'].push(temp[i].trim());
+        deviceInfo[currentNode.substring(8)]['parameter'].push(temp[i].trim());
     }
     $('#myModal').append(toast);
     toast.stop().fadeIn(400).delay(2000).fadeOut(400); //fade out after 2 seconds
@@ -1210,15 +1213,17 @@ $("#addDevice").click(function () {
     addnode();
 });
 function addnode(){
-    var _id = "Device" + $(".window").length;
+    var _id = "deviceId" + $(".window").length;
     var newnode = $('<div class="window box box-default collapsed-box" id="' + _id + '" >').appendTo("#test").html($(("#device0"))[0].innerHTML);
     newnode.find('h3').text(_id);
     _addEndpoints(newnode);
-    var temp = deviceInfo[_id.substring(6)] = deviceInfo[_id.substring(6)] || new Object();
-    deviceInfo[_id.substring(6)]['parameter'] = deviceInfo[_id.substring(6)]['parameter'] || new Array();
-    deviceInfo[_id.substring(6)]['code'] = deviceInfo[_id.substring(6)]['code'] || "def eventHandler(event, context, callback):\n    ";
-    deviceInfo[_id.substring(6)]['deviceId']= _id;
-    deviceInfo[_id.substring(6)]['lambda'] = "false";
+    var temp = deviceInfo[_id.substring(8)] = deviceInfo[_id.substring(8)] || new Object();
+    deviceInfo[_id.substring(8)]['parameter'] = deviceInfo[_id.substring(8)]['parameter'] || new Array();
+    deviceInfo[_id.substring(8)]['code'] = deviceInfo[_id.substring(8)]['code'] || "def eventHandler(event, context, callback):\n    ";
+    deviceInfo[_id.substring(8)]['deviceId']= _id;
+    deviceInfo[_id.substring(8)]['lambda'] = "false";
+    deviceInfo[_id.substring(8)]['brokerId'] = "null";
+    deviceInfo[_id.substring(8)]['serverId'] = "null";
 
     $(instance.getSelector("#"+_id)).draggable({
         containment:'parent',
