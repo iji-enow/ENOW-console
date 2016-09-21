@@ -15,27 +15,14 @@ app.controller('myCtrl', function($scope, $http){
     $scope.getTarget;
 
     // settings.html
-    $scope.brokerList=[
-        //     {
-        //         brokerId:"aaaaa",
-        //         ipAddress:"127.0.0.1",
-        //         port:"1111",
-        //         devices:["aaaa","aaa","aa","a"]
-        // },{
-        //     brokerId:"bbbbb",
-        //     ipAddress:"127.0.0.1",
-        //     port:"2222",
-        //     devices:["bbbb","bbb","bb","b"]
-        // }
-    ];
+    $scope.brokerList=[];
     $scope.currentDeviceList;
     $scope.currentBroker={
         brokerId:""
     };
     $scope.settings={};
     $scope.newnode ={};
-    $scope.newdevice={
-    };
+    $scope.newdevice={};
     // ------------------------------------------
     $scope.saveDataBase = function(){
         $http({
@@ -145,10 +132,8 @@ app.controller('myCtrl', function($scope, $http){
                     alert('deviceId already exist.');
                 }
             }
-
         });
     }
-
     $scope.getBroker = function(){
         $http({
             withCredentials: false,
@@ -164,7 +149,6 @@ app.controller('myCtrl', function($scope, $http){
             }else{
                 $scope.currentDeviceList = response.data[0]['deviceId'];
             }
-
         });
     }
     // get
@@ -193,7 +177,6 @@ app.controller('myCtrl', function($scope, $http){
             }else{
                 $scope.settings = response.data;
             }
-
         });
     }
 
