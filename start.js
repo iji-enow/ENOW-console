@@ -13,6 +13,9 @@ var mongoPort;
 var roadMapIdTemp;
 var db;
 var latestOffset;
+var MyDate = new Date();
+var MyDateString;
+var consumer;
 var kafka = require('kafka-node'),
 Producer = kafka.Producer,
 Consumer = kafka.Consumer,
@@ -25,34 +28,46 @@ payloads = [
         partition: 0
     }
 ],
-offset = new kafka.Offset(client),
-consumer = new Consumer(
-    client,
-    [
-        {
-            topic: 'log',
-            partition: 0,
-            offset: latestOffset
-        }
-    ],
-    {
-        autoCommit: false,
-        fromOffset: true
+offset = new kafka.Offset(client);
 
-    }
-);
+
 
 offset.fetchLatestOffsets(['log'], function (error, offsets) {
     if (error)
     return handleError(error);
     console.log('start from...\n\tkafka topic: log\n\toffset : '+offsets['log'][0]);
     latestOffset = offsets['log'][0];
+    consumer = new Consumer(
+        client,
+        [
+            {
+                topic: 'log',
+                partition: 0,
+                offset: latestOffset
+            }
+        ],
+        {
+            autoCommit: false,
+            fromOffset: true
+
+        }
+    );
     consumer.on('message', function (message) {
-        console.log(message);
-        fs.appendFile('logfile.txt', JSON.stringify(message)+'\r\n', 'utf8', function(err) {
+        MyDate = new Date();
+        MyDate.setDate(MyDate.getDate() + 20);
+        MyDateString = MyDate.getFullYear() + '/'
+                     +('0' + MyDate.getMonth()).slice(-2) + '/'
+                     +('0' + MyDate.getDate()).slice(-2) + '   '
+                     +('0' + MyDate.getHours()).slice(-2) + ':'
+                     +('0' + MyDate.getMinutes()).slice(-2) + ':'
+                     +('0' + MyDate.getSeconds()).slice(-2);
+                     console.log(MyDateString);
+        fs.appendFile('.log', '['+MyDateString+']  '+ JSON.stringify(message)+'\r\n', 'utf8', function(err) {
         });
     });
 });
+
+
 
 expressapp.use(bodyparser.json());
 expressapp.use(function(req,res,next){
@@ -111,7 +126,7 @@ expressapp.post('/post_url_settings', function(req, res){
         if(err) throw err;
         db = database;
         console.log('connected to mongodb://'+ mongoUrl+'/'+mongoPort);
-        response.send("done");
+        res.send("done");
     });
 });
 expressapp.post('/load_roadmap', function(req, res){
