@@ -125,6 +125,7 @@ expressapp.post('/post_url_settings', function(req, res){
     MongoClient.connect('mongodb://'+ mongoUrl+'/'+mongoPort, function(err, database, callback) {
         if(err){
             console.log(err);
+            res.send('no_connect');
             return;
         }
         db = database;
@@ -158,7 +159,7 @@ expressapp.get('/get_devices', function(req, res){
 });
 
 var server = expressapp.listen(expressapp.get('port'), function(){
-    console.log("start enow console...");
+    console.log("start enow console... connect to localhost:3000 (127.0.0.1:3000).");
 });
 function connectDB(source, dbName, collectionName, command, response){
     console.log('connecting to '+mongoUrl+':'+mongoPort+'...');
