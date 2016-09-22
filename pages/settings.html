@@ -890,10 +890,16 @@ $(document).ready(function(){
     setTimeout(function () {
         angular.element(document.getElementById('jsonToScope')).scope().settings = localStorage;
         console.log(angular.element(document.getElementById('jsonToScope')).scope().settings);
-        $.when(angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings()).done(
-            angular.element(document.getElementById('jsonToScope')).scope().getBrokers()
-        );
-    }, 200);
+            setTimeout(function () {
+                angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings();
+                    setTimeout(function () {
+                        angular.element(document.getElementById('jsonToScope')).scope().getBrokers();
+                    }, 300);
+            }, 300);
+        // $.when(angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings()).done(
+        //     angular.element(document.getElementById('jsonToScope')).scope().getBrokers()
+        // );
+    }, 300);
     $('#kafkaUrl')[0].value = localStorage['kafkaUrl'] || "";
     $('#kafkaPort')[0].value = localStorage['kafkaPort'] || "";
     $('#mongoUrl')[0].value = localStorage['mongoUrl'] || "";

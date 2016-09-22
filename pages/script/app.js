@@ -9,6 +9,7 @@ app.controller('myCtrl', function($scope, $http){
     $scope.listOfLastNode = [];
     $scope.list = [];
     $scope.listOfRoadMap = [];
+    $scope.listOfRunningRoadMap = [];
     $scope.tree;
     $scope.mapIds;
     $scope.loadTarget ={};
@@ -82,9 +83,10 @@ app.controller('myCtrl', function($scope, $http){
             contentType : 'application/json',
             dataType: "json"
         }).then(function(response){
-            if(response.data="no_connect"){
+            if(response.data=="no_connect"){
                 alert('Connect failed. Check MongoDB Url, Port.');
             }else{
+                console.log(response);
                 $scope.getTarget = response.data;
             }
         });
@@ -189,6 +191,19 @@ app.controller('myCtrl', function($scope, $http){
                 alert('Connect failed. Check MongoDB Url, Port.');
             }else{
                 $scope.listOfRoadMap = response.data;
+            }
+        });
+    }
+    $scope.getRunningRoadMaps = function(){
+        $http({
+            withCredentials: false,
+            method: 'get',
+            url: "/get_running_roadmaps"
+        }).then(function(response){
+            if(response.data=="no_connect"){
+                alert('Connect failed. Check MongoDB Url, Port.');
+            }else{
+                $scope.listOfRunningRoadMap = response.data;
             }
         });
     }
