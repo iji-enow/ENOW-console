@@ -2,6 +2,7 @@ const http = require('http');
 const express = require('express');
 const mongo = require('mongodb');
 const fs = require('fs');
+const ascoltatori = require('ascoltatori');
 const bodyparser = require('body-parser');
 const BSON = require('bson').BSONPure;
 var path = require('path');
@@ -29,6 +30,19 @@ payloads = [
     }
 ],
 offset = new kafka.Offset(client);
+//ascoltatori settings
+var settings = {
+  type: 'kafka',
+  json: false,
+  kafka: kafka,
+  connectString: "localhost:2181",
+  clientId: "ascoltatori",
+  groupId: "ascoltatori",
+  defaultEncoding: "utf8",
+  encodings: {
+    image: "buffer"
+  }
+};
 
 //make server starts from latest logs
 offset.fetchLatestOffsets(['log'], function (error, offsets) {
@@ -60,7 +74,7 @@ offset.fetchLatestOffsets(['log'], function (error, offsets) {
         +('0' + MyDate.getHours()).slice(-2) + ':'
         +('0' + MyDate.getMinutes()).slice(-2) + ':'
         +('0' + MyDate.getSeconds()).slice(-2);
-        console.log(MyDateString);
+        console.log(MyDateString+"   "+JSON.stringify(message));
         fs.appendFile('.log', '['+MyDateString+']  '+ JSON.stringify(message)+'\r\n', 'utf8', function(err) {
         });
     });
@@ -165,12 +179,12 @@ expressapp.get('/get_devices', function(req, res){
 var server = expressapp.listen(expressapp.get('port'), function(){
     console.log("\n\n\n");
     console.log(
-         "███████╗███╗   ██╗ ██████╗ ██╗    ██╗\
-        \n██╔════╝████╗  ██║██╔═══██╗██║    ██║  ENOW Started!\
-        \n█████╗  ██╔██╗ ██║██║   ██║██║ █╗ ██║  Connect to 127.0.0.1:1111\
-        \n██╔══╝  ██║╚██╗██║██║   ██║██║███╗██║\
-        \n███████╗██║ ╚████║╚██████╔╝╚███╔███╔╝  Version 0.0.1\
-        \n╚══════╝╚═╝  ╚═══╝ ╚═════╝  ╚══╝╚══╝   Copyright © 2016 ENOW. All rights reserved.");
+         "  ███████╗███╗   ██╗ ██████╗ ██╗    ██╗\
+        \n  ██╔════╝████╗  ██║██╔═══██╗██║    ██║  ENOW Started!\
+        \n  █████╗  ██╔██╗ ██║██║   ██║██║ █╗ ██║  Connect to 127.0.0.1:1111\
+        \n  ██╔══╝  ██║╚██╗██║██║   ██║██║███╗██║\
+        \n  ███████╗██║ ╚████║╚██████╔╝╚███╔███╔╝  Version 0.0.1\
+        \n  ╚══════╝╚═╝  ╚═══╝ ╚═════╝  ╚══╝╚══╝   Copyright © 2016 ENOW. All rights reserved.");
     });
     function connectDB(source, dbName, collectionName, command, response){
         console.log('connecting to '+mongoUrl+':'+mongoPort+'...'+dbName+'.'+collectionName);

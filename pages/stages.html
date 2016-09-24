@@ -41,6 +41,37 @@
 
     <style>
     /* The switch - the box around the slider */
+    #loader {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        z-index: 5;
+        width: 150px;
+        background-color: black
+        height: 150px;
+        margin: -75px 0 0 -75px;
+        border: 16px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 16px solid #3498db;
+        width: 120px;
+        height: 120px;
+        -webkit-animation: spin 2s linear infinite;
+        animation: spin 2s linear infinite;
+    }
+    @-webkit-keyframes spin {
+        0% { -webkit-transform: rotate(0deg); }
+        100% { -webkit-transform: rotate(360deg); }
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    #back{
+        opacity: 0.7;
+        background-color: black;
+        z-index: 1000;
+    }
     form {
         display: inline;
         padding: 0px;
@@ -211,7 +242,8 @@
     }
     </style>
 </head>
-<body class="hold-transition skin-blue sidebar-mini">
+<body id="back"class="hold-transition skin-blue sidebar-mini">
+    <div id="loader"></div>
     <header class="main-header">
         <!-- Logo -->
         <a href="../index.html" class="logo">
@@ -871,23 +903,23 @@ var tempBroker;
 var initNode = [];
 var lastNode = [];
 var orderNode = {};
-
-$(document).ready(function(){
+$(window).load(function(){
+});
+$(window).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();
     setTimeout(function () {
         angular.element(document.getElementById('jsonToScope')).scope().settings = localStorage;
+        setTimeout(function () {
+            angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings();
             setTimeout(function () {
-                angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings();
-                    setTimeout(function () {
-                        angular.element(document.getElementById('jsonToScope')).scope().getBrokers();
-                    }, 300);
+                angular.element(document.getElementById('jsonToScope')).scope().getBrokers();
+                $('#loader').hide();
+                $('#back').css('opacity','1');
             }, 300);
+        }, 300);
     }, 300);
-        // setTimeout(function () {
-        // angular.element(document.getElementById('jsonToScope')).scope().$apply();
-        //     console.log(angular.element(document.getElementById('jsonToScope')).scope().brokerList)
-        // }, 1000);
 });
+
 //select broker from brokerlist
 $(document).on("change","#brokerSelect", function(){
     tempBroker = $(this).parent().parent().parent()[0].id;
@@ -907,8 +939,6 @@ $(document).on("click","#listOfDevice", function(){
     }else{}
 });
 
-
-
 $('#run').click(function(){
     if($(this).is(':checked')){
         var ask = confirm("Start Roadmap?");
@@ -924,6 +954,7 @@ $('#run').click(function(){
         angular.element(document.getElementById('jsonToScope')).scope().killRoadMap();
     }
 });
+
 $('#test').on("click",'#deviceOrLambda', function(){
     if($(this).is(':checked')){
         console.log($(this).parent().parent().parent()[0].id);
@@ -939,6 +970,7 @@ $('#test').on("click",'#deviceOrLambda', function(){
         deviceInfo[$(this).parent().parent().parent()[0].id.substring(8)]['brokerId'] = "gay";
     }
 });
+
 // phone toggle button
 $('#test').on("click",'#phoneToggle', function(){
     if($(this).is(':checked')){
@@ -952,31 +984,12 @@ $('#test').on("click",'#phoneToggle', function(){
     }
 });
 
-$('#test').on("click","#protocolSelect", function () {
-    var selected = $(this)[0].value;
-    if(selected == "mqtt"){
-        $(this).parent().find('#url').attr('disabled',true);
-        $(this).parent().find('#ip').removeAttr('disabled');
-        $(this).parent().find('#port').removeAttr('disabled');
-    }else if(selected =="http"){
-        $(this).parent().find('#ip').attr('disabled',true);
-        $(this).parent().find('#port').attr('disabled',true);
-        $(this).parent().find('#url').removeAttr('disabled');
-    }else{
-        $(this).parent().find('#url').attr('disabled',true);
-        $(this).parent().find('#ip').removeAttr('disabled');
-        $(this).parent().find('#port').removeAttr('disabled');
-    }
-});
+// for device windows save button
+// $('#test').on("click","#devSettingSave", function () {
+//     var node = deviceInfo[$(this).parent().parent().get(0).id.substring(8)];
+//     console.log(node);
+// });
 
-$('#test').on("click","#devSettingSave", function () {
-    var node = deviceInfo[$(this).parent().parent().get(0).id.substring(8)];
-    // node['ipAddress'] = $(this).parent().find("#ip")[0].value;
-    // node['port'] = $(this).parent().find("#port")[0].value;
-    // node['url'] = $(this).parent().find("#url")[0].value;
-    // console.log($(this).parent().find("#ip")[0].value)
-    console.log(node);
-});
 $('#broker_table').on('click','#loadRoadMapItem, #loadRunningRoadMapItem', function(){
     if($(this)[0].id == 'loadRoadMapItem'){
         angular.element(document.getElementById('jsonToScope')).scope().loadTarget['db'] = 'enow';
@@ -1146,12 +1159,10 @@ instance.batch(function () {
 });
 var _addEndpoints = function (toId) {
     instance.addEndpoint(toId, sourceEndpoint, {
-        // anchor: dynamicAnchors,
         anchor: "Right",
         uuid: toId[0].id+"_source"
     });
     instance.addEndpoint(toId, targetEndpoint, {
-        // anchor: dynamicAnchors2,
         anchor: "Left",
         uuid: toId[0].id+"_target"
     });
@@ -1174,7 +1185,6 @@ function saveTree(){
     initNode = [];
     lastNode = [];
     for(var i = 1; i < n.length; ++i){
-        // console.log("asdf"+instance.getEndpoints($($('.window')[i]))[1].connections);
         if(!instance.getEndpoints($($('.window')[i]))[1].connections[0]){
             if(i != orderNode["key"]){
                 initNode.push(i.toString());
@@ -1187,150 +1197,149 @@ function saveTree(){
     //position values
     for(var i=1; i <= Object.keys(deviceInfo).length ; ++i){
         console.log(deviceInfo[i]['deviceId']);
-        // var temp = $('#test').find('#'+deviceInfo[i]['deviceId'])[0];
         var temp = $('#test').find('#deviceId'+i)[0];
         deviceInfo[i]['x'] = temp.style['left'] || "0px";
         deviceInfo[i]['y'] = temp.style['top'] || "0px";
-        }
-        angular.element(document.getElementById('jsonToScope')).scope().listOfInitNode = initNode;
-        angular.element(document.getElementById('jsonToScope')).scope().listOfLastNode = lastNode;
-        angular.element(document.getElementById('jsonToScope')).scope().orderNode = orderNode;
-        angular.element(document.getElementById('jsonToScope')).scope().list = connectInfo;
-        angular.element(document.getElementById('jsonToScope')).scope().mapIds = deviceInfo;
-        console.log(deviceInfo);
-        angular.element(document.getElementById('jsonToScope')).scope().changeToTree(connectInfo);
-        console.log(angular.element(document.getElementById('jsonToScope')).scope().tree);
     }
+    angular.element(document.getElementById('jsonToScope')).scope().listOfInitNode = initNode;
+    angular.element(document.getElementById('jsonToScope')).scope().listOfLastNode = lastNode;
+    angular.element(document.getElementById('jsonToScope')).scope().orderNode = orderNode;
+    angular.element(document.getElementById('jsonToScope')).scope().list = connectInfo;
+    angular.element(document.getElementById('jsonToScope')).scope().mapIds = deviceInfo;
+    console.log(deviceInfo);
+    angular.element(document.getElementById('jsonToScope')).scope().changeToTree(connectInfo);
+    console.log(angular.element(document.getElementById('jsonToScope')).scope().tree);
+}
 
 
-    $("#openDeviceList").click(function(){
-    });
+$("#openDeviceList").click(function(){
+});
 
-    //roadmap window
-    $("#loadRoadMap").click(function(){
-        angular.element(document.getElementById('jsonToScope')).scope().getRoadMaps();
-        angular.element(document.getElementById('jsonToScope')).scope().getRunningRoadMaps();
+//roadmap window
+$("#loadRoadMap").click(function(){
+    angular.element(document.getElementById('jsonToScope')).scope().getRoadMaps();
+    angular.element(document.getElementById('jsonToScope')).scope().getRunningRoadMaps();
+    setTimeout(function () {
+        angular.element(document.getElementById('jsonToScope')).scope().$apply();
         setTimeout(function () {
-            angular.element(document.getElementById('jsonToScope')).scope().$apply();
-            setTimeout(function () {
-                $('#roadMapModal').modal('show');
-            }, 301);
-        }, 501);
-    });
+            $('#roadMapModal').modal('show');
+        }, 301);
+    }, 501);
+});
 
 
-    // collapsed-box toggle button
-    $('#test').on("click",".tog_button", function () {
-        setTimeout(function () {
-            instance.repaintEverything();
-        }, 801);
-    });
+// collapsed-box toggle button
+$('#test').on("click",".tog_button", function () {
+    setTimeout(function () {
+        instance.repaintEverything();
+    }, 801);
+});
 
 
-    //zoom in & out.. not working now
-    // $('#test').on("mousewheel", function (e) {
-    //     if(e.originalEvent.wheelDelta>0){
-    //         console.log($('#test').find())
-    //     }else{
-    //         console.log("zz");
-    //     }
-    // });
+//zoom in & out.. not working now
+// $('#test').on("mousewheel", function (e) {
+//     if(e.originalEvent.wheelDelta>0){
+//         console.log($('#test').find())
+//     }else{
+//         console.log("zz");
+//     }
+// });
 
-    //show 'code editor'
-    $('#test').on("click","#codeEditor", function () {
-        var node = $(this)[0].parentNode.parentNode.id;
-        currentNode = node;
-        code="def eventHandler(event, context, callback):\n    ";
-        $('#parameters').val(deviceInfo[currentNode.substring(8)]['parameter']);
+//show 'code editor'
+$('#test').on("click","#codeEditor", function () {
+    var node = $(this)[0].parentNode.parentNode.id;
+    currentNode = node;
+    code="def eventHandler(event, context, callback):\n    ";
+    $('#parameters').val(deviceInfo[currentNode.substring(8)]['parameter']);
+    setTimeout(function () {
+        editor.getSession().setValue(code);
+        editor.resize();
+    }, 300);
+    if(deviceInfo[currentNode.substring(8)]['code']!==undefined){
+        console.log(deviceInfo);
+        code = deviceInfo[currentNode.substring(8)]['code'];
         setTimeout(function () {
             editor.getSession().setValue(code);
             editor.resize();
         }, 300);
-        if(deviceInfo[currentNode.substring(8)]['code']!==undefined){
-            console.log(deviceInfo);
-            code = deviceInfo[currentNode.substring(8)]['code'];
-            setTimeout(function () {
-                editor.getSession().setValue(code);
-                editor.resize();
-            }, 300);
+    }
+    $('#myModal').modal('show');
+});
+
+//save roadmap to 'recipes' database
+$("#saveCode").click(function(){
+    code = editor.getSession().getValue();
+    deviceInfo[currentNode.substring(8)]['code'] = code;
+    editor.setValue(code);
+    var temp = $('#parameters').val().split(",");
+    deviceInfo[currentNode.substring(8)]['parameter']=[];
+    for (var i = 0; i< temp.length ; ++i){
+        deviceInfo[currentNode.substring(8)]['parameter'].push(temp[i].trim());
+    }
+    $('#myModal').append(toast);
+    toast.stop().fadeIn(400).delay(2000).fadeOut(400); //fade out after 2 seconds
+});
+var toast = $('<div class="error" style="display:none">Code Saved..</div>');
+$("#addDevice").click(function () {
+    addnode();
+});
+
+function clearMap(){
+    var a = $(".window").length;
+    instance.detachEveryConnection();
+    instance.deleteEveryEndpoint();
+    for(var i = a; i>0; --i){
+        $('#deviceId'+i).remove();
+    }
+    // instance.repaintEverything();
+};
+
+function addnode(){
+    angular.element(document.getElementById('jsonToScope')).scope().$apply();
+    var _id = "deviceId" + $(".window").length;
+    var newnode = $('<div class="window box box-default collapsed-box" id="' + _id + '" >').appendTo("#test").html($(("#device0"))[0].innerHTML);
+    newnode.find('h3').text(_id.substring(8)+'[Device]');
+    _addEndpoints(newnode);
+    var temp = deviceInfo[_id.substring(8)] = deviceInfo[_id.substring(8)] || new Object();
+    deviceInfo[_id.substring(8)]['parameter'] = deviceInfo[_id.substring(8)]['parameter'] || new Array();
+    deviceInfo[_id.substring(8)]['code'] = deviceInfo[_id.substring(8)]['code'] || "def eventHandler(event, context, callback):\n    ";
+    deviceInfo[_id.substring(8)]['deviceId']= _id;
+    deviceInfo[_id.substring(8)]['lambda'] = false;
+    deviceInfo[_id.substring(8)]['brokerId'] = "null";
+    deviceInfo[_id.substring(8)]['serverId'] = "null";
+
+    $(instance.getSelector("#"+_id)).draggable({
+        containment:'parent',
+        grid:[20,20],
+        drag: function(e){
+            instance.repaintEverything();
+        },
+        stop: function(e){
+            instance.repaintEverything();
         }
-        $('#myModal').modal('show');
     });
+};
 
-    //save roadmap to 'recipes' database
-    $("#saveCode").click(function(){
-        code = editor.getSession().getValue();
-        deviceInfo[currentNode.substring(8)]['code'] = code;
-        editor.setValue(code);
-        var temp = $('#parameters').val().split(",");
-        deviceInfo[currentNode.substring(8)]['parameter']=[];
-        for (var i = 0; i< temp.length ; ++i){
-            deviceInfo[currentNode.substring(8)]['parameter'].push(temp[i].trim());
-        }
-        $('#myModal').append(toast);
-        toast.stop().fadeIn(400).delay(2000).fadeOut(400); //fade out after 2 seconds
-    });
-    var toast = $('<div class="error" style="display:none">Code Saved..</div>');
-    $("#addDevice").click(function () {
-        addnode();
-    });
+//minimap thing
+// var previewBody = $('#test').minimap({
+//     heightRatio : 0.3,
+//     widthRatio : 0.3,
+//     offsetHeightRatio : 0.535,
+//     offsetWidthRatio : 0.035,
+//     position : "right",
+//     touch: true,
+//     smoothScroll: true,
+//     smoothScrollDelay: 200,
+//     onPreviewChange: function() {}
+// });
 
-     function clearMap(){
-        var a = $(".window").length;
-        instance.detachEveryConnection();
-        instance.deleteEveryEndpoint();
-        for(var i = a; i>0; --i){
-            $('#deviceId'+i).remove();
-        }
-        // instance.repaintEverything();
-    };
-
-    function addnode(){
-        angular.element(document.getElementById('jsonToScope')).scope().$apply();
-        var _id = "deviceId" + $(".window").length;
-        var newnode = $('<div class="window box box-default collapsed-box" id="' + _id + '" >').appendTo("#test").html($(("#device0"))[0].innerHTML);
-        newnode.find('h3').text(_id.substring(8)+'[Device]');
-        _addEndpoints(newnode);
-        var temp = deviceInfo[_id.substring(8)] = deviceInfo[_id.substring(8)] || new Object();
-        deviceInfo[_id.substring(8)]['parameter'] = deviceInfo[_id.substring(8)]['parameter'] || new Array();
-        deviceInfo[_id.substring(8)]['code'] = deviceInfo[_id.substring(8)]['code'] || "def eventHandler(event, context, callback):\n    ";
-        deviceInfo[_id.substring(8)]['deviceId']= _id;
-        deviceInfo[_id.substring(8)]['lambda'] = false;
-        deviceInfo[_id.substring(8)]['brokerId'] = "null";
-        deviceInfo[_id.substring(8)]['serverId'] = "null";
-
-        $(instance.getSelector("#"+_id)).draggable({
-            containment:'parent',
-            grid:[20,20],
-            drag: function(e){
-                instance.repaintEverything();
-            },
-            stop: function(e){
-                instance.repaintEverything();
-            }
-        });
-    };
-
-    //minimap thing
-    // var previewBody = $('#test').minimap({
-    //     heightRatio : 0.3,
-    //     widthRatio : 0.3,
-    //     offsetHeightRatio : 0.535,
-    //     offsetWidthRatio : 0.035,
-    //     position : "right",
-    //     touch: true,
-    //     smoothScroll: true,
-    //     smoothScrollDelay: 200,
-    //     onPreviewChange: function() {}
-    // });
-
-    jsPlumb.fire("jsPlumbDemoLoaded", instance);
-    var code="def eventHandler(event, context, callback):\n    ";
-    var editor = ace.edit("editor");
-    editor.setTheme("ace/theme/terminal");
-    editor.getSession().setMode("ace/mode/python");
-    editor.$blockScrolling = Infinity;
-    document.getElementById('editor').style.fontSize='18px';
-    </script>
+jsPlumb.fire("jsPlumbDemoLoaded", instance);
+var code="def eventHandler(event, context, callback):\n    ";
+var editor = ace.edit("editor");
+editor.setTheme("ace/theme/terminal");
+editor.getSession().setMode("ace/mode/python");
+editor.$blockScrolling = Infinity;
+document.getElementById('editor').style.fontSize='18px';
+</script>
 </body>
 </html>

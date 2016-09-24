@@ -36,7 +36,40 @@
     <script src="script/jsPlumb-2.1.7-min.js"></script> -->
     <link rel="stylesheet" href="../dist/css/demo.css">
     <style>
+
+    #loader {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        z-index: 5;
+        width: 150px;
+        background-color: black
+        height: 150px;
+        margin: -75px 0 0 -75px;
+        border: 16px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 16px solid #3498db;
+        width: 120px;
+        height: 120px;
+        -webkit-animation: spin 2s linear infinite;
+        animation: spin 2s linear infinite;
+    }
+    @-webkit-keyframes spin {
+        0% { -webkit-transform: rotate(0deg); }
+        100% { -webkit-transform: rotate(360deg); }
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    #back{
+        opacity: 0.7;
+        background-color: black;
+        z-index: 1000;
+    }
     /* The switch - the box around the slider */
+
     .switch {
         position: relative;
         display: inline-block;
@@ -164,7 +197,9 @@
     </style>
 
 </head>
-<body class="hold-transition skin-blue sidebar-mini">
+<body id="back" class="hold-transition skin-blue sidebar-mini">
+
+        <div id="loader"></div>
     <header class="main-header">
         <!-- Logo -->
         <a href="../index.html" class="logo">
@@ -894,6 +929,8 @@ $(document).ready(function(){
                 angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings();
                     setTimeout(function () {
                         angular.element(document.getElementById('jsonToScope')).scope().getBrokers();
+                        $('#loader').hide();
+                        $('#back').css('opacity','1');
                     }, 300);
             }, 300);
         // $.when(angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings()).done(
