@@ -187,6 +187,7 @@ var server = expressapp.listen(expressapp.get('port'), function(){
         };
 
         var findTarget = function(callback){
+            console.log("abcd");
             var o_id = BSON.ObjectID.createFromHexString(source['_id']);
             db.db(dbName).collection(collectionName).find({_id:o_id}).toArray(function(err,result){
                 console.log(result);
@@ -275,6 +276,7 @@ var server = expressapp.listen(expressapp.get('port'), function(){
             findDocument(db, function(){
             });
         }else if(command=="findTarget"){
+            console.log("qwertty");
             findTarget(db, function(){
             });
         }else if(command=="findBroker"){

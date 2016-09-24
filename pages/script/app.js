@@ -5,6 +5,7 @@ app.controller('myCtrl', function($scope, $http){
 
     // stages.html
     $scope.listOfDevice = {};
+    $scope.anaconda;
     $scope.listOfInitNode = [];
     $scope.listOfLastNode = [];
     $scope.list = [];
@@ -163,6 +164,7 @@ app.controller('myCtrl', function($scope, $http){
             if(response.data=="no_connect"){
                 alert('Connect failed. Check MongoDB Url, Port.');
             }else{
+                console.log('done!');
                 $scope.brokerList = response.data;
             }
 
@@ -190,6 +192,7 @@ app.controller('myCtrl', function($scope, $http){
             if(response.data=="no_connect"){
                 alert('Connect failed. Check MongoDB Url, Port.');
             }else{
+                console.log(response.data);
                 $scope.listOfRoadMap = response.data;
             }
         });

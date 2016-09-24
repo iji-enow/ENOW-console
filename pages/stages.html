@@ -525,17 +525,7 @@
                                         <option disabled selected>----Select Broker----</option>
                                         <option ng-repeat = "n in brokerList">{{n.brokerId}}</option>
                                     </select>
-                                    <label>Device List</label>
-                                    <select id="deviceSelect" class="form-control">
-                                        <option disabled selected value>----Select Device----</option>
-                                        <option id="deviceToBroker" ng-repeat="n in currentDeviceList">{{n}}
-                                        </option>
-                                    </select>
                                 </div>
-                                <!-- <label>Device Port number</label>
-                                <input id="port" class="form-control input-sm" type="text" placeholder="Device Port"> -->
-                                <!-- <label>URL</label>
-                                <input id="url" class="form-control input-sm" type="text" disabled="true" placeholder="url" style="margin-bottom:18px;"> -->
                                 <button id="devSettingSave" class="btn btn-info btn-flat col-xs-12 col-lg-12" data-toggle="tooltip" title="Save settings" style="margin-top:18px;">Save</button>
                                 <button id="codeEditor" class="btn btn-info btn-flat col-xs-12 col-lg-12" data-toggle="tooltip" title="Add custom device" style="margin-top:2px;">Edit code</button>
 
@@ -554,6 +544,35 @@
                         </div>
                         <div class="modal-body" style="height:500px; margin-left:20px;margin-right:20px;">
                             <div id="editor"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="text" id="parameters" class="form-control" placeholder="Enter Parameters Ex) -p, -num ..." style="margin-bottom:5px;">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-default" id="saveCode">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="deviceModal" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Device List</h4>
+                        </div>
+                        <div class="modal-body" style="height:500px; margin-left:20px;margin-right:20px;">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>_Id</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="canClick" id="listOfDevice" ng-repeat = "n in currentDeviceList">
+                                        <td>{{n}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                         <div class="modal-footer">
                             <input type="text" id="parameters" class="form-control" placeholder="Enter Parameters Ex) -p, -num ..." style="margin-bottom:5px;">
@@ -842,31 +861,40 @@ var devices;
 var currentNode;
 var print;
 var deviceInfo={};
+var tempBroker;
 
 $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();
     setTimeout(function () {
         angular.element(document.getElementById('jsonToScope')).scope().settings = localStorage;
-        angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings();
-        angular.element(document.getElementById('jsonToScope')).scope().getBrokers();
-        angular.element(document.getElementById('jsonToScope')).scope().$apply();
-    }, 200);
+            setTimeout(function () {
+                angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings();
+                    setTimeout(function () {
+                        angular.element(document.getElementById('jsonToScope')).scope().getBrokers();
+                    }, 300);
+            }, 300);
+    }, 300);
+        // setTimeout(function () {
+        // angular.element(document.getElementById('jsonToScope')).scope().$apply();
+        //     console.log(angular.element(document.getElementById('jsonToScope')).scope().brokerList)
+        // }, 1000);
 });
 
 $(document).on("change","#brokerSelect", function(){
-    console.log($(this)[0].value);
-    for(var i=0; i< angular.element(document.getElementById('jsonToScope')).scope().brokerList.length ; ++i){
-        if(angular.element(document.getElementById('jsonToScope')).scope().brokerList[i].brokerId==$(this)[0].value){
-            angular.element(document.getElementById('jsonToScope')).scope().currentDeviceList = angular.element(document.getElementById('jsonToScope')).scope().brokerList[i].devices
-        }
-    }
+    tempBroker = $(this).parent().parent().parent()[0].id;
+    deviceInfo[$(this).parent().parent().parent()[0].id.substring(8)]['brokerId'] = $(this)[0].value;
+    angular.element(document.getElementById('jsonToScope')).scope().currentBroker['brokerId']=$(this)[0].value;
+    angular.element(document.getElementById('jsonToScope')).scope().getBroker();
+    $('#deviceModal').modal('show');
+
     angular.element(document.getElementById('jsonToScope')).scope().$apply();
-
-
-
 });
-$(document).on("click","#deviceToBroker", function(){
-    angular.element(document.getElementById('jsonToScope')).scope().$apply();
+$(document).on("click","#listOfDevice", function(){
+    var ask = confirm($(this)[0].childNodes[1].innerText +'?');
+    console.log(tempBroker.substring(8));
+    if(ask){
+        deviceInfo[tempBroker.substring(8)]['deviceId']=$(this)[0].childNodes[1].innerText;
+    }else{}
 });
 
 
@@ -1134,10 +1162,10 @@ function saveTree(){
     //position values
     for(var i=1; i <= Object.keys(deviceInfo).length ; ++i){
         console.log(deviceInfo[i]['deviceId']);
-        var temp = $('#test').find('#'+deviceInfo[i]['deviceId'])[0];
+        // var temp = $('#test').find('#'+deviceInfo[i]['deviceId'])[0];
+        var temp = $('#test').find('#deviceId'+i)[0];
         deviceInfo[i]['x'] = temp.style['left'] || "0px";
-        deviceInfo[i]['y'] = temp.style[
-            'top'] || "0px";
+        deviceInfo[i]['y'] = temp.style['top'] || "0px";
         }
         angular.element(document.getElementById('jsonToScope')).scope().listOfInitNode = initNode;
         angular.element(document.getElementById('jsonToScope')).scope().listOfLastNode = lastNode;
@@ -1158,15 +1186,17 @@ function saveTree(){
         angular.element(document.getElementById('jsonToScope')).scope().getRunningRoadMaps();
         setTimeout(function () {
             angular.element(document.getElementById('jsonToScope')).scope().$apply();
-            $('#roadMapModal').modal('show');
-        }, 301);
+            setTimeout(function () {
+                $('#roadMapModal').modal('show');
+            }, 301);
+        }, 501);
     });
 
 
     // collapsed-box toggle button
     $('#test').on("click",".tog_button", function () {
         setTimeout(function () {
-            setInterval(instance.repaintEverything(), 100);
+            instance.repaintEverything();
         }, 801);
     });
 
@@ -1230,6 +1260,7 @@ function saveTree(){
     };
 
     function addnode(){
+        angular.element(document.getElementById('jsonToScope')).scope().$apply();
         var _id = "deviceId" + $(".window").length;
         var newnode = $('<div class="window box box-default collapsed-box" id="' + _id + '" >').appendTo("#test").html($(("#device0"))[0].innerHTML);
         newnode.find('h3').text(_id.substring(8)+'[Device]');
