@@ -224,6 +224,7 @@ app.controller('myCtrl', function($scope, $http){
             rootNodes.outingNode[list.source].push(list.target);
         }
         rootNodes.roadMapId = "";
+        rootNodes.orderNode = this.orderNode['key'];
         rootNodes.initNode = this.listOfInitNode;
         rootNodes.lastNode = this.listOfLastNode;
         rootNodes.isInput = false;

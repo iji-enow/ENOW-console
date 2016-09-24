@@ -513,12 +513,18 @@
                                 </div>
                             </div>
                             <div class="box-body">
-                                <label id="deviceOrLambdaText"></label>
+                                <label id="deviceOrLambdaText">Device/Lambda</label>
                                 <label class="switch_slim pull-right" data-toggle="tooltip" title="select device or lambda" style="margin-right:5px;">
                                     <input type="checkbox" id="deviceOrLambda">
                                     <div class="slider_slim round"></div>
                                 </label>
+
                                 <div id="hideIfLambda" style="">
+                                    <label id="phoneToggleText">Phone/NoPhone</label>
+                                    <label class="switch_slim pull-right" data-toggle="tooltip" title="Phone or NoPhone" style="margin-right:5px;">
+                                        <input type="checkbox" id="phoneToggle">
+                                        <div class="slider_slim round"></div>
+                                    </label>
                                     <br>
                                     <label>Broker List</label>
                                     <select id="brokerSelect" class="form-control" style="margin-bottom:5px;">
@@ -862,6 +868,9 @@ var currentNode;
 var print;
 var deviceInfo={};
 var tempBroker;
+var initNode = [];
+var lastNode = [];
+var orderNode = {};
 
 $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();
@@ -879,7 +888,7 @@ $(document).ready(function(){
         //     console.log(angular.element(document.getElementById('jsonToScope')).scope().brokerList)
         // }, 1000);
 });
-
+//select broker from brokerlist
 $(document).on("change","#brokerSelect", function(){
     tempBroker = $(this).parent().parent().parent()[0].id;
     deviceInfo[$(this).parent().parent().parent()[0].id.substring(8)]['brokerId'] = $(this)[0].value;
@@ -889,6 +898,7 @@ $(document).on("change","#brokerSelect", function(){
 
     angular.element(document.getElementById('jsonToScope')).scope().$apply();
 });
+//select device in choosed broker
 $(document).on("click","#listOfDevice", function(){
     var ask = confirm($(this)[0].childNodes[1].innerText +'?');
     console.log(tempBroker.substring(8));
@@ -916,6 +926,7 @@ $('#run').click(function(){
 });
 $('#test').on("click",'#deviceOrLambda', function(){
     if($(this).is(':checked')){
+        console.log($(this).parent().parent().parent()[0].id);
         $("#"+$(this).parent().parent().parent()[0].id).find('h3').text($(this).parent().parent().parent()[0].id.substring(8)+ '[Lambda]');
         $("#"+$(this).parent().parent().parent()[0].id).find('#hideIfLambda').hide();
         deviceInfo[$(this).parent().parent().parent()[0].id.substring(8)]['lambda'] = true;
@@ -926,6 +937,18 @@ $('#test').on("click",'#deviceOrLambda', function(){
         $("#"+$(this).parent().parent().parent()[0].id).find('#hideIfLambda').show();
         deviceInfo[$(this).parent().parent().parent()[0].id.substring(8)]['lambda'] = false;
         deviceInfo[$(this).parent().parent().parent()[0].id.substring(8)]['brokerId'] = "gay";
+    }
+});
+// phone toggle button
+$('#test').on("click",'#phoneToggle', function(){
+    if($(this).is(':checked')){
+        console.log($(this).parent().parent().parent().parent()[0].id.substring(8));
+        orderNode["key"] = $(this).parent().parent().parent().parent()[0].id.substring(8);
+        console.log(orderNode);
+    }
+    else{
+        orderNode = {};
+        console.log(orderNode);
     }
 });
 
@@ -1148,12 +1171,14 @@ function saveTree(){
         }
     )
     var n = $('.window');
-    var initNode = [];
-    var lastNode = [];
+    initNode = [];
+    lastNode = [];
     for(var i = 1; i < n.length; ++i){
         // console.log("asdf"+instance.getEndpoints($($('.window')[i]))[1].connections);
         if(!instance.getEndpoints($($('.window')[i]))[1].connections[0]){
-            initNode.push(i.toString());
+            if(i != orderNode["key"]){
+                initNode.push(i.toString());
+            }
         }
         if(!instance.getEndpoints($($('.window')[i]))[0].connections[0]){
             lastNode.push(i.toString());
@@ -1169,6 +1194,7 @@ function saveTree(){
         }
         angular.element(document.getElementById('jsonToScope')).scope().listOfInitNode = initNode;
         angular.element(document.getElementById('jsonToScope')).scope().listOfLastNode = lastNode;
+        angular.element(document.getElementById('jsonToScope')).scope().orderNode = orderNode;
         angular.element(document.getElementById('jsonToScope')).scope().list = connectInfo;
         angular.element(document.getElementById('jsonToScope')).scope().mapIds = deviceInfo;
         console.log(deviceInfo);
