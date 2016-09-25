@@ -996,11 +996,14 @@ $("#addBrokerSubmit").click(function(){
         angular.element(document.getElementById('jsonToScope')).scope().newnode['ipAddress'] = $('#s2')[0].value;
         angular.element(document.getElementById('jsonToScope')).scope().newnode['port'] = $('#s3')[0].value;
         angular.element(document.getElementById('jsonToScope')).scope().newnode['deviceId'] = [];
-        $.when(angular.element(document.getElementById('jsonToScope')).scope().addBroker()).done(
-            angular.element(document.getElementById('jsonToScope')).scope().getBrokers()
-        )
-        angular.element(document.getElementById('jsonToScope')).scope().newnode = {};
-        angular.element(document.getElementById('jsonToScope')).scope().$apply();
+        setTimeout(function () {
+            $.when(angular.element(document.getElementById('jsonToScope')).scope().addBroker()).done(
+                angular.element(document.getElementById('jsonToScope')).scope().getBrokers());
+            setTimeout(function () {
+                angular.element(document.getElementById('jsonToScope')).scope().newnode = {};
+                angular.element(document.getElementById('jsonToScope')).scope().$apply();
+            }, 200);
+        }, 200);
     }
 });
 

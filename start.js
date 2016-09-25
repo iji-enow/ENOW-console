@@ -3,8 +3,7 @@ const express = require('express');
 const mongo = require('mongodb');
 const fs = require('fs');
 const bodyparser = require('body-parser');
-var ascoltatori_mqtt = require('ascoltatori'),
-ascoltatori_kafka = require('ascoltatori');
+var ascoltatori_mqtt = require('ascoltatori');
 var mqtt = require('mqtt');
 const BSON = require('bson').BSONPure;
 var path = require('path');
@@ -86,11 +85,10 @@ offset.fetchLatestOffsets(['log'], function (error, offsets) {
 
 
 
-//
+
 // var KEY;
 // var CERT;
 // var TRUSTED_CA_LIST;
-//
 // var options = {
 //     key: KEY,
 //     cert: CERT,
@@ -98,71 +96,23 @@ offset.fetchLatestOffsets(['log'], function (error, offsets) {
 //     // The CA list will be used to determine if server is authorized
 //     ca: TRUSTED_CA_LIST
 // }
-//
-// var settings_mqtt = {
-//     type: 'mqtt',
-//     // set 'true' if input type is json type
-//     json: false,
-//     mqtt: require('mqtt'),
-//     url: 'mqtt://127.0.0.1:1883'
-// };
-//
-// var settings_kafka = {
-//     type: 'kafka',
-//     json: false,
-//     kafka: require('kafka-node'),
-//     //connectString: "192.168.0.3:2181",
-//     connectString: "127.0.0.1:2181",
-//     clientId: "ascoltatori",
-//     groupId: "ascoltatori",
-//     defaultEncoding: "utf8",
-//     encodings: {
-//         image: "buffer"
-//     }
-// };
 
-// var client = mqtt.connect('mqtt://localhost:8883',options);
+var settings = {
+    type: 'mqtt',
+    json: true,
+    mqtt: require('mqtt'),
+    url: 'mqtt://127.0.0.1:8883'
+};
+
+//
+// var client = mqtt.connect('mqtt://localhost:8883', options);
 // client.subscribe('enow/+/+/+/order');
+// client.publish('enow/+/+/+/order');
+//
 //
 // client.on('message', function (topic, message) {
 //     //console.log(message.toString())
 //     console.log(arguments[0]);
-//     var topicName = JSON.stringify(arguments[0]);
-//     ascoltatori_kafka.build(settings_kafka, function (err, ascoltatori_kafka){
-//         var arr = topicName.substring(1,topicName.length -1).split("/");
-//         var corporationName = arr[0];
-//         var serverId = arr[1];
-//         var brokerId = arr[2];
-//         var deviceId = arr[3];
-//         var kafkaTopic = arr[4];
-//
-//         var str = "{\"corporationName\":\"" + corporationName + "\",\"serverId\":\"" + serverId + "\",\"brokerId\":\"" +  brokerId  + "\",\"deviceId\":\"" + deviceId + "\",\"kafkaTopic\":\"" + kafkaTopic + "\",\"payload\":\"" + message + "\"}"
-//         var jsonObj = JSON.parse(str);
-//
-//         ascoltatori_kafka.publish('order', JSON.stringify(jsonObj), function() {
-//             console.log('message published');
-//         });
-//     });
-// });
-//
-// ascoltatori_mqtt.build(settings_mqtt, function (err, ascoltatori_mqtt){
-//     ascoltatori_mqtt.subscribe('enow/+/+/+/tmp', function(topic,message) {
-//         console.log(arguments[0]);
-//         var topicName = JSON.stringify(arguments[0]);
-//         ascoltatori_kafka.build(settings_kafka, function (err, ascoltatori_kafka){
-//             var arr = topicName.substring(1,topicName.length -1).split("/");
-//             var corporationName = arr[0];
-//             var serverId = arr[1];
-//             var brokerId = arr[2];
-//             var deviceId = arr[3];
-//             var kafkaTopic = arr[4];
-//             var str = "{\"corporationName\":\"" + corporationName + "\",\"serverId\":\"" + serverId + "\",\"brokerId\":\"" +  brokerId  + "\",\"deviceId\":\"" + deviceId + "\",\"kafkaTopic\":\"" + kafkaTopic + "\",\"payload\":\"" + message + "\"}"
-//             var jsonObj = JSON.parse(str);
-//             ascoltatori_kafka.publish('order', JSON.stringify(jsonObj), function() {
-//                 console.log('message published');
-//             });
-//         });
-//     });
 // });
 
 
@@ -202,17 +152,41 @@ expressapp.post('/post_db', function(req, res){
     connectDB(req.body, 'enow', 'recipes', 'save', res);
 });
 expressapp.post('/run_db', function(req, res){
+    var obj = new Object();
     console.log('Running RoadMap!');
+
+    for(var i=1; i<= Object.keys(req.body['nodeIds']).length ; ++i){
+        obj[req.body['nodeIds'][i]['brokerId']] = obj[req.body['nodeIds'][i]['brokerId']] || [];
+        obj[req.body['nodeIds'][i]['brokerId']].push(req.body['nodeIds'][i]['deviceId']);
+    }
+    console.log(obj);
+
+    for(var key.value in obj) {
+        
+    }
+
+
     connectDB(req.body, 'enow', 'execute', 'run', res);
-    payloads[0]['messages']='{"roadMapId":"'+roadMapIdTemp+'"}';
-    setTimeout(function () {
-        producer.send(payloads, function (err, data) {
-            console.log(payloads);
-        });
-        producer.on('error', function (err) {
-            console.log(err);
-        });
-    }, 1000);
+
+    // ascoltatori_mqtt.build(settings, function(err, listener){
+    //     listener.publish('enow/a/b/c/order', '{send:"hi die"}', function(){
+    //         console.log('message published');
+    //     })
+    //
+    //     listener.subscribe('enow/+/+/+/order', function(){
+    //         console.log(arguments);
+    //     });
+    // });
+    //
+    // payloads[0]['messages']='{"roadMapId":"'+roadMapIdTemp+'"}';
+    // setTimeout(function () {
+    //     producer.send(payloads, function (err, data) {
+    //         console.log(payloads);
+    //     });
+    //     producer.on('error', function (err) {
+    //         console.log(err);
+    //     });
+    // }, 1000);
 });
 expressapp.post('/kill_db', function(req, res){
     console.log('kill execute...');
