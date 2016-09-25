@@ -199,7 +199,7 @@
 </head>
 <body id="back" class="hold-transition skin-blue sidebar-mini">
 
-        <div id="loader"></div>
+    <div id="loader"></div>
     <header class="main-header">
         <!-- Logo -->
         <a href="../index.html" class="logo">
@@ -617,12 +617,7 @@
                                     <div class="box-header">
                                         <h3 class="box-title">Broker lists</h3>
                                         <button id="addBroker" class="btn btn-primary btn-flat pull-right">Add Broker</button>
-                                        <input type="file" class="btn btn-default" id="addSecurityFile1">CA.crt</input>
-                                        <input type="file" class="btn btn-default" id="addSecurityFile2">HostName.crt</input>
-                                        <input type="file" class="btn btn-default" id="addSecurityFile3">HostName.key</input>
-                                        <!-- <input type="file" class="btn btn-default" id="addSecurityFile1" accept=".crt">CA.crt</input>
-                                        <input type="file" class="btn btn-default" id="addSecurityFile2" accept=".crt">HostName.crt</input>
-                                        <input type="file" class="btn btn-default" id="addSecurityFile3" accept=".key">HostName.key</input> -->
+
                                     </div>
                                     <div class="box-body">
                                         <table id="broker_table" class="table table-bordered table-striped">
@@ -632,6 +627,7 @@
                                                     <th>Ip Address</th>
                                                     <th>Port</th>
                                                     <th>Devices</th>
+                                                    <th style="width:5px;">Security</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -640,6 +636,7 @@
                                                     <td>{{n.ipAddress}}</td>
                                                     <td>{{n.port}}</td>
                                                     <td>{{n.deviceId.length}}</td>
+                                                    <td><input id="checkSecure" type="checkbox"></input></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -651,6 +648,31 @@
                 </div>
             </div>
         </div>
+
+        <!-- adding broker -->
+        <div id="secureModal" class="modal fade">
+            <div class="modal-dialog" style="width:300px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Broker Security</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input type="file" class="btn btn-default" id="addSecurityFile1">CA.crt</input>
+                        <input type="file" class="btn btn-default" id="addSecurityFile2">HostName.crt</input>
+                        <input type="file" class="btn btn-default" id="addSecurityFile3">HostName.key</input>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-default" id="secureSubmit">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
         <!-- adding broker -->
         <div id="myModal" class="modal fade">
             <div class="modal-dialog" style="width:300px;">
@@ -928,14 +950,14 @@ $(document).ready(function(){
     setTimeout(function () {
         angular.element(document.getElementById('jsonToScope')).scope().settings = localStorage;
         console.log(angular.element(document.getElementById('jsonToScope')).scope().settings);
+        setTimeout(function () {
+            angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings();
             setTimeout(function () {
-                angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings();
-                    setTimeout(function () {
-                        angular.element(document.getElementById('jsonToScope')).scope().getBrokers();
-                        $('#loader').hide();
-                        $('#back').css('opacity','1');
-                    }, 300);
+                angular.element(document.getElementById('jsonToScope')).scope().getBrokers();
+                $('#loader').hide();
+                $('#back').css('opacity','1');
             }, 300);
+        }, 300);
         // $.when(angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings()).done(
         //     angular.element(document.getElementById('jsonToScope')).scope().getBrokers()
         // );
@@ -968,7 +990,7 @@ $("#addBroker").click(function(){
 // add broker to list
 $("#addBrokerSubmit").click(function(){
     if ( !($('#s1')[0].value)|| !($('#s2')[0].value)|| !($('#s3')[0].value) ){
-        console.log("input fields must be filled");
+        alert("input fields must be filled");
     }else{
         angular.element(document.getElementById('jsonToScope')).scope().newnode['brokerId'] = $('#s1')[0].value;
         angular.element(document.getElementById('jsonToScope')).scope().newnode['ipAddress'] = $('#s2')[0].value;
@@ -981,11 +1003,7 @@ $("#addBrokerSubmit").click(function(){
         angular.element(document.getElementById('jsonToScope')).scope().$apply();
     }
 });
-//add security file
-$('#addSecurityFile1').click(function(){
-    angular.element(document.getElementById('jsonToScope')).scope().addFile();
-    console.log(angular.element(document.getElementById('jsonToScope')).scope().file);
-});
+
 //add device to current broker
 $("#addDeviceSubmit").click(function(){
     var ask = prompt("Add Device. (Type Device Id)");
@@ -1006,8 +1024,27 @@ $("#addDeviceSubmit").click(function(){
 $("#removeDeviceSubmit").click(function(){
     alert("nope");
 });
-
-$('.box-body').on("click","#deviceAdd",function(){
+$(document).on("click",'#checkSecure',function(e){
+    e.stopPropagation();
+        var arr = $(this).parent().parent()[0].innerText.split("	");
+        angular.element(document.getElementById('jsonToScope')).scope().currentBroker['brokerId'] = arr[0];
+    if($(this).is(':checked')){
+        $('#secureModal').modal('show');
+    }else{}
+});
+//add security file
+$('#secureSubmit').click(function(){
+    if( !$('#addSecurityFile1').val() || !$('#addSecurityFile2').val() || !$('#addSecurityFile3').val()){
+        alert("input fields must be filled");
+    }else{
+        angular.element(document.getElementById('jsonToScope')).scope().addFile();
+        angular.element(document.getElementById('jsonToScope')).scope().file['brokerId']=angular.element(document.getElementById('jsonToScope')).scope().currentBroker['brokerId'];
+        setTimeout(function(){
+            angular.element(document.getElementById('jsonToScope')).scope().addSecure();
+        }, 3000);
+    }
+});
+$(document).on("click","#deviceAdd",function(e){
     var arr = $(this)[0].innerText.split("	");
     angular.element(document.getElementById('jsonToScope')).scope().currentDeviceList =[];
     angular.element(document.getElementById('jsonToScope')).scope().$apply();

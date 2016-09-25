@@ -261,6 +261,13 @@ expressapp.post('/get_broker', function(req, res){
     console.log('get broker...');
     connectDB(req.body, 'connectionData', 'brokerList', 'findBroker', res);
 });
+
+expressapp.post('/add_secure', function(req, res){
+    console.log('add secure...');
+    console.log(req.body);
+    connectDB(req.body, 'connectionData', 'brokerList', 'addSecure', res);
+});
+
 expressapp.get('/get_brokers', function(req, res){
     console.log('get brokers...');
     connectDB(null, 'connectionData', 'brokerList', 'find', res);
@@ -277,8 +284,6 @@ expressapp.get('/get_running_roadmaps', function(req, res){
     console.log('get running roadmaps...');
     connectDB(null, 'enow', 'execute', 'find', res);
 });
-
-
 expressapp.get('/get_devices', function(req, res){
     console.log('get devices...');
     connectDB(null, 'connectionData', 'brokerList', 'find', res);
@@ -373,6 +378,14 @@ var server = expressapp.listen(expressapp.get('port'), function(){
             });
         };
 
+        var updateBroker = function(callback){
+            db.db(dbName).collection(collectionName).updateOne({'brokerId':source['brokerId']},{
+                '$set' : { 'ca': source['ca'], 'hostCrt': source['hostCrt'], 'hostKey': source['hostKey']}
+            }, function(err,result){
+                response.send("done");
+            });
+        };
+
         var deleteDocument = function(callback){
             db.db(dbName).collection(collectionName).deleteOne({
             },function(err, result){
@@ -404,6 +417,9 @@ var server = expressapp.listen(expressapp.get('port'), function(){
             });
         }else if(command=="findBroker"){
             findBroker(db, function(){
+            });
+        }else if(command=="addSecure"){
+            updateBroker(db, function(){
             });
         }
     };

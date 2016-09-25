@@ -3,6 +3,7 @@ var app = angular.module('mainModule', []);
 // var app = angular.module('mainModule',[]);
 app.controller('myCtrl', function($scope, $http){
 
+    $scope.temp;
     // stages.html
     $scope.listOfDevice = {};
     $scope.listOfInitNode = [];
@@ -24,17 +25,35 @@ app.controller('myCtrl', function($scope, $http){
     $scope.settings={};
     $scope.newnode ={};
     $scope.newdevice={};
-    $scope.file;
+    $scope.file ={
+        "ca":"",
+        "hostCrt":"",
+        "hostKey":""
+    };
     // ------------------------------------------
 
-    $scope.addFile = function(){
-        var file = document.getElementById('addSecurityFile1').files[0],
-        r = new FileReader();
-        r.onloadend = function(e){
-            $scope.file = e.target.result;
+    $scope.addFile = function(num){
+        var files = [];
+        $scope.temp = [];
+        for(var i =1; i<= 3; ++i){
+            files.push(document.getElementById('addSecurityFile'+i).files[0]);
         }
-        r.readAsBinaryString(file);
-    }
+        setTimeout(function(){
+            $.each(files, function(i, j){
+                var reader = new FileReader();
+                reader.readAsText(files[i]);
+                reader.onload = function(e){
+                    $scope.temp.push(reader.result);
+                }
+            });
+            setTimeout(function(){
+                $scope.file['ca'] = $scope.temp[0];
+                $scope.file['hostCrt'] = $scope.temp[1];
+                $scope.file['hostKey'] = $scope.temp[2];
+                }, 1000);
+        }, 1000);
+    };
+
     $scope.saveDataBase = function(){
         $http({
             withCredentials: false,
@@ -78,6 +97,18 @@ app.controller('myCtrl', function($scope, $http){
             url: "/add_broker",
             headers: {'Content-Type': 'application/json'},
             data: $scope.newnode,
+            contentType : 'application/json',
+            dataType: "json"
+        }).then(function(response){
+        });
+    }
+    $scope.addSecure = function(){
+        $http({
+            withCredentials: false,
+            method: 'post',
+            url: "/add_secure",
+            headers: {'Content-Type': 'application/json'},
+            data: $scope.file,
             contentType : 'application/json',
             dataType: "json"
         }).then(function(response){
