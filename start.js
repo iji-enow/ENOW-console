@@ -72,68 +72,12 @@ offset.fetchLatestOffsets(['log'], function (error, offsets) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// var KEY;
-// var CERT;
-// var TRUSTED_CA_LIST;
-// var options = {
-//     key: KEY,
-//     cert: CERT,
-//     rejectUnauthorized: true,
-//     // The CA list will be used to determine if server is authorized
-//     ca: TRUSTED_CA_LIST
-// }
-
 var settings = {
     type: 'mqtt',
     json: true,
     mqtt: require('mqtt'),
     url: 'mqtt://127.0.0.1:8883'
 };
-
-//
-// var client = mqtt.connect('mqtt://localhost:8883', options);
-// client.subscribe('enow/+/+/+/order');
-// client.publish('enow/+/+/+/order');
-//
-//
-// client.on('message', function (topic, message) {
-//     //console.log(message.toString())
-//     console.log(arguments[0]);
-// });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 expressapp.use(bodyparser.json());
@@ -161,32 +105,34 @@ expressapp.post('/run_db', function(req, res){
     }
     console.log(obj);
 
-    for(var key.value in obj) {
-        
+    for(key in obj){
+        for(val in obj[key]){
+            console.log(key+':'+obj[key][val]);
+            // settings['url'] = 'mqtt://127.0.0.1:8883'
+            // setTimeout(function(){
+            //     ascoltatori_mqtt.build(settings, function(err, listener){
+            //         listener.publish('aliveRequest', 'enow/server0/'+key+'/'+obj[key][val]+'/order', function(){
+            //             console.log('message published');
+            //         })
+            //         listener.subscribe('aliveResponse', function(){
+            //             console.log(arguments);
+            //         });
+            //     });
+            // },1000);
+
+        }
     }
 
-
     connectDB(req.body, 'enow', 'execute', 'run', res);
-
-    // ascoltatori_mqtt.build(settings, function(err, listener){
-    //     listener.publish('enow/a/b/c/order', '{send:"hi die"}', function(){
-    //         console.log('message published');
-    //     })
-    //
-    //     listener.subscribe('enow/+/+/+/order', function(){
-    //         console.log(arguments);
-    //     });
-    // });
-    //
-    // payloads[0]['messages']='{"roadMapId":"'+roadMapIdTemp+'"}';
-    // setTimeout(function () {
-    //     producer.send(payloads, function (err, data) {
-    //         console.log(payloads);
-    //     });
-    //     producer.on('error', function (err) {
-    //         console.log(err);
-    //     });
-    // }, 1000);
+    payloads[0]['messages']='{"roadMapId":"'+roadMapIdTemp+'"}';
+    setTimeout(function () {
+        producer.send(payloads, function (err, data) {
+            console.log(payloads);
+        });
+        producer.on('error', function (err) {
+            console.log(err);
+        });
+    }, 1000);
 });
 expressapp.post('/kill_db', function(req, res){
     console.log('kill execute...');
