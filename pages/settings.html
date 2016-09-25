@@ -620,6 +620,9 @@
                                         <input type="file" class="btn btn-default" id="addSecurityFile1">CA.crt</input>
                                         <input type="file" class="btn btn-default" id="addSecurityFile2">HostName.crt</input>
                                         <input type="file" class="btn btn-default" id="addSecurityFile3">HostName.key</input>
+                                        <!-- <input type="file" class="btn btn-default" id="addSecurityFile1" accept=".crt">CA.crt</input>
+                                        <input type="file" class="btn btn-default" id="addSecurityFile2" accept=".crt">HostName.crt</input>
+                                        <input type="file" class="btn btn-default" id="addSecurityFile3" accept=".key">HostName.key</input> -->
                                     </div>
                                     <div class="box-body">
                                         <table id="broker_table" class="table table-bordered table-striped">
@@ -980,7 +983,7 @@ $("#addBrokerSubmit").click(function(){
 });
 //add security file
 $('#addSecurityFile1').click(function(){
-    console.log($(this));
+    console.log($('#addSecurityFile1').val());
 });
 //add device to current broker
 $("#addDeviceSubmit").click(function(){

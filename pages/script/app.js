@@ -5,14 +5,13 @@ app.controller('myCtrl', function($scope, $http){
 
     // stages.html
     $scope.listOfDevice = {};
-    $scope.anaconda;
     $scope.listOfInitNode = [];
     $scope.listOfLastNode = [];
     $scope.list = [];
     $scope.listOfRoadMap = [];
     $scope.listOfRunningRoadMap = [];
     $scope.tree;
-    $scope.mapIds;
+    $scope.nodeIds;
     $scope.loadTarget ={};
     $scope.getTarget;
 
@@ -231,7 +230,7 @@ app.controller('myCtrl', function($scope, $http){
         rootNodes.isOutput = false;
         rootNodes.incomingNode = rootNodes.incomingNode || {};
         rootNodes.outingNode = rootNodes.outingNode || {};
-        rootNodes.mapIds = this.mapIds || {};
+        rootNodes.nodeIds = this.nodeIds || {};
         for(var i=0; i<arrayList.length; ++i){
             insert_incoming(arrayList[i]);
             insert_outcoming(arrayList[i]);

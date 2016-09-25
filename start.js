@@ -2,8 +2,10 @@ const http = require('http');
 const express = require('express');
 const mongo = require('mongodb');
 const fs = require('fs');
-const ascoltatori = require('ascoltatori');
 const bodyparser = require('body-parser');
+var ascoltatori_mqtt = require('ascoltatori'),
+ascoltatori_kafka = require('ascoltatori');
+var mqtt = require('mqtt');
 const BSON = require('bson').BSONPure;
 var path = require('path');
 var MongoClient = mongo.MongoClient;
@@ -11,6 +13,8 @@ var Server = mongo.Server;
 var expressapp = express();
 var mongoUrl;
 var mongoPort;
+var kafkaUrl;
+var kafkaPort;
 var roadMapIdTemp;
 var db;
 var latestOffset;
@@ -30,20 +34,6 @@ payloads = [
     }
 ],
 offset = new kafka.Offset(client);
-//ascoltatori settings
-var settings = {
-  type: 'kafka',
-  json: false,
-  kafka: kafka,
-  connectString: "localhost:2181",
-  clientId: "ascoltatori",
-  groupId: "ascoltatori",
-  defaultEncoding: "utf8",
-  encodings: {
-    image: "buffer"
-  }
-};
-
 //make server starts from latest logs
 offset.fetchLatestOffsets(['log'], function (error, offsets) {
     if (error)
@@ -82,6 +72,120 @@ offset.fetchLatestOffsets(['log'], function (error, offsets) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
+// var KEY;
+// var CERT;
+// var TRUSTED_CA_LIST;
+//
+// var options = {
+//     key: KEY,
+//     cert: CERT,
+//     rejectUnauthorized: true,
+//     // The CA list will be used to determine if server is authorized
+//     ca: TRUSTED_CA_LIST
+// }
+//
+// var settings_mqtt = {
+//     type: 'mqtt',
+//     // set 'true' if input type is json type
+//     json: false,
+//     mqtt: require('mqtt'),
+//     url: 'mqtt://127.0.0.1:1883'
+// };
+//
+// var settings_kafka = {
+//     type: 'kafka',
+//     json: false,
+//     kafka: require('kafka-node'),
+//     //connectString: "192.168.0.3:2181",
+//     connectString: "127.0.0.1:2181",
+//     clientId: "ascoltatori",
+//     groupId: "ascoltatori",
+//     defaultEncoding: "utf8",
+//     encodings: {
+//         image: "buffer"
+//     }
+// };
+
+// var client = mqtt.connect('mqtt://localhost:8883',options);
+// client.subscribe('enow/+/+/+/order');
+//
+// client.on('message', function (topic, message) {
+//     //console.log(message.toString())
+//     console.log(arguments[0]);
+//     var topicName = JSON.stringify(arguments[0]);
+//     ascoltatori_kafka.build(settings_kafka, function (err, ascoltatori_kafka){
+//         var arr = topicName.substring(1,topicName.length -1).split("/");
+//         var corporationName = arr[0];
+//         var serverId = arr[1];
+//         var brokerId = arr[2];
+//         var deviceId = arr[3];
+//         var kafkaTopic = arr[4];
+//
+//         var str = "{\"corporationName\":\"" + corporationName + "\",\"serverId\":\"" + serverId + "\",\"brokerId\":\"" +  brokerId  + "\",\"deviceId\":\"" + deviceId + "\",\"kafkaTopic\":\"" + kafkaTopic + "\",\"payload\":\"" + message + "\"}"
+//         var jsonObj = JSON.parse(str);
+//
+//         ascoltatori_kafka.publish('order', JSON.stringify(jsonObj), function() {
+//             console.log('message published');
+//         });
+//     });
+// });
+//
+// ascoltatori_mqtt.build(settings_mqtt, function (err, ascoltatori_mqtt){
+//     ascoltatori_mqtt.subscribe('enow/+/+/+/tmp', function(topic,message) {
+//         console.log(arguments[0]);
+//         var topicName = JSON.stringify(arguments[0]);
+//         ascoltatori_kafka.build(settings_kafka, function (err, ascoltatori_kafka){
+//             var arr = topicName.substring(1,topicName.length -1).split("/");
+//             var corporationName = arr[0];
+//             var serverId = arr[1];
+//             var brokerId = arr[2];
+//             var deviceId = arr[3];
+//             var kafkaTopic = arr[4];
+//             var str = "{\"corporationName\":\"" + corporationName + "\",\"serverId\":\"" + serverId + "\",\"brokerId\":\"" +  brokerId  + "\",\"deviceId\":\"" + deviceId + "\",\"kafkaTopic\":\"" + kafkaTopic + "\",\"payload\":\"" + message + "\"}"
+//             var jsonObj = JSON.parse(str);
+//             ascoltatori_kafka.publish('order', JSON.stringify(jsonObj), function() {
+//                 console.log('message published');
+//             });
+//         });
+//     });
+// });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 expressapp.use(bodyparser.json());
 expressapp.use(function(req,res,next){
     res.setTimeout(5000, function(){
@@ -93,10 +197,12 @@ expressapp.use(function(req,res,next){
 expressapp.use(express.static(path.join(__dirname+"/../", 'console')));
 const port = 1111;
 expressapp.set('port', port);
+
 expressapp.post('/post_db', function(req, res){
     connectDB(req.body, 'enow', 'recipes', 'save', res);
 });
 expressapp.post('/run_db', function(req, res){
+    console.log('Running RoadMap!');
     connectDB(req.body, 'enow', 'execute', 'run', res);
     payloads[0]['messages']='{"roadMapId":"'+roadMapIdTemp+'"}';
     setTimeout(function () {
@@ -128,7 +234,9 @@ expressapp.post('/post_url_settings', function(req, res){
     console.log('setting url...');
     mongoUrl = req.body['mongoUrl'];
     mongoPort = req.body['mongoPort'];
-    producer.client.connectionString = req.body['kafkaUrl']+':'+req.body['kafkaPort'];
+    kafkaUrl = req.body['kafkaUrl'];
+    kafkaPort = req.body['kafkaPort'];
+    producer.client.connectionString = kafkaUrl+':'+kafkaPort;
     if(db){
         db.close();
     }
@@ -179,7 +287,7 @@ expressapp.get('/get_devices', function(req, res){
 var server = expressapp.listen(expressapp.get('port'), function(){
     console.log("\n\n\n");
     console.log(
-         "  ███████╗███╗   ██╗ ██████╗ ██╗    ██╗\
+        "  ███████╗███╗   ██╗ ██████╗ ██╗    ██╗\
         \n  ██╔════╝████╗  ██║██╔═══██╗██║    ██║  ENOW Started!\
         \n  █████╗  ██╔██╗ ██║██║   ██║██║ █╗ ██║  Connect to 127.0.0.1:1111\
         \n  ██╔══╝  ██║╚██╗██║██║   ██║██║███╗██║\
