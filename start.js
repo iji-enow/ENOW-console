@@ -107,19 +107,35 @@ expressapp.post('/run_db', function(req, res){
 
     for(key in obj){
         for(val in obj[key]){
-            console.log(key+':'+obj[key][val]);
+            // console.log(key+':'+obj[key][val]);
             // settings['url'] = 'mqtt://127.0.0.1:8883'
+            //
+
+            // 타이머 이벤트에 즉시 실행 함수를 랩핑.
+            (function(i){
+                process.nextTick(function(){
+
+                    var client = mqtt.connect('mqtt://localhost:8883');
+                    client.publish('/enow/server0/'+key+'/'+obj[key][val]+'/alive/request', '{"topic":'+'/enow/server0/'+key+'/'+obj[key][val]+'}' , function(){
+                        console.log('message published');
+                    });
+                    client.subscribe('/enow/server0/'+key+'/'+obj[key][val]+'/alive/response', function(topic, message){
+                        console.log(arguments);
+                    });
+                });
+            })(i);
+
+
             // setTimeout(function(){
             //     ascoltatori_mqtt.build(settings, function(err, listener){
-            //         listener.publish('aliveRequest', 'enow/server0/'+key+'/'+obj[key][val]+'/order', function(){
+            //         listener.publish('/enow/server0/'+key+'/'+obj[key][val]+'/alive/request', '{"topic":'+'/enow/server0/'+key+'/'+obj[key][val]+'}' , function(){
             //             console.log('message published');
             //         })
-            //         listener.subscribe('aliveResponse', function(){
+            //         listener.subscribe('/enow/server0/'+key+'/'+obj[key][val]+'/alive/response', function(topic, message){
             //             console.log(arguments);
             //         });
             //     });
             // },1000);
-
         }
     }
 
