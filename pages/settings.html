@@ -983,7 +983,8 @@ $("#addBrokerSubmit").click(function(){
 });
 //add security file
 $('#addSecurityFile1').click(function(){
-    console.log($('#addSecurityFile1').val());
+    angular.element(document.getElementById('jsonToScope')).scope().addFile();
+    console.log(angular.element(document.getElementById('jsonToScope')).scope().file);
 });
 //add device to current broker
 $("#addDeviceSubmit").click(function(){

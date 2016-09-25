@@ -24,7 +24,17 @@ app.controller('myCtrl', function($scope, $http){
     $scope.settings={};
     $scope.newnode ={};
     $scope.newdevice={};
+    $scope.file;
     // ------------------------------------------
+
+    $scope.addFile = function(){
+        var file = document.getElementById('addSecurityFile1').files[0],
+        r = new FileReader();
+        r.onloadend = function(e){
+            $scope.file = e.target.result;
+        }
+        r.readAsBinaryString(file);
+    }
     $scope.saveDataBase = function(){
         $http({
             withCredentials: false,

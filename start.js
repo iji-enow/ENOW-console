@@ -335,13 +335,14 @@ var server = expressapp.listen(expressapp.get('port'), function(){
                 db.db(dbName).collection(collectionName).insertOne({
                     "roadMapId" : roadMapIdTemp.toString(),
                     "clientId" : source['clientId'],
+                    "orderNode" : source['orderNode'],
                     "initNode" : source['initNode'],
                     "lastNode" : source['lastNode'],
                     "incomingNode" : source['incomingNode'],
                     "outingNode" : source['outingNode'],
                     "isInput" : source['isInput'],
                     "isOutput" : source['isOutput'],
-                    "mapIds" : source['mapIds']
+                    "nodeIds" : source['nodeIds']
                 },function(err, result){
                     response.send("done");
                 });
