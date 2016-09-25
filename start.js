@@ -95,49 +95,50 @@ expressapp.set('port', port);
 expressapp.post('/post_db', function(req, res){
     connectDB(req.body, 'enow', 'recipes', 'save', res);
 });
+
 expressapp.post('/run_db', function(req, res){
     var obj = new Object();
     console.log('Running RoadMap!');
 
-    for(var i=1; i<= Object.keys(req.body['nodeIds']).length ; ++i){
-        obj[req.body['nodeIds'][i]['brokerId']] = obj[req.body['nodeIds'][i]['brokerId']] || [];
-        obj[req.body['nodeIds'][i]['brokerId']].push(req.body['nodeIds'][i]['deviceId']);
-    }
-    console.log(obj);
+    setTimeout(function(){
 
-    for(key in obj){
-        for(val in obj[key]){
-            // console.log(key+':'+obj[key][val]);
-            // settings['url'] = 'mqtt://127.0.0.1:8883'
-            //
-
-            // 타이머 이벤트에 즉시 실행 함수를 랩핑.
-            (function(i){
-                process.nextTick(function(){
-
-                    var client = mqtt.connect('mqtt://localhost:8883');
-                    client.publish('/enow/server0/'+key+'/'+obj[key][val]+'/alive/request', '{"topic":'+'/enow/server0/'+key+'/'+obj[key][val]+'}' , function(){
-                        console.log('message published');
-                    });
-                    client.subscribe('/enow/server0/'+key+'/'+obj[key][val]+'/alive/response', function(topic, message){
-                        console.log(arguments);
-                    });
-                });
-            })(i);
-
-
-            // setTimeout(function(){
-            //     ascoltatori_mqtt.build(settings, function(err, listener){
-            //         listener.publish('/enow/server0/'+key+'/'+obj[key][val]+'/alive/request', '{"topic":'+'/enow/server0/'+key+'/'+obj[key][val]+'}' , function(){
-            //             console.log('message published');
-            //         })
-            //         listener.subscribe('/enow/server0/'+key+'/'+obj[key][val]+'/alive/response', function(topic, message){
-            //             console.log(arguments);
-            //         });
-            //     });
-            // },1000);
+        for(var i=1; i<= Object.keys(req.body['nodeIds']).length ; ++i){
+            obj[req.body['nodeIds'][i]['brokerId']] = obj[req.body['nodeIds'][i]['brokerId']] || [];
+            obj[req.body['nodeIds'][i]['brokerId']].push(req.body['nodeIds'][i]['deviceId']);
         }
-    }
+        console.log(obj);
+        for(key in obj){
+            for(val in obj[key]){
+                (function(val){
+                    console.log(key+':'+obj[key][val]);
+                    process.nextTick(function(){
+
+                        var client = mqtt.connect('mqtt://localhost:8883');
+
+                        client.subscribe('/enow/server0/+/+/alive/response', function(topic, message){
+                            console.log(arguments);
+                        });
+                        client.publish('/enow/server0/'+key+'/'+obj[key][val]+'/alive/request', '{"topic":'+'/enow/server0/'+key+'/'+obj[key][val]+'}' , function(){
+                            console.log('message published');
+                        });
+                    });
+                })(val);
+
+
+                // setTimeout(function(){
+                //     ascoltatori_mqtt.build(settings, function(err, listener){
+                //         listener.publish('/enow/server0/'+key+'/'+obj[key][val]+'/alive/request', '{"topic":'+'/enow/server0/'+key+'/'+obj[key][val]+'}' , function(){
+                //             console.log('message published');
+                //         })
+                //         listener.subscribe('/enow/server0/'+key+'/'+obj[key][val]+'/alive/response', function(topic, message){
+                //             console.log(arguments);
+                //         });
+                //     });
+                // },1000);
+            }
+        }
+    },3000);
+
 
     connectDB(req.body, 'enow', 'execute', 'run', res);
     payloads[0]['messages']='{"roadMapId":"'+roadMapIdTemp+'"}';
