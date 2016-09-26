@@ -1,4 +1,4 @@
-ENOW-CONSOLE ![travis-ci](https://travis-ci.org/ENOW-IJI/console.svg?branch=master)
+ENOW-CONSOLE ![travis-ci](https://travis-ci.org/ENOW-IJI/ENOW-console.svg?branch=master)
 ====
 
 Introduction
