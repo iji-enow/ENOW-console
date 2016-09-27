@@ -88,7 +88,7 @@ expressapp.use(function(req,res,next){
     });
     next();
 });
-expressapp.use(express.static(path.join(__dirname+"/../", 'console')));
+expressapp.use(express.static(path.join(__dirname+"/../", 'ENOW-console')));
 const port = 1111;
 expressapp.set('port', port);
 
