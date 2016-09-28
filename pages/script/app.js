@@ -135,8 +135,8 @@ app.controller('myCtrl', function($scope, $http){
             if(response.data=="no_connect"){
                 alert('Connect failed. Check MongoDB Url, Port.');
             }else{
-                console.log(response);
                 $scope.getTarget = response.data;
+                    console.log($scope.getTarget);
             }
         });
     }
@@ -270,7 +270,7 @@ app.controller('myCtrl', function($scope, $http){
             rootNodes.outingNode[list.source] = rootNodes.outingNode[list.source] || [];
             rootNodes.outingNode[list.source].push(list.target);
         }
-        rootNodes.roadMapId = "";
+        rootNodes.roadMapId = this.getTarget[0]['roadMapId'] || "";
         rootNodes.orderNode = this.orderNode['key'];
         rootNodes.initNode = this.listOfInitNode;
         rootNodes.lastNode = this.listOfLastNode;

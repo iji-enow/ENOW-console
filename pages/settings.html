@@ -572,23 +572,23 @@
             <div class="col-lg-4 col-xs-4">
                 <div class="box box-warning">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Storm Settings</h3>
+                        <h3 class="box-title">Other Settings</h3>
                     </div>
                     <div class="box-body">
                         <div class="row">
                             <div class="col-lg-8 col-xs-8">
-                                <label>Number of Workers</label>
+                                <label>Set Timeout Limit</label>
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-user"></i>
                                     </div>
-                                    <input id="numWorker" type="text" class="form-control">
+                                    <input id="timeoutLimit" type="text" class="form-control">
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-8 col-xs-8">
-                                <label>Max Task Parallelism</label>
+                                <label>Max Broker Limit</label>
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-cubes"></i>
@@ -967,7 +967,7 @@ $(document).ready(function(){
     $('#kafkaPort')[0].value = localStorage['kafkaPort'] || "";
     $('#mongoUrl')[0].value = localStorage['mongoUrl'] || "";
     $('#mongoPort')[0].value = localStorage['mongoPort'] || "";
-    $('#numWorker')[0].value = localStorage['numberOfWorkers'] || "";
+    $('#timeoutLimit')[0].value = localStorage['timeoutLimit'] || "";
     $('#maxTask')[0].value = localStorage['maxTaskParallelism'] || "";
 });
 $("#submit1").click(function(){
@@ -981,7 +981,7 @@ $("#submit2").click(function(){
     alert('Saved.');
 });
 $("#submit3").click(function(){
-    localStorage['numberOfWorkers'] = $('#numWorker')[0].value;
+    localStorage['timeoutLimit'] = $('#timeoutLimit')[0].value;
     localStorage['maxTaskParallelism'] = $('#maxTask')[0].value;
     alert('Saved.');
 });

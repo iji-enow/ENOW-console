@@ -14,6 +14,7 @@ var mongoUrl;
 var mongoPort;
 var kafkaUrl;
 var kafkaPort;
+var timeoutLimit;
 var roadMapIdTemp;
 var db;
 var latestOffset;
@@ -80,7 +81,7 @@ var settings = {
 
 expressapp.use(bodyparser.json());
 expressapp.use(function(req,res,next){
-    res.setTimeout(5000, function(){
+    res.setTimeout(timeoutLimit || 5000, function(){
         console.log('time out..');
         res.sendStatus(408);
     });
@@ -93,12 +94,25 @@ expressapp.set('port', port);
 expressapp.post('/post_db', function(req, res){
     connectDB(req.body, 'enow', 'recipes', 'save', res);
 });
+
+var sendKafka = function(req, topic, messages){
+    payloads[0]['topic'] = topic
+    payloads[0]['messages']= JSON.stringify(messages, null, '   ');
+    setTimeout(function () {
+        producer.send(payloads, function (err, data) {
+            console.log(payloads);
+        });
+        producer.on('error', function (err) {
+            console.log(err);
+        });
+    }, 1000);
+}
+
 var reserve = function(cb) {
     process.nextTick(function() {
         cb();
     });
 }
-
 var makeReserve = function(key, value) {
     reserve(function() {
         var client = mqtt.connect('mqtt://localhost:8883');
@@ -126,25 +140,16 @@ expressapp.post('/run_db', function(req, res){
         // console.log(obj);
         for(key in obj){
             for(val in obj[key]){
-                // console.log(key+':'+obj[key][val]);
                 makeReserve(key, obj[key][val]);
 
             }
         }
-    },3000);
+    }, timeoutLimit || 5000);
 
-
+console.log(req.body);
     connectDB(req.body, 'enow', 'execute', 'run', res);
-    payloads[0]['topic'] = 'event'
-    payloads[0]['messages']='{"roadMapId":"'+roadMapIdTemp+'"}';
-    setTimeout(function () {
-        producer.send(payloads, function (err, data) {
-            console.log(payloads);
-        });
-        producer.on('error', function (err) {
-            console.log(err);
-        });
-    }, 1000);
+    sendKafka(req, 'event', '{roadMapId:'+req.body['roadMapId']+'}');
+
 });
 expressapp.post('/kill_db', function(req, res){
     console.log('kill execute...');
@@ -153,16 +158,7 @@ expressapp.post('/kill_db', function(req, res){
 expressapp.post('/add_broker', function(req, res){
     console.log('add broker...');
     connectDB(req.body, 'connectionData', 'brokerList', 'saveBroker', res);
-    payloads[0]['topic'] = 'brokerAdd'
-    payloads[0]['messages']= JSON.stringify(req.body, null, '   ');
-    setTimeout(function () {
-        producer.send(payloads, function (err, data) {
-            console.log(payloads);
-        });
-        producer.on('error', function (err) {
-            console.log(err);
-        });
-    }, 1000);
+    sendKafka(req, 'brokerAdd', req.body);
 });
 expressapp.post('/add_device', function(req, res){
     console.log('add device...');
@@ -178,6 +174,7 @@ expressapp.post('/post_url_settings', function(req, res){
     mongoPort = req.body['mongoPort'];
     kafkaUrl = req.body['kafkaUrl'];
     kafkaPort = req.body['kafkaPort'];
+    timeoutLimit = req.body['timeoutLimit']*1000;
     producer.client.connectionString = kafkaUrl+':'+kafkaPort;
     if(db){
         db.close();
@@ -197,7 +194,6 @@ expressapp.post('/load_roadmap', function(req, res){
     console.log('load roadmap...');
     console.log(req.body['db']);
     connectDB(req.body, req.body['db'], req.body['collection'], 'findTarget', res);
-    // connectDB(req.body, 'enow', 'recipes', 'findTarget', res);
 });
 expressapp.post('/get_broker', function(req, res){
     console.log('get broker...');
