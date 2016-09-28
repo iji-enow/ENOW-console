@@ -14,10 +14,12 @@ var mongoUrl;
 var mongoPort;
 var kafkaUrl;
 var kafkaPort;
-var timeoutLimit;
-var roadMapIdTemp;
-var db;
-var latestOffset;
+var timeoutLimit,
+    roadMapIdTemp,
+    db,
+    latestOffset,
+    mqttHost,
+    mqttPort;
 var MyDate = new Date();
 var MyDateString;
 var consumer;
@@ -106,19 +108,30 @@ var reserve = function(cb) {
 }
 var makeReserve = function(key, value) {
     reserve(function() {
-        var client = mqtt.connect('mqtt://localhost:8883');
-        client.on('connect', function(){
-            client.publish('enow/server0/'+key+'/'+value+'/alive/request', '{"topic":'+'enow/server0/'+key+'/'+value+'}');
-            client.subscribe('enow/server0/'+key+'/'+value+'/alive/response');
-        })
-        client.on('message', function(topic, message){
-            console.log(topic);
-            console.log(message.toString());
-            setTimeout(function(){
-                console.log('Timeout...');
-                client.end();
-            }, 5000);
-        });
+        var obj = new Object();
+        obj['brokerId'] = key;
+        console.log(obj);
+        connectDB(obj, 'connectionData', 'brokerList', 'findBroker2', null);
+        setTimeout(function(){
+        console.log("-------------------------------------------");
+        console.log("-------------------------------------------");
+        console.log(mqttHost);
+        console.log(mqttPort);
+            var client = mqtt.connect('mqtt://'+mqttHost+':'+mqttPort);
+            client.on('connect', function(){
+                client.publish('enow/server0/'+key+'/'+value+'/alive/request', '{"topic":'+'enow/server0/'+key+'/'+value+'}');
+                client.subscribe('enow/server0/'+key+'/'+value+'/alive/response');
+            })
+            client.on('message', function(topic, message){
+                console.log(topic);
+                console.log(message.toString());
+                setTimeout(function(){
+                    console.log('Timeout...');
+                    client.end();
+                }, 3000);
+            });
+        }, 2000);
+
 
         console.log(key, value);
     });
@@ -243,10 +256,19 @@ var server = expressapp.listen(expressapp.get('port'), function(){
         };
         var findBroker = function(callback){
             db.db(dbName).collection(collectionName).find({brokerId:source['brokerId']}).toArray(function(err,result){
-                response.send(result);
+                    response.send(result);
             });
         };
+        var findBroker_2 = function(callback){
+            console.log(source);
+            db.db(dbName).collection(collectionName).find({brokerId:source['brokerId']}).toArray(function(err,result){
+                console.log("resuit is : ")
+                console.log(result[0])
+                    mqttHost = result[0]['ipAddress'];
+                    mqttPort = result[0]['port'];
 
+            });
+        };
         var findTarget = function(callback){
             var o_id = BSON.ObjectID.createFromHexString(source['_id']);
             db.db(dbName).collection(collectionName).find({_id:o_id}).toArray(function(err,result){
@@ -349,6 +371,9 @@ var server = expressapp.listen(expressapp.get('port'), function(){
             });
         }else if(command=="findBroker"){
             findBroker(db, function(){
+            });
+        }else if(command=="findBroker2"){
+            findBroker_2(db, function(){
             });
         }else if(command=="addSecure"){
             updateBroker(db, function(){
