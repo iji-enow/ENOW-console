@@ -30,6 +30,14 @@ app.controller('myCtrl', function($scope, $http){
         "hostCrt":"",
         "hostKey":""
     };
+    // dashboard.html
+    $scope.data={
+        'x': 10,
+        'y': 20
+    };
+    // statistics.html
+    $scope.log;
+
     // ------------------------------------------
 
     $scope.addFile = function(num){

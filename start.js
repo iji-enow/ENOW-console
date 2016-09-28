@@ -27,7 +27,7 @@ client = new kafka.Client(),
 producer = new Producer(client),
 payloads = [
     {
-        topic:'event',
+        // topic:'event',
         messages: '',
         partition: 0
     }
@@ -70,8 +70,6 @@ offset.fetchLatestOffsets(['log'], function (error, offsets) {
 });
 
 
-
-
 var settings = {
     type: 'mqtt',
     json: true,
@@ -95,7 +93,17 @@ expressapp.set('port', port);
 expressapp.post('/post_db', function(req, res){
     connectDB(req.body, 'enow', 'recipes', 'save', res);
 });
+var reserve = function(cb) {
+  process.nextTick(function() {
+    cb();
+  });
+}
 
+var makeReserve = function(key, value) {
+  reserve(function() {
+    console.log(key, value);
+  });
+}
 expressapp.post('/run_db', function(req, res){
     var obj = new Object();
     console.log('Running RoadMap!');
@@ -113,14 +121,14 @@ expressapp.post('/run_db', function(req, res){
                     console.log(key+':'+obj[key][val]);
                     process.nextTick(function(){
 
-                        var client = mqtt.connect('mqtt://localhost:8883');
-
-                        client.subscribe('/enow/server0/+/+/alive/response', function(topic, message){
-                            console.log(arguments);
-                        });
-                        client.publish('/enow/server0/'+key+'/'+obj[key][val]+'/alive/request', '{"topic":'+'/enow/server0/'+key+'/'+obj[key][val]+'}' , function(){
-                            console.log('message published');
-                        });
+                        // var client = mqtt.connect('mqtt://localhost:8883');
+                        makeReserve(key, obj[key][val]);
+                        // client.subscribe('/enow/server0/+/+/alive/response', function(topic, message){
+                        //     console.log(arguments);
+                        // });
+                        // client.publish('/enow/server0/'+key+'/'+obj[key][val]+'/alive/request', '{"topic":'+'/enow/server0/'+key+'/'+obj[key][val]+'}' , function(){
+                        //     console.log('message published');
+                        // });
                     });
                 })(val);
 
@@ -141,6 +149,7 @@ expressapp.post('/run_db', function(req, res){
 
 
     connectDB(req.body, 'enow', 'execute', 'run', res);
+    payloads[0]['topic'] = 'event'
     payloads[0]['messages']='{"roadMapId":"'+roadMapIdTemp+'"}';
     setTimeout(function () {
         producer.send(payloads, function (err, data) {
@@ -158,6 +167,16 @@ expressapp.post('/kill_db', function(req, res){
 expressapp.post('/add_broker', function(req, res){
     console.log('add broker...');
     connectDB(req.body, 'connectionData', 'brokerList', 'saveBroker', res);
+    payloads[0]['topic'] = 'brokerAdd'
+    payloads[0]['messages']= JSON.stringify(req.body, null, '   ');
+    setTimeout(function () {
+        producer.send(payloads, function (err, data) {
+            console.log(payloads);
+        });
+        producer.on('error', function (err) {
+            console.log(err);
+        });
+    }, 1000);
 });
 expressapp.post('/add_device', function(req, res){
     console.log('add device...');
