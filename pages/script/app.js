@@ -40,7 +40,7 @@ app.controller('myCtrl', function($scope, $http){
 
     // ------------------------------------------
 
-    $scope.addFile = function(num){
+    $scope.addFile = function(){
         var files = [];
         $scope.temp = [];
         for(var i =1; i<= 3; ++i){
@@ -215,7 +215,6 @@ app.controller('myCtrl', function($scope, $http){
                 console.log('done!');
                 $scope.brokerList = response.data;
             }
-
         });
     }
     $scope.getSettings = function(){
