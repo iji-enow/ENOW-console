@@ -986,10 +986,16 @@ $("#submit3").click(function(){
     alert('Saved.');
 });
 $("#addBroker").click(function(){
+
+
+        $('#s1')[0].value = "";
+        $('#s2')[0].value = "";
+        $('#s3')[0].value = "";
     $('#myModal').modal('show');
 });
 // add broker to list
 $("#addBrokerSubmit").click(function(){
+
     if ( !($('#s1')[0].value)|| !($('#s2')[0].value)|| !($('#s3')[0].value) ){
         alert("input fields must be filled");
     }else{
@@ -1002,9 +1008,10 @@ $("#addBrokerSubmit").click(function(){
                 angular.element(document.getElementById('jsonToScope')).scope().getBrokers());
             setTimeout(function () {
                 angular.element(document.getElementById('jsonToScope')).scope().newnode = {};
+                alert('Broker Added.');
                 angular.element(document.getElementById('jsonToScope')).scope().$apply();
-            }, 200);
-        }, 200);
+            }, 500);
+        }, 500);
     }
 });
 
@@ -1051,11 +1058,14 @@ $('#secureSubmit').click(function(){
 $(document).on("click","#deviceAdd",function(e){
     var arr = $(this)[0].innerText.split("	");
     angular.element(document.getElementById('jsonToScope')).scope().currentDeviceList =[];
-    angular.element(document.getElementById('jsonToScope')).scope().$apply();
     angular.element(document.getElementById('jsonToScope')).scope().currentBroker['brokerId'] = arr[0];
-    angular.element(document.getElementById('jsonToScope')).scope().getBroker();
-    angular.element(document.getElementById('jsonToScope')).scope().$apply();
-    $("#deviceModal").modal('show');
+    setTimeout(function(){
+        angular.element(document.getElementById('jsonToScope')).scope().getBroker();
+        setTimeout(function(){
+            angular.element(document.getElementById('jsonToScope')).scope().$apply();
+            $("#deviceModal").modal('show');
+        }, 500);
+    }, 500);
 });
 </script>
 </body>

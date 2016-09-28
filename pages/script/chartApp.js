@@ -167,7 +167,7 @@ app.controller('chartCtrl', function($scope, $http){
             $scope.trafficChart.data['datasets'][0]['data'].shift();
             $scope.trafficChart.data['labels'].shift();
         }
-        var num = Math.floor(Math.random()*10000);
+        var num = Math.floor(Math.random()*100);
         $scope.trafficChart.data['labels'].push(myDateString);
         $scope.trafficChart.data['datasets'][0]['data'].push(num);
         $scope.trafficChart.update();
@@ -193,7 +193,7 @@ app.controller('chartCtrl', function($scope, $http){
             $scope.logChart.data['datasets'][0]['data'].shift();
             $scope.logChart.data['labels'].shift();
         }
-        var num = Math.floor(Math.random()*10000);
+        var num = Math.floor(Math.random()*100);
         $scope.logChart.data['labels'].push(myDateString);
         $scope.logChart.data['datasets'][0]['data'].push(num);
         $scope.logChart.update();
@@ -211,7 +211,6 @@ app.controller('chartCtrl', function($scope, $http){
         //         $scope.brokerList = response.data;
         //     }
         // });
-        var num = Math.floor(Math.random()*10000);
         var target = Math.floor(Math.random()*4);
         $scope.errorChart.data['datasets'][0]['data'][target] += 1;
 

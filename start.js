@@ -22,18 +22,18 @@ var MyDate = new Date();
 var MyDateString;
 var consumer;
 var kafka = require('kafka-node'),
-    Producer = kafka.Producer,
-    Consumer = kafka.Consumer,
-    client = new kafka.Client(),
-    producer = new Producer(client),
-    payloads = [
-        {
-            // topic:'event',
-            messages: '',
-            partition: 0
-        }
-    ],
-    offset = new kafka.Offset(client);
+Producer = kafka.Producer,
+Consumer = kafka.Consumer,
+client = new kafka.Client(),
+producer = new Producer(client),
+payloads = [
+    {
+        // topic:'event',
+        messages: '',
+        partition: 0
+    }
+],
+offset = new kafka.Offset(client);
 //make server starts from latest logs
 offset.fetchLatestOffsets(['log'], function (error, offsets) {
     if (error)
@@ -117,13 +117,14 @@ var makeReserve = function(key, value) {
     reserve(function() {
         var client = mqtt.connect('mqtt://localhost:8883');
         client.on('connect', function(){
-            client.publish('/enow/server0/'+key+'/'+value+'/alive/request', '{"topic":'+'/enow/server0/'+key+'/'+value+'}');
-            client.subscribe('/enow/server0/'+key+'/'+value+'/alive/response');
+            client.publish('enow/server0/'+key+'/'+value+'/alive/request', '{"topic":'+'enow/server0/'+key+'/'+value+'}');
+            client.subscribe('enow/server0/'+key+'/'+value+'/alive/response');
         })
-            client.on('message', function(topic, message){
-                console.log(topic);
-                console.log(message.toString());
-            });
+        client.on('message', function(topic, message){
+            console.log(topic);
+            console.log(message.toString());
+            client.end();
+        });
         console.log(key, value);
     });
 }
@@ -146,7 +147,7 @@ expressapp.post('/run_db', function(req, res){
         }
     }, timeoutLimit || 5000);
 
-console.log(req.body);
+    console.log(req.body);
     connectDB(req.body, 'enow', 'execute', 'run', res);
     sendKafka(req, 'event', '{roadMapId:'+req.body['roadMapId']+'}');
 
@@ -157,6 +158,7 @@ expressapp.post('/kill_db', function(req, res){
 });
 expressapp.post('/add_broker', function(req, res){
     console.log('add broker...');
+    console.log(req.body);
     connectDB(req.body, 'connectionData', 'brokerList', 'saveBroker', res);
     sendKafka(req, 'brokerAdd', req.body);
 });
