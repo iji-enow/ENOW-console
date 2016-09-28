@@ -21,18 +21,18 @@ var MyDate = new Date();
 var MyDateString;
 var consumer;
 var kafka = require('kafka-node'),
-Producer = kafka.Producer,
-Consumer = kafka.Consumer,
-client = new kafka.Client(),
-producer = new Producer(client),
-payloads = [
-    {
-        // topic:'event',
-        messages: '',
-        partition: 0
-    }
-],
-offset = new kafka.Offset(client);
+    Producer = kafka.Producer,
+    Consumer = kafka.Consumer,
+    client = new kafka.Client(),
+    producer = new Producer(client),
+    payloads = [
+        {
+            // topic:'event',
+            messages: '',
+            partition: 0
+        }
+    ],
+    offset = new kafka.Offset(client);
 //make server starts from latest logs
 offset.fetchLatestOffsets(['log'], function (error, offsets) {
     if (error)
@@ -94,15 +94,24 @@ expressapp.post('/post_db', function(req, res){
     connectDB(req.body, 'enow', 'recipes', 'save', res);
 });
 var reserve = function(cb) {
-  process.nextTick(function() {
-    cb();
-  });
+    process.nextTick(function() {
+        cb();
+    });
 }
 
 var makeReserve = function(key, value) {
-  reserve(function() {
-    console.log(key, value);
-  });
+    reserve(function() {
+        var client = mqtt.connect('mqtt://localhost:8883');
+        client.on('connect', function(){
+            client.publish('/enow/server0/'+key+'/'+value+'/alive/request', '{"topic":'+'/enow/server0/'+key+'/'+value+'}');
+            client.subscribe('/enow/server0/'+key+'/'+value+'/alive/response');
+        })
+            client.on('message', function(topic, message){
+                console.log(topic);
+                console.log(message.toString());
+            });
+        console.log(key, value);
+    });
 }
 expressapp.post('/run_db', function(req, res){
     var obj = new Object();
@@ -114,35 +123,12 @@ expressapp.post('/run_db', function(req, res){
             obj[req.body['nodeIds'][i]['brokerId']] = obj[req.body['nodeIds'][i]['brokerId']] || [];
             obj[req.body['nodeIds'][i]['brokerId']].push(req.body['nodeIds'][i]['deviceId']);
         }
-        console.log(obj);
+        // console.log(obj);
         for(key in obj){
             for(val in obj[key]){
-                (function(val){
-                    console.log(key+':'+obj[key][val]);
-                    process.nextTick(function(){
+                // console.log(key+':'+obj[key][val]);
+                makeReserve(key, obj[key][val]);
 
-                        // var client = mqtt.connect('mqtt://localhost:8883');
-                        makeReserve(key, obj[key][val]);
-                        // client.subscribe('/enow/server0/+/+/alive/response', function(topic, message){
-                        //     console.log(arguments);
-                        // });
-                        // client.publish('/enow/server0/'+key+'/'+obj[key][val]+'/alive/request', '{"topic":'+'/enow/server0/'+key+'/'+obj[key][val]+'}' , function(){
-                        //     console.log('message published');
-                        // });
-                    });
-                })(val);
-
-
-                // setTimeout(function(){
-                //     ascoltatori_mqtt.build(settings, function(err, listener){
-                //         listener.publish('/enow/server0/'+key+'/'+obj[key][val]+'/alive/request', '{"topic":'+'/enow/server0/'+key+'/'+obj[key][val]+'}' , function(){
-                //             console.log('message published');
-                //         })
-                //         listener.subscribe('/enow/server0/'+key+'/'+obj[key][val]+'/alive/response', function(topic, message){
-                //             console.log(arguments);
-                //         });
-                //     });
-                // },1000);
             }
         }
     },3000);
@@ -246,9 +232,8 @@ expressapp.get('/get_devices', function(req, res){
 });
 
 var server = expressapp.listen(expressapp.get('port'), function(){
-    console.log("\n\n\n");
     console.log(
-        "  ███████╗███╗   ██╗ ██████╗ ██╗    ██╗\
+        "\n\n\n  ███████╗███╗   ██╗ ██████╗ ██╗    ██╗\
         \n  ██╔════╝████╗  ██║██╔═══██╗██║    ██║  ENOW Started!\
         \n  █████╗  ██╔██╗ ██║██║   ██║██║ █╗ ██║  Connect to 127.0.0.1:1111\
         \n  ██╔══╝  ██║╚██╗██║██║   ██║██║███╗██║\
@@ -257,7 +242,6 @@ var server = expressapp.listen(expressapp.get('port'), function(){
     });
     function connectDB(source, dbName, collectionName, command, response){
         console.log('connecting to '+mongoUrl+':'+mongoPort+'...'+dbName+'.'+collectionName);
-        console.log('connected!');
         var findDocument = function(callback){
             db.db(dbName).collection(collectionName).find({}).toArray(function(err,result){
                 response.send(result);
@@ -270,7 +254,6 @@ var server = expressapp.listen(expressapp.get('port'), function(){
         };
 
         var findTarget = function(callback){
-            console.log("abcd");
             var o_id = BSON.ObjectID.createFromHexString(source['_id']);
             db.db(dbName).collection(collectionName).find({_id:o_id}).toArray(function(err,result){
                 console.log(result);
@@ -368,7 +351,6 @@ var server = expressapp.listen(expressapp.get('port'), function(){
             findDocument(db, function(){
             });
         }else if(command=="findTarget"){
-            console.log("qwertty");
             findTarget(db, function(){
             });
         }else if(command=="findBroker"){
