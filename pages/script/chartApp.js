@@ -52,7 +52,7 @@ app.controller('chartCtrl', function($scope, $http){
                 label: 'Traffics',
                 data: [],
                 backgroundColor: [
-                    'rgba(54, 162, 235, 0.1)'
+                    'rgba(54, 162, 235, 0.05)'
                 ]
             }]
         },
@@ -85,7 +85,7 @@ app.controller('chartCtrl', function($scope, $http){
                 label: 'Logs',
                 data: [],
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.1)'
+                    'rgba(255, 99, 132, 0.05)'
                 ]
             }]
         },
@@ -211,7 +211,8 @@ app.controller('chartCtrl', function($scope, $http){
         //         $scope.brokerList = response.data;
         //     }
         // });
-        var target = Math.floor(Math.random()*4);
+        var arr = [0,0,0,0,0,0,0,1,2,3,0,0,0,0,0,0,0,1,0,3,0,0,0,0,0,0,0,0,2,3,0,0,0,0,0,0,0,0,2,3];
+        var target = arr[Math.floor(Math.random()*40)];
         $scope.errorChart.data['datasets'][0]['data'][target] += 1;
 
         $scope.errorChart.update();

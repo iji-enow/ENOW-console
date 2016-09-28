@@ -68,7 +68,7 @@
 </head>
 <body id="back" class="hold-transition skin-blue sidebar-mini" ng-controller="chartCtrl">
 
-        <div id="loader"></div>
+    <div id="loader"></div>
     <div class="wrapper">
 
         <header class="main-header">
@@ -393,26 +393,28 @@
 
             <!-- Main content -->
             <section class="content">
-                    <div id="result"></div>
+                <div id="result"></div>
                 <div class="col-xs-8 col-lg-8">
-                    <div class="row">
-                        <div class="col-xs-12 col-lg-12">
-                            <canvas id="trafficChart" width="200" height="50"></canvas>
+                    <div class="box box-danger">
+                        <h2 class="box-title" style="margin-left:2%">Statistics</h2>
+                        <div class="row">
+                            <div class="col-xs-12 col-lg-12">
+                                <canvas id="trafficChart" width="200" height="50"></canvas>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-12 col-lg-12">
-                            <canvas id="logChart" width="200" height="50"></canvas>
+                        <div class="row">
+                            <div class="col-xs-12 col-lg-12">
+                                <canvas id="logChart" width="200" height="50"></canvas>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-3 col-lg-3">
-                            <canvas id="errorChart" width="100" height="100"></canvas>
+                        <div class="row">
+                            <div class="col-xs-3 col-lg-3">
+                                <canvas id="errorChart" width="100" height="100"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-xs-4 col-lg-4">
-                    <!-- <button id="stopButton">asdf</button> -->
                     <div class="box box-danger">
                         <label style="margin-left:5px;">Running RoadMaps</label>
                         <table class="table table-bordered table-striped">
@@ -665,20 +667,25 @@
                     $('#loader').hide();
                     $('#back').css('opacity','1');
 
-                        setTimeout(function(){
-                            angular.element(document.getElementById('trafficChart')).scope().getRunningRoadMaps();
-                        }, 1000);
+                    setTimeout(function(){
+                        angular.element(document.getElementById('trafficChart')).scope().getRunningRoadMaps();
+                    }, 1000);
                 }, 300);
             }, 300);
         }, 300);
-
-        start_timer;
+        timer_traffic;
+        timer_log;
+        timer_error;
     });
-    var start_timer = setInterval(function(){
+    var timer_traffic = setInterval(function(){
         angular.element(document.getElementById('trafficChart')).scope().updateTrafficChart();
+    }, 2000);
+    var timer_log = setInterval(function(){
         angular.element(document.getElementById('trafficChart')).scope().updateLogChart();
-        angular.element(document.getElementById('trafficChart')).scope().updateErrorChart();
     }, 1000);
+    var timer_error = setInterval(function(){
+        angular.element(document.getElementById('trafficChart')).scope().updateErrorChart();
+    }, 700);
     $('#stopButton').on('click',function(){
         // $('#stopButton').toggle(tf);
         // if(tf){
