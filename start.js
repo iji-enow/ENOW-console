@@ -123,8 +123,12 @@ var makeReserve = function(key, value) {
         client.on('message', function(topic, message){
             console.log(topic);
             console.log(message.toString());
-            client.end();
+            setTimeout(function(){
+                console.log('Timeout...');
+                client.end();
+            }, 5000);
         });
+
         console.log(key, value);
     });
 }
@@ -133,7 +137,6 @@ expressapp.post('/run_db', function(req, res){
     console.log('Running RoadMap!');
 
     setTimeout(function(){
-
         for(var i=1; i<= Object.keys(req.body['nodeIds']).length ; ++i){
             obj[req.body['nodeIds'][i]['brokerId']] = obj[req.body['nodeIds'][i]['brokerId']] || [];
             obj[req.body['nodeIds'][i]['brokerId']].push(req.body['nodeIds'][i]['deviceId']);
@@ -142,12 +145,10 @@ expressapp.post('/run_db', function(req, res){
         for(key in obj){
             for(val in obj[key]){
                 makeReserve(key, obj[key][val]);
-
             }
         }
-    }, timeoutLimit || 5000);
+    }, timeoutLimit || 3000);
 
-    console.log(req.body);
     connectDB(req.body, 'enow', 'execute', 'run', res);
     sendKafka(req, 'event', '{roadMapId:'+req.body['roadMapId']+'}');
 
@@ -169,6 +170,10 @@ expressapp.post('/add_device', function(req, res){
 expressapp.post('/find_device', function(req, res){
     console.log('find device...');
     connectDB(req.body, 'connectionData', 'brokerList', 'findDevice', res);
+});
+expressapp.post('/find_broker', function(req, res){
+    console.log('find broker...');
+    connectDB(req.body, 'connectionData', 'brokerList', 'findBroker', res);
 });
 expressapp.post('/post_url_settings', function(req, res){
     console.log('setting url...');

@@ -1004,11 +1004,10 @@ $("#addBrokerSubmit").click(function(){
         angular.element(document.getElementById('jsonToScope')).scope().newnode['port'] = $('#s3')[0].value;
         angular.element(document.getElementById('jsonToScope')).scope().newnode['deviceId'] = [];
         setTimeout(function () {
-            $.when(angular.element(document.getElementById('jsonToScope')).scope().addBroker()).done(
-                angular.element(document.getElementById('jsonToScope')).scope().getBrokers());
+            angular.element(document.getElementById('jsonToScope')).scope().findBroker();
             setTimeout(function () {
+                angular.element(document.getElementById('jsonToScope')).scope().getBrokers();
                 angular.element(document.getElementById('jsonToScope')).scope().newnode = {};
-                alert('Broker Added.');
                 angular.element(document.getElementById('jsonToScope')).scope().$apply();
             }, 500);
         }, 500);

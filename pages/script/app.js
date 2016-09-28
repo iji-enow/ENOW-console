@@ -185,6 +185,27 @@ app.controller('myCtrl', function($scope, $http){
             }
         });
     }
+    $scope.findBroker = function(){
+        $http({
+            withCredentials: false,
+            method: 'post',
+            url: "/find_broker",
+            headers: {'Content-Type': 'application/json'},
+            data: $scope.newnode,
+            contentType : 'application/json',
+            dataType: "json"
+        }).then(function(response){
+            if(response.data=="no_connect"){
+                alert('Connect failed. Check MongoDB Url, Port.');
+            }else{
+                if(response.data.length==0){
+                    $scope.addBroker();
+                }else{
+                    alert('brokerId already exist.');
+                }
+            }
+        });
+    }
     $scope.getBroker = function(){
         $http({
             withCredentials: false,
