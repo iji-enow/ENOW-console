@@ -24,9 +24,51 @@
     <script src="script/chartApp.js"></script>
     <script src="../dist/js/Chart.js"></script>
 
-
+    <style>
+    #loader {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        z-index: 5;
+        width: 150px;
+        background-color: black
+        height: 150px;
+        margin: -75px 0 0 -75px;
+        border: 16px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 16px solid #3498db;
+        width: 120px;
+        height: 120px;
+        -webkit-animation: spin 2s linear infinite;
+        animation: spin 2s linear infinite;
+    }
+    @-webkit-keyframes spin {
+        0% { -webkit-transform: rotate(0deg); }
+        100% { -webkit-transform: rotate(360deg); }
+    }
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    #back{
+        opacity: 0.7;
+        background-color: black;
+        z-index: 1000;
+    }
+    form {
+        display: inline;
+        padding: 0px;
+        spacing: 0px;
+    }
+    .canClick:hover{
+        border: 3px solid green;
+        cursor: pointer;
+    }
+    </style>
 </head>
-<body class="hold-transition skin-blue sidebar-mini" ng-controller="chartCtrl">
+<body id="back" class="hold-transition skin-blue sidebar-mini" ng-controller="chartCtrl">
+
+        <div id="loader"></div>
     <div class="wrapper">
 
         <header class="main-header">
@@ -351,22 +393,48 @@
 
             <!-- Main content -->
             <section class="content">
-                <div class="row">
-                    <div class="col-xs-8 col-lg-8">
-                        <canvas id="trafficChart" width="200" height="50"></canvas>
+                    <div id="result"></div>
+                <div class="col-xs-8 col-lg-8">
+                    <div class="row">
+                        <div class="col-xs-12 col-lg-12">
+                            <canvas id="trafficChart" width="200" height="50"></canvas>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-lg-12">
+                            <canvas id="logChart" width="200" height="50"></canvas>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-3 col-lg-3">
+                            <canvas id="errorChart" width="100" height="100"></canvas>
+                        </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-xs-8 col-lg-8">
-                        <canvas id="logChart" width="200" height="50"></canvas>
+                <div class="col-xs-4 col-lg-4">
+                    <!-- <button id="stopButton">asdf</button> -->
+                    <div class="box box-danger">
+                        <label style="margin-left:5px;">Running RoadMaps</label>
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>_Id</th>
+                                    <th>RoadMap Id</th>
+                                    <th>Client Id</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="canClick" id="loadRunningRoadMapItem" ng-repeat = "n in listOfRunningRoadMap">
+                                    <td>{{n._id}}</td>
+                                    <td>{{n.roadMapId}}</td>
+                                    <td>{{n.clientId}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
+
                 </div>
-                <div class="row">
-                    <div class="col-xs-3 col-lg-3">
-                        <canvas id="errorChart" width="100" height="100"></canvas>
-                    </div>
-                </div>
-                <button id="stopButton">asdf</button>
+
             </section>
             <!--- ------------------------------------------------------------------------------->
 
@@ -588,6 +656,22 @@
     <script>
     var tf = true;
     $(document).ready(function(){
+        setTimeout(function () {
+            angular.element(document.getElementById('trafficChart')).scope().settings = localStorage;
+            setTimeout(function () {
+                angular.element(document.getElementById('trafficChart')).scope().postUrlSettings();
+                setTimeout(function () {
+                    angular.element(document.getElementById('trafficChart')).scope().getBrokers();
+                    $('#loader').hide();
+                    $('#back').css('opacity','1');
+
+                        setTimeout(function(){
+                            angular.element(document.getElementById('trafficChart')).scope().getRunningRoadMaps();
+                        }, 1000);
+                }, 300);
+            }, 300);
+        }, 300);
+
         start_timer;
     });
     var start_timer = setInterval(function(){
@@ -596,12 +680,12 @@
         angular.element(document.getElementById('trafficChart')).scope().updateErrorChart();
     }, 1000);
     $('#stopButton').on('click',function(){
-        $('#stopButton').toggle(tf);
-        if(tf){
-            alert('1');
-        }else{
-            alert('0');
-        }
+        // $('#stopButton').toggle(tf);
+        // if(tf){
+        //     alert('1');
+        // }else{
+        //     alert('0');
+        // }
         // clearInterval(start_timer);
     });
     </script>

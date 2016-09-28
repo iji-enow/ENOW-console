@@ -1,6 +1,48 @@
 var app = angular.module('chartModule', []);
 // var app = angular.module('mainModule',[]);
 app.controller('chartCtrl', function($scope, $http){
+
+    $scope.settings={};
+    $scope.listOfRunningRoadMap = [];
+    $scope.getRunningRoadMaps = function(){
+        $http({
+            withCredentials: false,
+            method: 'get',
+            url: "/get_running_roadmaps"
+        }).then(function(response){
+            if(response.data=="no_connect"){
+                alert('Connect failed. Check MongoDB Url, Port.');
+            }else{
+                $scope.listOfRunningRoadMap = response.data;
+            }
+        });
+    }
+    $scope.postUrlSettings = function(){
+        $http({
+            withCredentials: false,
+            method: 'post',
+            url: "/post_url_settings",
+            headers: {'Content-Type': 'application/json'},
+            data: $scope.settings,
+            contentType : 'application/json',
+            dataType: "json"
+        }).then(function(response){
+        });
+    }
+    $scope.getBrokers = function(){
+        $http({
+            withCredentials: false,
+            method: 'get',
+            url: "/get_brokers"
+        }).then(function(response){
+            if(response.data=="no_connect"){
+                alert('Connect failed. Check MongoDB Url, Port.');
+            }else{
+                console.log('done!');
+                $scope.brokerList = response.data;
+            }
+        });
+    }
     $scope.traffic = document.getElementById("trafficChart");
     $scope.trafficChart = new Chart($scope.traffic, {
         type: 'line',
@@ -17,7 +59,7 @@ app.controller('chartCtrl', function($scope, $http){
         options: {
             title:{
                 display:true,
-                text:'Traffics of RoadMap1'
+                text:'Traffics of RoadMap'
             },
             scales: {
                 xAxes: [{
@@ -50,7 +92,7 @@ app.controller('chartCtrl', function($scope, $http){
         options: {
             title:{
                 display:true,
-                text:'Logs of RoadMap1'
+                text:'Logs of RoadMap'
             },
             scales: {
                 xAxes: [{
