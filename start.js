@@ -70,15 +70,6 @@ offset.fetchLatestOffsets(['log'], function (error, offsets) {
     });
 });
 
-
-var settings = {
-    type: 'mqtt',
-    json: true,
-    mqtt: require('mqtt'),
-    url: 'mqtt://127.0.0.1:8883'
-};
-
-
 expressapp.use(bodyparser.json());
 expressapp.use(function(req,res,next){
     res.setTimeout(timeoutLimit || 5000, function(){
@@ -141,7 +132,6 @@ expressapp.post('/run_db', function(req, res){
             obj[req.body['nodeIds'][i]['brokerId']] = obj[req.body['nodeIds'][i]['brokerId']] || [];
             obj[req.body['nodeIds'][i]['brokerId']].push(req.body['nodeIds'][i]['deviceId']);
         }
-        // console.log(obj);
         for(key in obj){
             for(val in obj[key]){
                 makeReserve(key, obj[key][val]);
@@ -243,6 +233,7 @@ var server = expressapp.listen(expressapp.get('port'), function(){
         \n  ███████╗██║ ╚████║╚██████╔╝╚███╔███╔╝  Version 0.0.1\
         \n  ╚══════╝╚═╝  ╚═══╝ ╚═════╝  ╚══╝╚══╝   Copyright © 2016 ENOW. All rights reserved.");
     });
+
     function connectDB(source, dbName, collectionName, command, response){
         console.log('connecting to '+mongoUrl+':'+mongoPort+'...'+dbName+'.'+collectionName);
         var findDocument = function(callback){

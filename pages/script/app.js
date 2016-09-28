@@ -291,7 +291,13 @@ app.controller('myCtrl', function($scope, $http){
             rootNodes.outingNode[list.source] = rootNodes.outingNode[list.source] || [];
             rootNodes.outingNode[list.source].push(list.target);
         }
-        rootNodes.roadMapId = this.getTarget[0]['roadMapId'] || "";
+        if(this.getTarget){
+            rootNodes.roadMapId = this.getTarget[0]['roadMapId'] || "";
+        }
+        else{
+            rootNodes.roadMapId = "";
+        }
+
         rootNodes.orderNode = this.orderNode['key'];
         rootNodes.initNode = this.listOfInitNode;
         rootNodes.lastNode = this.listOfLastNode;
