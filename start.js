@@ -114,27 +114,32 @@ var makeReserve = function(key, value, res) {
         obj['brokerId'] = key;
         connectDB(obj, 'connectionData', 'brokerList', 'findBroker2', null);
         setTimeout(function(){
-            var client = mqtt.connect('mqtt://'+mqttHost+':'+mqttPort);
-            client.on('connect', function(){
-                client.publish('enow/server0/'+key+'/'+value+'/alive/request', '{"topic":'+'"enow/server0/'+key+'/'+value+'"}');
-                client.subscribe('enow/server0/'+key+'/'+value+'/alive/response');
-            })
-            var waitAck = setInterval(function(){
-                console.log(client.connected);
-                if(++aliveAsk>3){
-                    clearInterval(waitAck);
-                    res.write('0');
+            if(mqttHost != null){
+                var client = mqtt.connect('mqtt://'+mqttHost+':'+mqttPort);
+                client.on('connect', function(){
+                    client.publish('enow/server0/'+key+'/'+value+'/alive/request', '{"topic":'+'"enow/server0/'+key+'/'+value+'"}');
+                    client.subscribe('enow/server0/'+key+'/'+value+'/alive/response');
+                })
+                var waitAck = setInterval(function(){
+                    console.log(client.connected);
+                    if(++aliveAsk>3){
+                        clearInterval(waitAck);
+                        res.write('0');
+                        client.end();
+                    }
+                }, 2000);
+                client.on('message', function(topic, message){
+                    console.log(topic + ' sent ack.');
                     client.end();
-                }
-            }, 2000);
-            client.on('message', function(topic, message){
-                console.log(topic + ' sent ack.');
-                client.end();
+                    res.write('1');
+                    clearInterval(waitAck);
+                });
+            }else{
                 res.write('1');
-                clearInterval(waitAck);
-            });
+            }
+
+
         }, 2000);
-        console.log(key, value);
     });
 }
 expressapp.post('/alive_check', function(req, res){
@@ -269,12 +274,19 @@ var server = expressapp.listen(expressapp.get('port'), function(){
             });
         };
         var findBroker_2 = function(callback){
+            console.log("asdfasdfadsfadsfadsfdsafafds");
             console.log(source);
-            db.db(dbName).collection(collectionName).find({brokerId:source['brokerId']}).toArray(function(err,result){
-                    mqttHost = result[0]['ipAddress'];
-                    mqttPort = result[0]['port'];
+            if(source['brokerId']!='null'){
+                db.db(dbName).collection(collectionName).find({brokerId:source['brokerId']}).toArray(function(err,result){
+                        mqttHost = result[0]['ipAddress'];
+                        mqttPort = result[0]['port'];
 
-            });
+                });
+            }else{
+                mqttHost = null;
+                mqttPort = null;
+            }
+
         };
         var findTarget = function(callback){
             var o_id = BSON.ObjectID.createFromHexString(source['_id']);
