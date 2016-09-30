@@ -1302,7 +1302,7 @@ function addnode(){
     deviceInfo[_id.slice(-1)]['deviceId']= _id;
     deviceInfo[_id.slice(-1)]['lambda'] = false;
     deviceInfo[_id.slice(-1)]['brokerId'] = "null";
-    deviceInfo[_id.slice(-1)]['serverId'] = "null";
+    deviceInfo[_id.slice(-1)]['serverId'] = "server0";
 
     $(instance.getSelector("#"+_id)).draggable({
         containment:'parent',
