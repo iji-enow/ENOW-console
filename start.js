@@ -91,7 +91,7 @@ expressapp.post('/post_db', function(req, res){
 
 var sendKafka = function(req, topic, messages){
     payloads[0]['topic'] = topic
-    payloads[0]['messages']= JSON.stringify(messages, null, '   ');
+    payloads[0]['messages']= JSON.stringify(messages);
     setTimeout(function () {
         producer.send(payloads, function (err, data) {
             console.log(payloads);
@@ -112,13 +112,8 @@ var makeReserve = function(key, value, res) {
         var obj = new Object();
         var aliveAsk = 0;
         obj['brokerId'] = key;
-        console.log(obj);
         connectDB(obj, 'connectionData', 'brokerList', 'findBroker2', null);
         setTimeout(function(){
-        console.log("-------------------------------------------");
-        console.log("-------------------------------------------");
-        console.log(mqttHost);
-        console.log(mqttPort);
             var client = mqtt.connect('mqtt://'+mqttHost+':'+mqttPort);
             client.on('connect', function(){
                 client.publish('enow/server0/'+key+'/'+value+'/alive/request', '{"topic":'+'"enow/server0/'+key+'/'+value+'"}');
@@ -133,8 +128,7 @@ var makeReserve = function(key, value, res) {
                 }
             }, 2000);
             client.on('message', function(topic, message){
-                console.log(topic);
-                console.log(message.toString());
+                console.log(topic + ' sent ack.');
                 client.end();
                 res.write('1');
                 clearInterval(waitAck);
@@ -159,13 +153,15 @@ expressapp.post('/alive_check', function(req, res){
         }
         setTimeout(function(){
             res.end();
-        },timeoutLimit || 12000)
+        }, timeoutLimit || 12000)
     }, 3000);
 });
 expressapp.post('/run_db', function(req, res){
         connectDB(req.body, 'enow', 'execute', 'run', res);
         setTimeout(function(){
-            sendKafka(req, 'event', '{roadMapId:'+roadmapNum+'}');
+            var obj = {};
+            obj['roadMapId'] = roadmapNum.toString();
+            sendKafka(req, 'event', obj);
         },3000);
 
 });
