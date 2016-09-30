@@ -14,6 +14,7 @@ var mongoUrl;
 var mongoPort;
 var kafkaUrl;
 var kafkaPort;
+var roadmapNum;
 var timeoutLimit,
     roadMapIdTemp,
     db,
@@ -163,7 +164,10 @@ expressapp.post('/alive_check', function(req, res){
 });
 expressapp.post('/run_db', function(req, res){
         connectDB(req.body, 'enow', 'execute', 'run', res);
-        sendKafka(req, 'event', '{roadMapId:'+req.body['roadMapId']+'}');
+        setTimeout(function(){
+            sendKafka(req, 'event', '{roadMapId:'+roadmapNum+'}');
+        },3000);
+
 });
 expressapp.post('/kill_db', function(req, res){
     console.log('kill execute...');
@@ -293,10 +297,11 @@ var server = expressapp.listen(expressapp.get('port'), function(){
         var insertDocument = function(callback){
             var cursor = db.db(dbName).collection(collectionName).find({}).toArray(function(err,result){
                 if(result.length!=0){
-                    roadMapIdTemp = parseInt(result[result.length-1]['roadMapId'])+1;
+                    roadmapNum = roadMapIdTemp = parseInt(result[result.length-1]['roadMapId'])+1;
+
                 }
                 else{
-                    roadMapIdTemp = 1;
+                    roadmapNum = roadMapIdTemp = 1;
                 }
                 db.db(dbName).collection(collectionName).insertOne({
                     "roadMapId" : roadMapIdTemp.toString(),
