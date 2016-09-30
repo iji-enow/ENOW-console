@@ -880,10 +880,8 @@
 <!-- <script src="../plugins/jQuery/jquery-2.2.3.min.js"></script> -->
 <!-- Bootstrap 3.3.6 -->
 <script src="../bootstrap/js/bootstrap.min.js"></script>
-<!-- AdminLTE App -->
-<script src="../dist/js/app.min.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="../dist/js/demo.js"></script>
+<!-- <script src="../dist/js/app.min.js"></script> -->
+<!-- <script src="../dist/js/demo.js"></script> -->
 
 
 <script>
@@ -952,13 +950,13 @@ $('#run').click(function(){
 $('#test').on("click",'#deviceOrLambda', function(){
     if($(this).is(':checked')){
         console.log($(this).parent().parent().parent()[0].id);
-        $("#"+$(this).parent().parent().parent()[0].id).find('h3').text($(this).parent().parent().parent()[0].id.slice(-1)+ '[Lambda]');
+        $("#"+$(this).parent().parent().parent()[0].id).find('h3').text('node'+$(this).parent().parent().parent()[0].id.slice(-1)+' [Lambda]');
         $("#"+$(this).parent().parent().parent()[0].id).find('#hideIfLambda').hide();
         deviceInfo[$(this).parent().parent().parent()[0].id.slice(-1)]['lambda'] = true;
         deviceInfo[$(this).parent().parent().parent()[0].id.slice(-1)]['brokerId'] = "null";
     }
     else{
-        $("#"+$(this).parent().parent().parent()[0].id).find('h3').text($(this).parent().parent().parent()[0].id.slice(-1)+ '[Device]');
+        $("#"+$(this).parent().parent().parent()[0].id).find('h3').text('node'+$(this).parent().parent().parent()[0].id.slice(-1)+' [Device]');
         $("#"+$(this).parent().parent().parent()[0].id).find('#hideIfLambda').show();
         deviceInfo[$(this).parent().parent().parent()[0].id.slice(-1)]['lambda'] = false;
         deviceInfo[$(this).parent().parent().parent()[0].id.slice(-1)]['brokerId'] = "gay";
@@ -1141,15 +1139,12 @@ instance.batch(function () {
         //   instance.detach(conn);
         conn.toggleType("basic");
     });
-
     instance.bind("connectionDrag", function (connection) {
         instance.repaintEverything();
     });
-
     instance.bind("connectionDragStop", function (connection) {
         // console.log("connection " + connection.id + " was dragged");
     });
-
     instance.bind("connectionMoved", function (params) {
         // console.log("connection " + params.connection.id + " was moved");
     });
@@ -1294,7 +1289,7 @@ function addnode(){
     angular.element(document.getElementById('jsonToScope')).scope().$apply();
     var _id = "deviceId" + $(".window").length;
     var newnode = $('<div class="window box box-default collapsed-box" id="' + _id + '" >').appendTo("#test").html($(("#device0"))[0].innerHTML);
-    newnode.find('h3').text(_id.slice(-1)+'[Device]');
+    newnode.find('h3').text('node'+_id.slice(-1)+' [Device]');
     _addEndpoints(newnode);
     var temp = deviceInfo[_id.slice(-1)] = deviceInfo[_id.slice(-1)] || new Object();
     deviceInfo[_id.slice(-1)]['parameter'] = deviceInfo[_id.slice(-1)]['parameter'] || new Array();

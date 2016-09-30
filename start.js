@@ -168,7 +168,6 @@ expressapp.post('/run_db', function(req, res){
             obj['roadMapId'] = roadmapNum.toString();
             sendKafka(req, 'event', obj);
         },3000);
-
 });
 expressapp.post('/kill_db', function(req, res){
     console.log('kill execute...');
@@ -295,18 +294,15 @@ var server = expressapp.listen(expressapp.get('port'), function(){
                 o_id = null;
             });
         }
-
         var findDevice = function(callback){
             db.db(dbName).collection(collectionName).find({deviceId:source['deviceId']}).toArray(function(err,result){
                 response.send(result);
             });
         }
-
         var insertDocument = function(callback){
             var cursor = db.db(dbName).collection(collectionName).find({}).toArray(function(err,result){
                 if(result.length!=0){
                     roadmapNum = roadMapIdTemp = parseInt(result[result.length-1]['roadMapId'])+1;
-
                 }
                 else{
                     roadmapNum = roadMapIdTemp = 1;
