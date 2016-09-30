@@ -120,7 +120,7 @@ var makeReserve = function(key, value, res) {
         console.log(mqttPort);
             var client = mqtt.connect('mqtt://'+mqttHost+':'+mqttPort);
             client.on('connect', function(){
-                client.publish('enow/server0/'+key+'/'+value+'/alive/request', '{"topic":'+'enow/server0/'+key+'/'+value+'"}');
+                client.publish('enow/server0/'+key+'/'+value+'/alive/request', '{"topic":'+'"enow/server0/'+key+'/'+value+'"}');
                 client.subscribe('enow/server0/'+key+'/'+value+'/alive/response');
             })
             var waitAck = setInterval(function(){
