@@ -78,12 +78,27 @@ app.controller('myCtrl', function($scope, $http){
         $http({
             withCredentials: false,
             method: 'post',
-            url: "/run_db",
+            url: "/alive_check",
             headers: {'Content-Type': 'application/json'},
             data: $scope.tree,
             contentType : 'application/json',
             dataType: "json"
         }).then(function(response){
+            console.log(response.data);
+            if(response.data.includes('0')){
+                alert('no ack from devices');
+            }else{
+                console.log('running db...');
+                $http({
+                    withCredentials: false,
+                    method: 'post',
+                    url: "/run_db",
+                    headers: {'Content-Type': 'application/json'},
+                    data: $scope.tree,
+                    contentType : 'application/json',
+                    dataType: "json"
+                })
+            }
         });
     }
     $scope.killRoadMap = function(){

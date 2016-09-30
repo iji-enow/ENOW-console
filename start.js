@@ -74,7 +74,7 @@ offset.fetchLatestOffsets(['log'], function (error, offsets) {
 
 expressapp.use(bodyparser.json());
 expressapp.use(function(req,res,next){
-    res.setTimeout(timeoutLimit || 5000, function(){
+    res.setTimeout(15000, function(){
         console.log('time out..');
         res.sendStatus(408);
     });
@@ -106,9 +106,10 @@ var reserve = function(cb) {
         cb();
     });
 }
-var makeReserve = function(key, value) {
+var makeReserve = function(key, value, res) {
     reserve(function() {
         var obj = new Object();
+        var aliveAsk = 0;
         obj['brokerId'] = key;
         console.log(obj);
         connectDB(obj, 'connectionData', 'brokerList', 'findBroker2', null);
@@ -119,24 +120,29 @@ var makeReserve = function(key, value) {
         console.log(mqttPort);
             var client = mqtt.connect('mqtt://'+mqttHost+':'+mqttPort);
             client.on('connect', function(){
-                client.publish('enow/server0/'+key+'/'+value+'/alive/request', '{"topic":'+'enow/server0/'+key+'/'+value+'}');
+                client.publish('enow/server0/'+key+'/'+value+'/alive/request', '{"topic":'+'enow/server0/'+key+'/'+value+'"}');
                 client.subscribe('enow/server0/'+key+'/'+value+'/alive/response');
             })
+            var waitAck = setInterval(function(){
+                console.log(client.connected);
+                if(++aliveAsk>3){
+                    clearInterval(waitAck);
+                    res.write('0');
+                    client.end();
+                }
+            }, 2000);
             client.on('message', function(topic, message){
                 console.log(topic);
                 console.log(message.toString());
-                setTimeout(function(){
-                    console.log('Timeout...');
-                    client.end();
-                }, 3000);
+                client.end();
+                res.write('1');
+                clearInterval(waitAck);
             });
         }, 2000);
-
-
         console.log(key, value);
     });
 }
-expressapp.post('/run_db', function(req, res){
+expressapp.post('/alive_check', function(req, res){
     var obj = new Object();
     console.log('Running RoadMap!');
 
@@ -147,14 +153,17 @@ expressapp.post('/run_db', function(req, res){
         }
         for(key in obj){
             for(val in obj[key]){
-                makeReserve(key, obj[key][val]);
+                makeReserve(key, obj[key][val], res);
             }
         }
-    }, timeoutLimit || 3000);
-
-    connectDB(req.body, 'enow', 'execute', 'run', res);
-    sendKafka(req, 'event', '{roadMapId:'+req.body['roadMapId']+'}');
-
+        setTimeout(function(){
+            res.end();
+        },timeoutLimit || 12000)
+    }, 3000);
+});
+expressapp.post('/run_db', function(req, res){
+        connectDB(req.body, 'enow', 'execute', 'run', res);
+        sendKafka(req, 'event', '{roadMapId:'+req.body['roadMapId']+'}');
 });
 expressapp.post('/kill_db', function(req, res){
     console.log('kill execute...');
@@ -262,8 +271,6 @@ var server = expressapp.listen(expressapp.get('port'), function(){
         var findBroker_2 = function(callback){
             console.log(source);
             db.db(dbName).collection(collectionName).find({brokerId:source['brokerId']}).toArray(function(err,result){
-                console.log("resuit is : ")
-                console.log(result[0])
                     mqttHost = result[0]['ipAddress'];
                     mqttPort = result[0]['port'];
 
@@ -272,7 +279,6 @@ var server = expressapp.listen(expressapp.get('port'), function(){
         var findTarget = function(callback){
             var o_id = BSON.ObjectID.createFromHexString(source['_id']);
             db.db(dbName).collection(collectionName).find({_id:o_id}).toArray(function(err,result){
-                console.log(result);
                 response.send(result);
                 o_id = null;
             });
