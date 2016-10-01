@@ -247,7 +247,7 @@ app.controller('chartCtrl', function($scope, $http){
         //         $scope.brokerList = response.data;
         //     }
         // });
-        var arr = [0,0,0,0,0,0,0,1,2,3,0,0,0,0,0,0,0,1,0,3,0,0,0,0,0,0,0,0,2,3,0,0,0,0,0,0,0,0,2,3];
+        var arr = [0,0,0,0,0,0,0,1,2,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,2,3];
         var target = arr[Math.floor(Math.random()*40)];
         $scope.errorChart.data['datasets'][0]['data'][target] += 1;
 

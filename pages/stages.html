@@ -894,8 +894,6 @@ var tempBroker;
 var initNode = [];
 var lastNode = [];
 var orderNode = {};
-$(window).load(function(){
-});
 $(window).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();
     setTimeout(function () {
@@ -1289,7 +1287,7 @@ function addnode(){
     angular.element(document.getElementById('jsonToScope')).scope().$apply();
     var _id = "deviceId" + $(".window").length;
     var newnode = $('<div class="window box box-default collapsed-box" id="' + _id + '" >').appendTo("#test").html($(("#device0"))[0].innerHTML);
-    newnode.find('h3').text('node'+_id.slice(-1)+' [Device]');
+    newnode.find('h3').text('node'+_id.slice(8)+' [Device]');
     _addEndpoints(newnode);
     var temp = deviceInfo[_id.slice(-1)] = deviceInfo[_id.slice(-1)] || new Object();
     deviceInfo[_id.slice(-1)]['parameter'] = deviceInfo[_id.slice(-1)]['parameter'] || new Array();
