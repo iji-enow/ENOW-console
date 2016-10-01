@@ -169,8 +169,11 @@ app.controller('chartCtrl', function($scope, $http){
         $scope.trafficChart.data['datasets'][0]['data']=[];
         $scope.logChart.data['labels']=[];
         $scope.logChart.data['datasets'][0]['data']=[];
-        $scope.errorChart.data['labels']=[];
-        $scope.errorChart.data['datasets'][0]['data']=[];
+        $scope.errorChart.data['datasets'][0]['data'][0]=0;
+        $scope.errorChart.data['datasets'][0]['data'][1]=0;
+        $scope.errorChart.data['datasets'][0]['data'][2]=0;
+        $scope.errorChart.data['datasets'][0]['data'][3]=0;
+        $scope.logChart.update();
     }
 
     $scope.updateTrafficChart = function(){
@@ -186,7 +189,6 @@ app.controller('chartCtrl', function($scope, $http){
             $scope.trafficChart.data['labels'].push(myDateString);
             $scope.trafficChart.data['datasets'][0]['data'].push(response.data);
             $scope.trafficChart.update();
-            ;
         });
         MyDate = new Date();
         MyDate.setDate(MyDate.getDate() + 20);
