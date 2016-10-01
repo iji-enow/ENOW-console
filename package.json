@@ -1,6 +1,6 @@
 {
   "name": "enow-console",
-  "version": "0.0.3-alpha",
+  "version": "0.0.4-alpha",
   "description": "Console for ENOW Project",
   "author": { "name": "liamgall", "email": "liamgall@naver.com", "url": "https://github.com/liamgall" },
   "contributors": [],
@@ -18,9 +18,9 @@
     "bson": "^0.5.5",
     "express": "^4.14.0",
     "fs": "0.0.1-security",
-    "http": "0.0.0",
     "mongodb": "^2.2.10",
     "mqtt": "^2.0.1",
+    "enow-bridge": "^0.0.1-alpha",
     "path": "^0.12.7"
   },
   "devDependencies": {
