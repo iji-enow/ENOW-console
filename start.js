@@ -315,7 +315,7 @@ offset.fetchLatestOffsets(['log'], function (error, offsets) {
             console.log(++errorArray[temp]);
         }
 
-            console.log('traffic in');
+        console.log('traffic in');
         console.log(++trafficArray[temp]);
         fs.appendFile('.log', '['+MyDateString+']  '+ JSON.stringify(message['value'])+'\r\n', 'utf8', function(err) {
         });
