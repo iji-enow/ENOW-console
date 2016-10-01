@@ -950,6 +950,7 @@ $('#test').on("click",'#deviceOrLambda', function(){
         $("#"+$(this).parent().parent().parent()[0].id).find('h3').text('node'+$(this).parent().parent().parent()[0].id.slice(8)+' [Lambda]');
         $("#"+$(this).parent().parent().parent()[0].id).find('#hideIfLambda').hide();
         deviceInfo[$(this).parent().parent().parent()[0].id.slice(-1)]['lambda'] = true;
+
         deviceInfo[$(this).parent().parent().parent()[0].id.slice(-1)]['brokerId'] = "null";
     }
     else{
@@ -1001,6 +1002,12 @@ $('#broker_table').on('click','#loadRoadMapItem, #loadRunningRoadMapItem', funct
             for(var i=1 ; i< n.length; ++i){
                 n[i].style['left'] = temp['nodeIds'][i]['x'];
                 n[i].style['top'] = temp['nodeIds'][i]['y'];
+                if(temp['nodeIds'][i]['lambda']){
+                    console.log(n.find('h3')[i].childNodes[0]='node'+i+' [Lambda]');
+                    // n[i].childNodes[1].innerText = 'node'+i+' [Lambda]';
+                    // console.log(n[i].childNodes);
+                    n[i].childNodes[3].childNodes[3].childNodes[1].checked=true;
+                }
             };
             var arr = Object.keys(temp['outingNode']).map(function(key){
                 return temp['outingNode'][key];
@@ -1020,6 +1027,7 @@ $('#broker_table').on('click','#loadRoadMapItem, #loadRunningRoadMapItem', funct
                 deviceInfo[i]['brokerId'] = arr[i-1].brokerId;
                 deviceInfo[i]['code'] = arr[i-1].code;
                 deviceInfo[i]['lambda'] = arr[i-1].lambda;
+
                 deviceInfo[i]['deviceId'] = arr[i-1].deviceId;
                 deviceInfo[i]['parameter'] = arr[i-1].parameter;
             }
@@ -1212,6 +1220,14 @@ $("#loadRoadMap").click(function(){
 
 // collapsed-box toggle button
 $('#test').on("click",".tog_button", function () {
+    if($(this).parent().parent().parent().find('#deviceOrLambda')[0].checked){
+        $(this).parent().parent().parent().find('h3').text('node'+$(this).parent().parent().parent()[0].id.slice(8)+' [Lambda]');
+        $(this).parent().parent().parent().find('#hideIfLambda').hide();
+    }else{
+        $(this).parent().parent().parent().find('#hideIfLambda').show();
+    }
+    // $("#"+$(this).parent().parent().parent()[0].id).find('#hideIfLambda').hide();
+    // $("#"+$(this).parent().parent().parent()[0].id).find('#hideIfLambda').show();
     setTimeout(function () {
         instance.repaintEverything();
     }, 801);
