@@ -531,7 +531,7 @@
                         </form>
                     </div>
                     <div id="test" class="map" style="height:750px;">
-                        <div class="window box box-default collapsed-box" id="device0" style="display:none;">
+                        <div class="window box collapsed-box" id="device0" style="display:none;">
                             <div class="box-header with-border">
                                 <h3 class="box-title" id="devname">Device</h3>
                                 <div class="box-tools pull-right">
@@ -908,7 +908,6 @@ $(window).ready(function(){
         }, 300);
     }, 300);
 });
-
 //select broker from brokerlist
 $(document).on("change","#brokerSelect", function(){
     tempBroker = $(this).parent().parent().parent()[0].id;
@@ -927,7 +926,7 @@ $(document).on("click","#listOfDevice", function(){
         $('#deviceModal').modal('hide');
     }else{}
 });
-
+//run button. start current roadmap
 $('#run').click(function(){
     if($(this).is(':checked')){
         var ask = confirm("Start Roadmap?");
@@ -957,7 +956,7 @@ $('#test').on("click",'#deviceOrLambda', function(){
         $("#"+$(this).parent().parent().parent()[0].id).find('h3').text('node'+$(this).parent().parent().parent()[0].id.slice(8)+' [Device]');
         $("#"+$(this).parent().parent().parent()[0].id).find('#hideIfLambda').show();
         deviceInfo[$(this).parent().parent().parent()[0].id.slice(-1)]['lambda'] = false;
-        deviceInfo[$(this).parent().parent().parent()[0].id.slice(-1)]['brokerId'] = "gay";
+        // deviceInfo[$(this).parent().parent().parent()[0].id.slice(-1)]['brokerId'] = "";
     }
 });
 
@@ -974,12 +973,7 @@ $('#test').on("click",'#triggerToggle', function(){
     }
 });
 
-// for device windows save button
-// $('#test').on("click","#devSettingSave", function () {
-//     var node = deviceInfo[$(this).parent().parent().get(0).id.slice(-1)];
-//     console.log(node);
-// });
-
+//load roadmap
 $('#broker_table').on('click','#loadRoadMapItem, #loadRunningRoadMapItem', function(){
     if($(this)[0].id == 'loadRoadMapItem'){
         angular.element(document.getElementById('jsonToScope')).scope().loadTarget['db'] = 'enow';
@@ -1023,7 +1017,6 @@ $('#broker_table').on('click','#loadRoadMapItem, #loadRunningRoadMapItem', funct
                 return temp['nodeIds'][key];
             });
             for(var i=1; i <= arr.length ; ++i){
-                // console.log(arr[i]['deviceId'].slice(-1));
                 deviceInfo[i]['brokerId'] = arr[i-1].brokerId;
                 deviceInfo[i]['code'] = arr[i-1].code;
                 deviceInfo[i]['lambda'] = arr[i-1].lambda;
@@ -1102,7 +1095,7 @@ sourceEndpoint = {
     },
     isSource: true,
     maxConnections: 5,
-    connector: [ "Flowchart", { stub: [40, 60], gap: 10, cornerRadius: 5, alwaysRespectStubs: true } ],
+    connector: [ "Flowchart", { stub: [40, 60], gap: 10, cornerRadius: 0, alwaysRespectStubs: true } ],
     connectorStyle: connectorPaintStyle,
     hoverPaintStyle: endpointHoverStyle,
     connectorHoverStyle: connectorHoverStyle,
@@ -1191,6 +1184,9 @@ function saveTree(){
         deviceInfo[i]['x'] = temp.style['left'] || "0px";
         deviceInfo[i]['y'] = temp.style['top'] || "0px";
     }
+    if(!initNode.length){
+        initNode = prompt('No InitNode. You must have at least 1 initnode. input initnode number.');
+    }
     angular.element(document.getElementById('jsonToScope')).scope().listOfInitNode = initNode;
     angular.element(document.getElementById('jsonToScope')).scope().listOfLastNode = lastNode;
     angular.element(document.getElementById('jsonToScope')).scope().orderNode = orderNode;
@@ -1201,9 +1197,6 @@ function saveTree(){
     console.log(angular.element(document.getElementById('jsonToScope')).scope().tree);
 }
 
-
-$("#openDeviceList").click(function(){
-});
 
 //roadmap window
 $("#loadRoadMap").click(function(){
@@ -1273,6 +1266,7 @@ $("#addDevice").click(function () {
     addnode();
 });
 
+//clear roadmap and reset.
 function clearMap(){
     var a = $(".window").length;
     instance.detachEveryConnection();
@@ -1280,13 +1274,13 @@ function clearMap(){
     for(var i = a; i>0; --i){
         $('#deviceId'+i).remove();
     }
-    // instance.repaintEverything();
 };
 
+//add new node
 function addnode(){
     angular.element(document.getElementById('jsonToScope')).scope().$apply();
     var _id = "deviceId" + $(".window").length;
-    var newnode = $('<div class="window box box-default collapsed-box" id="' + _id + '" >').appendTo("#test").html($(("#device0"))[0].innerHTML);
+    var newnode = $('<div class="window box collapsed-box" id="' + _id + '" >').appendTo("#test").html($(("#device0"))[0].innerHTML);
     newnode.find('h3').text('node'+_id.slice(8)+' [Device]');
     _addEndpoints(newnode);
     var temp = deviceInfo[_id.slice(-1)] = deviceInfo[_id.slice(-1)] || new Object();
