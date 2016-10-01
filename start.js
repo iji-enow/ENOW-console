@@ -352,6 +352,9 @@ var server = expressapp.listen(expressapp.get('port'), function(){
                     "ipAddress" : source['ipAddress'],
                     "port" : source['port'],
                     "deviceId" : source['deviceId'],
+                    "caFile" : source['caFile'],
+                    "certFile" : source['certFile'],
+                    "keyFile" : source['keyFile']
                 },function(err, result){
                     response.send("done");
                 });

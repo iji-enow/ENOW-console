@@ -939,11 +939,25 @@ $(document).ready(function(){
                 angular.element(document.getElementById('jsonToScope')).scope().getBrokers();
                 $('#loader').hide();
                 $('#back').css('opacity','1');
+
+
+                setTimeout(function(){
+                    for(var i =0; i< $('.canClick').length ; ++i){
+                        console.log(angular.element(document.getElementById('jsonToScope')).scope().brokerList[i]['certFile']);
+                        if(angular.element(document.getElementById('jsonToScope')).scope().brokerList[i]['certFile']==null){
+                        }else{
+                            $('.canClick')[i].childNodes[9].childNodes[0].checked=true
+                        }
+                    }
+                    setTimeout(function () {
+                        angular.element(document.getElementById('jsonToScope')).scope().$apply();
+                    }, 500);
+                }, 1000);
+
+
+
             }, 300);
         }, 300);
-        // $.when(angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings()).done(
-        //     angular.element(document.getElementById('jsonToScope')).scope().getBrokers()
-        // );
     }, 300);
     $('#kafkaUrl')[0].value = localStorage['kafkaUrl'] || "";
     $('#kafkaPort')[0].value = localStorage['kafkaPort'] || "";
@@ -1049,6 +1063,7 @@ $('#secureSubmit').click(function(){
         }, 3000);
     }
 });
+
 $(document).on("click","#deviceAdd",function(e){
     var arr = $(this)[0].innerText.split("	");
     angular.element(document.getElementById('jsonToScope')).scope().currentDeviceList =[];
