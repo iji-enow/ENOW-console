@@ -15,11 +15,11 @@ var kafkaUrl;
 var kafkaPort;
 var roadmapNum;
 var timeoutLimit,
-    roadMapIdTemp,
-    db,
-    latestOffset,
-    mqttHost,
-    mqttPort;
+roadMapIdTemp,
+db,
+latestOffset,
+mqttHost,
+mqttPort;
 var MyDate = new Date();
 var MyDateString;
 var consumer;
@@ -161,12 +161,12 @@ expressapp.post('/alive_check', function(req, res){
     }, 3000);
 });
 expressapp.post('/run_db', function(req, res){
-        connectDB(req.body, 'enow', 'execute', 'run', res);
-        setTimeout(function(){
-            var obj = {};
-            obj['roadMapId'] = roadmapNum.toString();
-            sendKafka(req, 'event', obj);
-        },3000);
+    connectDB(req.body, 'enow', 'execute', 'run', res);
+    setTimeout(function(){
+        var obj = {};
+        obj['roadMapId'] = roadmapNum.toString();
+        sendKafka(req, 'event', obj);
+    },3000);
 });
 expressapp.post('/kill_db', function(req, res){
     console.log('kill execute...');
@@ -226,6 +226,17 @@ expressapp.post('/add_secure', function(req, res){
     console.log('add secure...');
     console.log(req.body);
     connectDB(req.body, 'connectionData', 'brokerList', 'addSecure', res);
+    var obj = {};
+    obj['brokerId'] = req.body['brokerId'];
+    if(req.body['caFile']==null){
+        sendKafka(req, 'sslSub', obj);
+    }else{
+        obj['caFile'] = req.body['caFile'];
+        obj['certFile'] = req.body['certFile'];
+        obj['keyFile'] = req.body['keyFile'];
+        sendKafka(req, 'sslAdd', obj);
+    }
+
 });
 
 expressapp.get('/get_brokers', function(req, res){
@@ -268,7 +279,7 @@ var server = expressapp.listen(expressapp.get('port'), function(){
         };
         var findBroker = function(callback){
             db.db(dbName).collection(collectionName).find({brokerId:source['brokerId']}).toArray(function(err,result){
-                    response.send(result);
+                response.send(result);
             });
         };
         var findBroker_2 = function(callback){
@@ -276,8 +287,8 @@ var server = expressapp.listen(expressapp.get('port'), function(){
             console.log(source);
             if(source['brokerId']!='null'){
                 db.db(dbName).collection(collectionName).find({brokerId:source['brokerId']}).toArray(function(err,result){
-                        mqttHost = result[0]['ipAddress'];
-                        mqttPort = result[0]['port'];
+                    mqttHost = result[0]['ipAddress'];
+                    mqttPort = result[0]['port'];
 
                 });
             }else{
@@ -349,7 +360,7 @@ var server = expressapp.listen(expressapp.get('port'), function(){
 
         var updateBroker = function(callback){
             db.db(dbName).collection(collectionName).updateOne({'brokerId':source['brokerId']},{
-                '$set' : { 'ca': source['ca'], 'hostCrt': source['hostCrt'], 'hostKey': source['hostKey']}
+                '$set' : { 'caFile': source['caFile'], 'certFile': source['certFile'], 'keyFile': source['keyFile']}
             }, function(err,result){
                 response.send("done");
             });
