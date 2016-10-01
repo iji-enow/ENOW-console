@@ -1,12 +1,12 @@
 {
   "name": "AdminLTE",
-  "homepage": "http://almsaeedstudio.com",
+  "homepage": "https://github.com/ENOW-IJI/ENOW-console",
   "authors": [
-    "Abdullah Almsaeed <abdullah@almsaeedstudio.com>"
+    "Liamgall <liamgall@naver.com>"
   ],
-  "description": "Admin dashboard and control panel template",
+  "description": "ENOW-conosole",
   "main": [
-    "index2.html",
+    "index.html",
     "dist/css/AdminLTE.css",
     "dist/js/app.js",
     "build/less/AdminLTE.less"

@@ -26,9 +26,9 @@ app.controller('myCtrl', function($scope, $http){
     $scope.newnode ={};
     $scope.newdevice={};
     $scope.file ={
-        "ca":"",
-        "hostCrt":"",
-        "hostKey":""
+        "caFile":"",
+        "certFile":"",
+        "keyFile":""
     };
     // dashboard.html
     $scope.data={
@@ -55,9 +55,9 @@ app.controller('myCtrl', function($scope, $http){
                 }
             });
             setTimeout(function(){
-                $scope.file['ca'] = $scope.temp[0];
-                $scope.file['hostCrt'] = $scope.temp[1];
-                $scope.file['hostKey'] = $scope.temp[2];
+                $scope.file['caFile'] = $scope.temp[0];
+                $scope.file['certFile'] = $scope.temp[1];
+                $scope.file['keyFile'] = $scope.temp[2];
                 }, 1000);
         }, 1000);
     };
