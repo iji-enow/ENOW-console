@@ -71,7 +71,8 @@ app.controller('chartCtrl', function($scope, $http){
         options: {
             title:{
                 display:true,
-                text:'Traffics of RoadMap'
+                text:'Traffics of RoadMap',
+                fontSize : 24
             },
             scales: {
                 xAxes: [{
@@ -113,7 +114,8 @@ app.controller('chartCtrl', function($scope, $http){
         options: {
             title:{
                 display:true,
-                text:'Logs of RoadMap'
+                text:'Logs of RoadMap',
+                fontSize : 24
             },
             scales: {
                 xAxes: [{
@@ -156,7 +158,13 @@ app.controller('chartCtrl', function($scope, $http){
             ]
         }]
 },
-    options: {}
+    options: {
+        title:{
+            display:true,
+            text:'Error rate',
+            fontSize : 24
+        }
+    }
 });
 
 

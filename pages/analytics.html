@@ -333,49 +333,54 @@
 
             <!-- Main content -->
             <section class="content">
-                <div id="result"></div>
-                <div class="col-xs-8 col-lg-8">
-                    <div class="box box-danger">
-                        <h2 class="box-title" style="margin-left:2%">Analytics</h2>
-                        <div class="row">
-                            <div class="col-xs-12 col-lg-12">
-                                <canvas id="trafficChart" width="200" height="50"></canvas>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-12 col-lg-12">
-                                <canvas id="logChart" width="200" height="50"></canvas>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-3 col-lg-3">
-                                <canvas id="errorChart" width="100" height="100"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xs-4 col-lg-4">
-                    <div class="box box-danger">
-                        <label style="margin-left:5px;">Running RoadMaps</label>
-                        <table class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>_Id</th>
-                                    <th>RoadMap Id</th>
-                                    <th>Client Id</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="canClick" id="loadRunningRoadMapItem" ng-repeat = "n in listOfRunningRoadMap">
-                                    <td>{{n._id}}</td>
-                                    <td>{{n.roadMapId}}</td>
-                                    <td>{{n.clientId}}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="row">
 
+                    <div id="result"></div>
+                    <div class="col-xs-8 col-lg-8">
+                        <div class="box box-danger">
+                            <h2 class="box-title" style="margin-left:2%">Analytics</h2>
+                            <div class="row">
+                                <div class="col-xs-12 col-lg-12">
+                                    <canvas id="trafficChart" width="200" height="50"></canvas>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-lg-12">
+                                    <canvas id="logChart" width="200" height="50"></canvas>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top:10px;">
+                                <div class="col-xs-4 col-lg-4">
+                                    <canvas id="errorChart" width="100" height="100"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-4 col-lg-4">
+                        <div class="box box-danger">
+                            <label style="margin-left:5px;">Running RoadMaps</label>
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>_Id</th>
+                                        <th>RoadMap Id</th>
+                                        <th>Client Id</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="canClick" id="loadRunningRoadMapItem" ng-repeat = "n in listOfRunningRoadMap">
+                                        <td>{{n._id}}</td>
+                                        <td>{{n.roadMapId}}</td>
+                                        <td>{{n.clientId}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
                 </div>
+
+
 
             </section>
             <!--- ------------------------------------------------------------------------------->
