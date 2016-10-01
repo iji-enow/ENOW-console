@@ -13,7 +13,15 @@
   },
   "main": "dist/js/app.min.js",
   "dependencies": {
-    "http": "0.0.0"
+    "http": "0.0.0",
+    "body-parser": "^1.15.2",
+    "bson": "^0.5.5",
+    "express": "^4.14.0",
+    "fs": "0.0.1-security",
+    "http": "0.0.0",
+    "mongodb": "^2.2.10",
+    "mqtt": "^2.0.1",
+    "path": "^0.12.7"
   },
   "devDependencies": {
     "R2": "^1.4.3",
@@ -38,5 +46,7 @@
     "url": "https://www.apache.org/licenses/LICENSE-2.0"
   } ],
   "keywords": ["enow", "console", "IoT", "dashboard"],
-  "homepage": "https://github.com/ENOW-IJI/ENOW-console"
+  "homepage": "https://github.com/ENOW-IJI/ENOW-console",
+    "url": "git://github.com/ENOW-IJI/ENOW-console"
+  }
 }
