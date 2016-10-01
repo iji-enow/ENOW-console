@@ -3,6 +3,9 @@ var app = angular.module('chartModule', []);
 app.controller('chartCtrl', function($scope, $http){
 
     $scope.settings={};
+    $scope.brokerId={
+        "brokerId" : "2"
+    };
     $scope.listOfRunningRoadMap = [];
     $scope.getRunningRoadMaps = function(){
         $http({
@@ -53,7 +56,16 @@ app.controller('chartCtrl', function($scope, $http){
                 data: [],
                 backgroundColor: [
                     'rgba(54, 162, 235, 0.05)'
-                ]
+                ],
+                pointBorderColor: "rgba(75,192,192,1)",
+            pointBackgroundColor: "#fff",
+            pointBorderWidth: 5,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: "rgba(75,192,192,1)",
+            pointHoverBorderColor: "rgba(220,220,220,1)",
+            pointHoverBorderWidth: 2,
+            pointRadius: 5,
+            pointHitRadius: 20
             }]
         },
         options: {
@@ -86,7 +98,16 @@ app.controller('chartCtrl', function($scope, $http){
                 data: [],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.05)'
-                ]
+                ],
+                pointBorderColor: "rgba(75,192,192,1)",
+            pointBackgroundColor: "#fff",
+            pointBorderWidth: 5,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: "rgba(75,192,192,1)",
+            pointHoverBorderColor: "rgba(220,220,220,1)",
+            pointHoverBorderWidth: 2,
+            pointRadius: 5,
+            pointHitRadius: 20
             }]
         },
         options: {
@@ -143,22 +164,30 @@ app.controller('chartCtrl', function($scope, $http){
 
 
 
-
-
+    $scope.clearChart = function(){
+        $scope.trafficChart.data['labels']=[];
+        $scope.trafficChart.data['datasets'][0]['data']=[];
+        $scope.logChart.data['labels']=[];
+        $scope.logChart.data['datasets'][0]['data']=[];
+        $scope.errorChart.data['labels']=[];
+        $scope.errorChart.data['datasets'][0]['data']=[];
+    }
 
     $scope.updateTrafficChart = function(){
-        // $http({
-        //     withCredentials: false,
-        //     method: 'get',
-        //     url: "/get_log"
-        // }).then(function(response){
-        //     if(response.data=="no_connect"){
-        //         alert('Connect failed. Check MongoDB Url, Port.');
-        //     }else{
-        //         console.log('done!');
-        //         $scope.brokerList = response.data;
-        //     }
-        // });
+        $http({
+            withCredentials: false,
+            method: 'post',
+            url: "/get_traffic",
+            headers: {'Content-Type': 'application/json'},
+            data: $scope.brokerId,
+            contentType : 'application/json',
+            dataType: "json"
+        }).then(function(response){
+            $scope.trafficChart.data['labels'].push(myDateString);
+            $scope.trafficChart.data['datasets'][0]['data'].push(response.data);
+            $scope.trafficChart.update();
+            ;
+        });
         MyDate = new Date();
         MyDate.setDate(MyDate.getDate() + 20);
         var myDateString = ('0' + MyDate.getMinutes()).slice(-2) + ':'
@@ -167,10 +196,7 @@ app.controller('chartCtrl', function($scope, $http){
             $scope.trafficChart.data['datasets'][0]['data'].shift();
             $scope.trafficChart.data['labels'].shift();
         }
-        var num = Math.floor(Math.random()*100);
-        $scope.trafficChart.data['labels'].push(myDateString);
-        $scope.trafficChart.data['datasets'][0]['data'].push(num);
-        $scope.trafficChart.update();
+
     };
     $scope.updateLogChart = function(){
         // $http({

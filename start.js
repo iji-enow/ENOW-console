@@ -23,6 +23,8 @@ mqttPort;
 var MyDate = new Date();
 var MyDateString;
 var consumer;
+var trafficArray= new Array(1000);
+trafficArray.fill(0);
 var kafka = require('kafka-node'),
 Producer = kafka.Producer,
 Consumer = kafka.Consumer,
@@ -59,6 +61,7 @@ offset.fetchLatestOffsets(['log'], function (error, offsets) {
     );
     consumer.on('message', function (message) {
         MyDate = new Date();
+        var temp = message['value'].substr(message['value'].search("roadMapId")+12, 10).split(' ')[0]
         MyDate.setDate(MyDate.getDate() + 20);
         MyDateString = MyDate.getFullYear() + '/'
         +('0' + MyDate.getMonth()).slice(-2) + '/'
@@ -66,8 +69,16 @@ offset.fetchLatestOffsets(['log'], function (error, offsets) {
         +('0' + MyDate.getHours()).slice(-2) + ':'
         +('0' + MyDate.getMinutes()).slice(-2) + ':'
         +('0' + MyDate.getSeconds()).slice(-2);
-        console.log(MyDateString+"   "+JSON.stringify(message));
-        fs.appendFile('.log', '['+MyDateString+']  '+ JSON.stringify(message)+'\r\n', 'utf8', function(err) {
+        console.log(MyDateString+"   "+message['value'].search("roadMapId"));
+        console.log(MyDateString+"   "+temp);
+        console.log(temp);
+        if(trafficArray[temp]==undefined){
+            console.log("a");
+            trafficArray[temp] = 0;
+        }else{
+            console.log(++trafficArray[temp]);
+        }
+        fs.appendFile('.log', '['+MyDateString+']  '+ JSON.stringify(message['value'])+'\r\n', 'utf8', function(err) {
         });
     });
 });
@@ -192,11 +203,12 @@ expressapp.post('/find_broker', function(req, res){
 });
 expressapp.post('/post_url_settings', function(req, res){
     console.log('setting url...');
+    console.log(req.body);
     mongoUrl = req.body['mongoUrl'];
     mongoPort = req.body['mongoPort'];
     kafkaUrl = req.body['kafkaUrl'];
     kafkaPort = req.body['kafkaPort'];
-    timeoutLimit = req.body['timeoutLimit']*1000;
+    // timeoutLimit = req.body['timeoutLimit']*1000;
     producer.client.connectionString = kafkaUrl+':'+kafkaPort;
     if(db){
         db.close();
@@ -236,6 +248,17 @@ expressapp.post('/add_secure', function(req, res){
         obj['keyFile'] = req.body['keyFile'];
         sendKafka(req, 'sslAdd', obj);
     }
+});
+
+
+expressapp.post('/get_traffic', function(req, res){
+    console.log('get traffics...');
+    console.log(req.body);
+    setTimeout(function(){
+        console.log(trafficArray[req.body['brokerId']])
+        res.send(trafficArray[req.body['brokerId']].toString());
+        trafficArray[req.body['brokerId']] = 0;
+    }, 1000);
 
 });
 
@@ -283,8 +306,6 @@ var server = expressapp.listen(expressapp.get('port'), function(){
             });
         };
         var findBroker_2 = function(callback){
-            console.log("asdfasdfadsfadsfadsfdsafafds");
-            console.log(source);
             if(source['brokerId']!='null'){
                 db.db(dbName).collection(collectionName).find({brokerId:source['brokerId']}).toArray(function(err,result){
                     mqttHost = result[0]['ipAddress'];

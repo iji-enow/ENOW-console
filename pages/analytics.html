@@ -102,67 +102,7 @@
                                 <li>
                                     <!-- inner menu: contains the actual data -->
                                     <ul class="menu">
-                                        <li><!-- start message -->
-                                            <a href="#">
-                                                <div class="pull-left">
-                                                    <img src="../dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-                                                </div>
-                                                <h4>
-                                                    Support Team
-                                                    <small><i class="fa fa-clock-o"></i> 5 mins</small>
-                                                </h4>
-                                                <p>Why not buy a new awesome theme?</p>
-                                            </a>
-                                        </li>
-                                        <!-- end message -->
-                                        <li>
-                                            <a href="#">
-                                                <div class="pull-left">
-                                                    <img src="../dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
-                                                </div>
-                                                <h4>
-                                                    AdminLTE Design Team
-                                                    <small><i class="fa fa-clock-o"></i> 2 hours</small>
-                                                </h4>
-                                                <p>Why not buy a new awesome theme?</p>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <div class="pull-left">
-                                                    <img src="../dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
-                                                </div>
-                                                <h4>
-                                                    Developers
-                                                    <small><i class="fa fa-clock-o"></i> Today</small>
-                                                </h4>
-                                                <p>Why not buy a new awesome theme?</p>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <div class="pull-left">
-                                                    <img src="../dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
-                                                </div>
-                                                <h4>
-                                                    Sales Department
-                                                    <small><i class="fa fa-clock-o"></i> Yesterday</small>
-                                                </h4>
-                                                <p>Why not buy a new awesome theme?</p>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#">
-                                                <div class="pull-left">
-                                                    <img src="../dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
-                                                </div>
-                                                <h4>
-                                                    Reviewers
-                                                    <small><i class="fa fa-clock-o"></i> 2 days</small>
-                                                </h4>
-                                                <p>Why not buy a new awesome theme?</p>
-                                            </a>
-                                        </li>
+
                                     </ul>
                                 </li>
                                 <li class="footer"><a href="#">See All Messages</a></li>
@@ -362,9 +302,9 @@
                         </a>
                     </li>
                     <li>
-                      <a href="../pages/analytics.html">
-                        <i class="fa fa-th"></i> <span>Analytics</span>
-                      </a>
+                        <a href="../pages/analytics.html">
+                            <i class="fa fa-th"></i> <span>Analytics</span>
+                        </a>
                     </li>
                     <li>
                         <a href="../pages/settings.html">
@@ -555,7 +495,6 @@
                                     Back End Framework
                                     <span class="label label-primary pull-right">68%</span>
                                 </h4>
-
                                 <div class="progress progress-xxs">
                                     <div class="progress-bar progress-bar-primary" style="width: 68%"></div>
                                 </div>
@@ -671,16 +610,29 @@
                 }, 300);
             }, 300);
         }, 300);
-        timer_traffic;
-        timer_log;
-        timer_error;
+        // timer_traffic;
+        // timer_log;
+        // timer_error;
+    });
+
+    $(document).on('click', '#loadRunningRoadMapItem', function(){
+        var brokerId = $(this)[0].childNodes[3].innerText
+        angular.element(document.getElementById('trafficChart')).scope().clearChart();
+        setTimeout(function(){
+            angular.element(document.getElementById('trafficChart')).scope().brokerId['brokerId'] = brokerId;
+            setTimeout(function(){
+                angular.element(document.getElementById('trafficChart')).scope().updateTrafficChart();
+            }, 300);
+
+        }, 300);
+
     });
     var timer_traffic = setInterval(function(){
         angular.element(document.getElementById('trafficChart')).scope().updateTrafficChart();
-    }, 5000);
+    }, 3000);
     var timer_log = setInterval(function(){
         angular.element(document.getElementById('trafficChart')).scope().updateLogChart();
-    }, 3000);
+    }, 2000);
     var timer_error = setInterval(function(){
         angular.element(document.getElementById('trafficChart')).scope().updateErrorChart();
     }, 1300);
