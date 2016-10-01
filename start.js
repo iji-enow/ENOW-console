@@ -3,7 +3,6 @@ const express = require('express');
 const mongo = require('mongodb');
 const fs = require('fs');
 const bodyparser = require('body-parser');
-var ascoltatori_mqtt = require('ascoltatori');
 var mqtt = require('mqtt');
 const BSON = require('bson').BSONPure;
 var path = require('path');
