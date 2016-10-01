@@ -200,9 +200,11 @@ app.controller('chartCtrl', function($scope, $http){
         });
         MyDate = new Date();
         MyDate.setDate(MyDate.getDate() + 20);
-        var myDateString = ('0' + MyDate.getMinutes()).slice(-2) + ':'
+        var myDateString =
+        ('0' + MyDate.getHours()).slice(-2) + ':'
+        +('0' + MyDate.getMinutes()).slice(-2) + ':'
         +('0' + MyDate.getSeconds()).slice(-2);
-        if($scope.trafficChart.data['datasets'][0]['data'].length>20){
+        if($scope.trafficChart.data['datasets'][0]['data'].length > 15){
             $scope.trafficChart.data['datasets'][0]['data'].shift();
             $scope.trafficChart.data['labels'].shift();
         }
@@ -235,18 +237,21 @@ app.controller('chartCtrl', function($scope, $http){
         $scope.logChart.update();
     };
     $scope.updateErrorChart = function(){
-        // $http({
-        //     withCredentials: false,
-        //     method: 'get',
-        //     url: "/get_log"
-        // }).then(function(response){
-        //     if(response.data=="no_connect"){
-        //         alert('Connect failed. Check MongoDB Url, Port.');
-        //     }else{
-        //         console.log('done!');
-        //         $scope.brokerList = response.data;
-        //     }
-        // });
+        $http({
+            withCredentials: false,
+            method: 'post',
+            url: "/get_error",
+            headers: {'Content-Type': 'application/json'},
+            data: $scope.brokerId,
+            contentType : 'application/json',
+            dataType: "json"
+        }).then(function(response){
+            console.log(response.data);
+            console.log('----------------------');
+            console.log(response.data['traffic']);
+            console.log(response.data['error']);
+            $scope.errorChart.update();
+        });
         var arr = [0,0,0,0,0,0,0,1,2,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,2,3];
         var target = arr[Math.floor(Math.random()*40)];
         $scope.errorChart.data['datasets'][0]['data'][target] += 1;

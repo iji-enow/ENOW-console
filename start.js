@@ -26,8 +26,10 @@ var timeoutLimit,
 var MyDate = new Date();
 var MyDateString;
 var consumer;
-var trafficArray= new Array(1000);
-trafficArray.fill(0);
+var trafficArray= new Array(1000).fill(0);
+var errorArray= new Array(1000).fill(0);
+var trafficPin = 0;
+// trafficArray.fill(0);
 var kafka = require('kafka-node'),
 Producer = kafka.Producer,
 Consumer = kafka.Consumer,
@@ -294,7 +296,8 @@ offset.fetchLatestOffsets(['log'], function (error, offsets) {
     );
     consumer.on('message', function (message) {
         MyDate = new Date();
-        var temp = message['value'].substr(message['value'].search("roadMapId")+12, 10).split(' ')[0]
+        var temp = message['value'].substr(message['value'].search("roadMapId")+12, 10).split(' ')[0];
+        var errorCheck = message['value'].substr(message['value'].search("message")+12, 10).split(' ')[0];
         MyDate.setDate(MyDate.getDate() + 20);
         MyDateString = MyDate.getFullYear() + '/'
         +('0' + MyDate.getMonth()).slice(-2) + '/'
@@ -302,15 +305,15 @@ offset.fetchLatestOffsets(['log'], function (error, offsets) {
         +('0' + MyDate.getHours()).slice(-2) + ':'
         +('0' + MyDate.getMinutes()).slice(-2) + ':'
         +('0' + MyDate.getSeconds()).slice(-2);
-        console.log(MyDateString+"   "+message['value'].search("roadMapId"));
         console.log(MyDateString+"   "+temp);
         console.log(temp);
-        if(trafficArray[temp]==undefined){
-            console.log("a");
-            trafficArray[temp] = 0;
-        }else{
-            console.log(++trafficArray[temp]);
+        if(errorCheck=="ERROR"){
+            console.log('error in');
+            console.log(++errorArray[temp]);
         }
+
+            console.log('traffic in');
+        console.log(++trafficArray[temp]);
         fs.appendFile('.log', '['+MyDateString+']  '+ JSON.stringify(message['value'])+'\r\n', 'utf8', function(err) {
         });
     });
@@ -492,7 +495,23 @@ expressapp.post('/get_traffic', function(req, res){
         res.send(trafficArray[req.body['brokerId']].toString());
         trafficArray[req.body['brokerId']] = 0;
     }, 1000);
-
+});
+expressapp.post('/get_error', function(req, res){
+    console.log('get error...');
+    console.log(req.body);
+    var obj = new Object();
+    if(trafficArray[req.body['brokerId']] > trafficPin){
+        obj['traffic'] = trafficArray[req.body['brokerId']] - trafficPin;
+        trafficPin = trafficArray[req.body['brokerId']];
+    }else{
+        obj['traffic'] = trafficArray[req.body['brokerId']];
+        trafficPin = 0;
+    }
+    obj['error'] = errorArray[req.body['brokerId']];
+    setTimeout(function(){
+        res.send(obj);
+        errorArray[req.body['brokerId']] = 0;
+    }, 1000);
 });
 
 expressapp.get('/get_brokers', function(req, res){

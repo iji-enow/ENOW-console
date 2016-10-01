@@ -1184,7 +1184,7 @@ function saveTree(){
         deviceInfo[i]['x'] = temp.style['left'] || "0px";
         deviceInfo[i]['y'] = temp.style['top'] || "0px";
     }
-    if(!initNode.length){
+    if(!initNode.length && !orderNode['key']){
         initNode = prompt('No InitNode. You must have at least 1 initnode. input initnode number.');
     }
     angular.element(document.getElementById('jsonToScope')).scope().listOfInitNode = initNode;

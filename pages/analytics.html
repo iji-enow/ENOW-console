@@ -634,13 +634,13 @@
     });
     var timer_traffic = setInterval(function(){
         angular.element(document.getElementById('trafficChart')).scope().updateTrafficChart();
-    }, 3000);
+    }, 10000);
     var timer_log = setInterval(function(){
         angular.element(document.getElementById('trafficChart')).scope().updateLogChart();
-    }, 2000);
+    }, 5000);
     var timer_error = setInterval(function(){
         angular.element(document.getElementById('trafficChart')).scope().updateErrorChart();
-    }, 1300);
+    }, 3200);
     $('#stopButton').on('click',function(){
         // $('#stopButton').toggle(tf);
         // if(tf){
