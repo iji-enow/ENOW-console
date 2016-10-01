@@ -547,9 +547,9 @@
                                 </label>
 
                                 <div id="hideIfLambda" style="">
-                                    <label id="phoneToggleText">Phone/NoPhone</label>
-                                    <label class="switch_slim pull-right" data-toggle="tooltip" title="Phone or NoPhone" style="margin-right:5px;">
-                                        <input type="checkbox" id="phoneToggle">
+                                    <label id="triggerToggleText">Trigger Node</label>
+                                    <label class="switch_slim pull-right" data-toggle="tooltip" title="Trigger other nodes" style="margin-right:5px;">
+                                        <input type="checkbox" id="triggerToggle">
                                         <div class="slider_slim round"></div>
                                     </label>
                                     <br>
@@ -962,7 +962,7 @@ $('#test').on("click",'#deviceOrLambda', function(){
 });
 
 // phone toggle button
-$('#test').on("click",'#phoneToggle', function(){
+$('#test').on("click",'#triggerToggle', function(){
     if($(this).is(':checked')){
         console.log($(this).parent().parent().parent().parent()[0].id.slice(-1));
         orderNode["key"] = $(this).parent().parent().parent().parent()[0].id.slice(-1);
