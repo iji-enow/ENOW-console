@@ -26,8 +26,11 @@ var timeoutLimit,
 var MyDate = new Date();
 var MyDateString;
 var consumer;
-var trafficArray= new Array(1000).fill(0);
-var errorArray= new Array(1000).fill(0);
+var trafficArray= new Array(1000);
+
+var errorArray= new Array(1000);
+errorArray.fill(0);
+trafficArray.fill(0);
 var trafficPin = 0;
 // trafficArray.fill(0);
 var kafka = require('kafka-node'),
@@ -558,7 +561,7 @@ var server = expressapp.listen(expressapp.get('port'), function(){
             });
         };
         var findBroker_2 = function(callback){
-            if(source['brokerId']!='null'){
+            if(source['brokerId']!='null' && source['lambda']==true){
                 db.db(dbName).collection(collectionName).find({brokerId:source['brokerId']}).toArray(function(err,result){
                         mqttHost = result[0]['ipAddress'];
                         mqttPort = result[0]['port'];

@@ -4,7 +4,7 @@ app.controller('chartCtrl', function($scope, $http){
 
     $scope.settings={};
     $scope.brokerId={
-        "brokerId" : "2"
+        "brokerId" : "1"
     };
     $scope.listOfRunningRoadMap = [];
     $scope.getRunningRoadMaps = function(){
@@ -250,12 +250,15 @@ app.controller('chartCtrl', function($scope, $http){
             console.log('----------------------');
             console.log(response.data['traffic']);
             console.log(response.data['error']);
+            setTimeout(function(){
+                $scope.errorChart.data['datasets'][0]['data'][0] += response.data['traffic'] - response.data['error'];
+                $scope.errorChart.data['datasets'][0]['data'][1] += response.data['error'];
+            }, 1000);
             $scope.errorChart.update();
         });
-        var arr = [0,0,0,0,0,0,0,1,2,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,2,3];
-        var target = arr[Math.floor(Math.random()*40)];
-        $scope.errorChart.data['datasets'][0]['data'][target] += 1;
 
-        $scope.errorChart.update();
+        // $scope.errorChart.data['datasets'][0]['data'][target] += 1;
+
+        // $scope.errorChart.update();
     };
 });
