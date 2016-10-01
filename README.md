@@ -1,15 +1,9 @@
 ENOW-CONSOLE ![travis-ci](https://travis-ci.org/ENOW-IJI/ENOW-console.svg?branch=master)
 ====
-```
-███████╗███╗   ██╗ ██████╗ ██╗    ██╗  
-██╔════╝████╗  ██║██╔═══██╗██║    ██║  
-█████╗  ██╔██╗ ██║██║   ██║██║ █╗ ██║  
-██╔══╝  ██║╚██╗██║██║   ██║██║███╗██║  
-███████╗██║ ╚████║╚██████╔╝╚███╔███╔╝  
-╚══════╝╚═╝  ╚═══╝ ╚═════╝  ╚══╝╚══╝   
+
 ENOW-Server Version 0.0.1
 Copyright © 2016 ENOW. All rights reserved.
-```
+
 ## Requirements
 
 - Node.js
@@ -31,7 +25,7 @@ Download
 ----------
 
 
-Download from Github [ ENOW-dashboard](https://github.com/ENOW-IJI/ENOW-console/) and download the latest release.
+Download from Github [ENOW-dashboard](https://github.com/ENOW-IJI/ENOW-console/) and download the latest release.
 
 
 **Github**
@@ -43,10 +37,9 @@ git clone https://github.com/ENOW-IJI/dashboard.git
 ```
 
 3. Go to the ENOW-console folder.
-4. In cmd, type ```node start```.
+4. On cmd, type ```node start```.
 5. Run [Apache Kafka](http://kafka.apache.org/07/quickstart.html), [MongoDB](https://docs.mongodb.com/getting-started/shell/), [MQTT Broker](https://mosquitto.org/documentation/).
-6. Type ```  127.0.0.1:1111  ``` or ```  localhost:1111  ``` in chrome to start ENOW-console.
-
+6. Type ```  127.0.0.1:1111  ``` or ```  localhost:1111  ``` on chrome to start ENOW-console.
 
 Documentation
 -------------

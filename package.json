@@ -1,6 +1,6 @@
 {
   "name": "enow-console",
-  "version": "0.0.1-alpha",
+  "version": "0.0.3-alpha",
   "description": "Console for ENOW Project",
   "author": { "name": "liamgall", "email": "liamgall@naver.com", "url": "https://github.com/liamgall" },
   "contributors": [],
