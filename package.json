@@ -1,12 +1,20 @@
 {
-  "name": "admin-lte",
-  "version": "2.3.6",
-  "main": "dist/js/app.min.js",
+  "name": "enow-console",
+  "version": "0.0.1-alpha",
+  "description": "Console for ENOW Project",
+  "author": { "name": "liamgall", "email": "liamgall@naver.com", "url": "https://github.com/liamgall" },
+  "contributors": [],
   "repository": {
     "type": "git",
-    "url": "git://github.com/almasaeed2010/AdminLTE.git"
+    "url": "git://github.com/ENOW-IJI/ENOW-console.git"
   },
-  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ENOW-IJI/ENOW-console/issues"
+  },
+  "main": "dist/js/app.min.js",
+  "dependencies": {
+    "http": "0.0.0"
+  },
   "devDependencies": {
     "R2": "^1.4.3",
     "grunt": "~0.4.5",
@@ -22,7 +30,13 @@
     "grunt-image": "^1.0.5",
     "grunt-includes": "^0.4.5"
   },
-  "dependencies": {
-    "http": "0.0.0"
-  }
+  "scripts": {
+  },
+  "engines": { "node": ">= 0.4.0" },
+  "licenses": [ {
+    "type": "APACHE-2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0"
+  } ],
+  "keywords": ["enow", "console", "IoT", "dashboard"],
+  "homepage": "https://github.com/ENOW-IJI/ENOW-console"
 }
