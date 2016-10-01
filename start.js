@@ -3,6 +3,7 @@ const express = require('express');
 const mongo = require('mongodb');
 const fs = require('fs');
 const bodyparser = require('body-parser');
+var ascoltatori_mqtt = require('ascoltatori');
 var mqtt = require('mqtt');
 const BSON = require('bson').BSONPure;
 var path = require('path');
@@ -15,11 +16,11 @@ var kafkaUrl;
 var kafkaPort;
 var roadmapNum;
 var timeoutLimit,
-roadMapIdTemp,
-db,
-latestOffset,
-mqttHost,
-mqttPort;
+    roadMapIdTemp,
+    db,
+    latestOffset,
+    mqttHost,
+    mqttPort;
 var MyDate = new Date();
 var MyDateString;
 var consumer;
@@ -172,12 +173,12 @@ expressapp.post('/alive_check', function(req, res){
     }, 3000);
 });
 expressapp.post('/run_db', function(req, res){
-    connectDB(req.body, 'enow', 'execute', 'run', res);
-    setTimeout(function(){
-        var obj = {};
-        obj['roadMapId'] = roadmapNum.toString();
-        sendKafka(req, 'event', obj);
-    },3000);
+        connectDB(req.body, 'enow', 'execute', 'run', res);
+        setTimeout(function(){
+            var obj = {};
+            obj['roadMapId'] = roadmapNum.toString();
+            sendKafka(req, 'event', obj);
+        },3000);
 });
 expressapp.post('/kill_db', function(req, res){
     console.log('kill execute...');
@@ -302,14 +303,14 @@ var server = expressapp.listen(expressapp.get('port'), function(){
         };
         var findBroker = function(callback){
             db.db(dbName).collection(collectionName).find({brokerId:source['brokerId']}).toArray(function(err,result){
-                response.send(result);
+                    response.send(result);
             });
         };
         var findBroker_2 = function(callback){
             if(source['brokerId']!='null'){
                 db.db(dbName).collection(collectionName).find({brokerId:source['brokerId']}).toArray(function(err,result){
-                    mqttHost = result[0]['ipAddress'];
-                    mqttPort = result[0]['port'];
+                        mqttHost = result[0]['ipAddress'];
+                        mqttPort = result[0]['port'];
 
                 });
             }else{
@@ -373,9 +374,6 @@ var server = expressapp.listen(expressapp.get('port'), function(){
                     "ipAddress" : source['ipAddress'],
                     "port" : source['port'],
                     "deviceId" : source['deviceId'],
-                    "caFile" : source['caFile'],
-                    "certFile" : source['certFile'],
-                    "keyFile" : source['keyFile']
                 },function(err, result){
                     response.send("done");
                 });
@@ -384,7 +382,7 @@ var server = expressapp.listen(expressapp.get('port'), function(){
 
         var updateBroker = function(callback){
             db.db(dbName).collection(collectionName).updateOne({'brokerId':source['brokerId']},{
-                '$set' : { 'caFile': source['caFile'], 'certFile': source['certFile'], 'keyFile': source['keyFile']}
+                '$set' : { 'ca': source['ca'], 'hostCrt': source['hostCrt'], 'hostKey': source['hostKey']}
             }, function(err,result){
                 response.send("done");
             });
