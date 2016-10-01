@@ -948,13 +948,13 @@ $('#run').click(function(){
 $('#test').on("click",'#deviceOrLambda', function(){
     if($(this).is(':checked')){
         console.log($(this).parent().parent().parent()[0].id);
-        $("#"+$(this).parent().parent().parent()[0].id).find('h3').text('node'+$(this).parent().parent().parent()[0].id.slice(-1)+' [Lambda]');
+        $("#"+$(this).parent().parent().parent()[0].id).find('h3').text('node'+$(this).parent().parent().parent()[0].id.slice(8)+' [Lambda]');
         $("#"+$(this).parent().parent().parent()[0].id).find('#hideIfLambda').hide();
         deviceInfo[$(this).parent().parent().parent()[0].id.slice(-1)]['lambda'] = true;
         deviceInfo[$(this).parent().parent().parent()[0].id.slice(-1)]['brokerId'] = "null";
     }
     else{
-        $("#"+$(this).parent().parent().parent()[0].id).find('h3').text('node'+$(this).parent().parent().parent()[0].id.slice(-1)+' [Device]');
+        $("#"+$(this).parent().parent().parent()[0].id).find('h3').text('node'+$(this).parent().parent().parent()[0].id.slice(8)+' [Device]');
         $("#"+$(this).parent().parent().parent()[0].id).find('#hideIfLambda').show();
         deviceInfo[$(this).parent().parent().parent()[0].id.slice(-1)]['lambda'] = false;
         deviceInfo[$(this).parent().parent().parent()[0].id.slice(-1)]['brokerId'] = "gay";
