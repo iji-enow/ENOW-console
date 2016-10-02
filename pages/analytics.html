@@ -345,13 +345,17 @@
                                 </div>
                             </div>
                             <div class="row" style="margin-top:20px;">
-                                <div class="col-xs-12 col-lg-12">
-                                    <canvas id="logChart" width="200" height="50"></canvas>
+                                <div class="col-xs-10 col-lg-10">
+                                    <canvas id="requestChart" width="100" height="60"></canvas>
                                 </div>
+
                             </div>
                             <div class="row" style="margin-top:30px;">
                                 <div class="col-xs-4 col-lg-4">
                                     <canvas id="errorChart" width="100" height="100"></canvas>
+                                </div>
+                                <div class="col-xs-8 col-lg-8">
+                                    <canvas id="logChart" width="200" height="100"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -641,6 +645,9 @@
     var timer_error = setInterval(function(){
         angular.element(document.getElementById('trafficChart')).scope().updateErrorChart();
     }, 3200);
+    var timer_request = setInterval(function(){
+        angular.element(document.getElementById('trafficChart')).scope().updateRequestChart();
+    }, 1700);
     $('#stopButton').on('click',function(){
         // $('#stopButton').toggle(tf);
         // if(tf){
