@@ -1306,10 +1306,9 @@ function addnode(){
     deviceInfo[_id.slice(8)]['lambda'] = false;
     deviceInfo[_id.slice(8)]['brokerId'] = "null";
     deviceInfo[_id.slice(8)]['serverId'] = "server0";
-
     $(instance.getSelector("#"+_id)).draggable({
         containment:'parent',
-        grid:[20, 20], 
+        grid:[20, 20],
         drag: function(e){
             instance.repaintEverything();
         },
