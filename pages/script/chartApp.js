@@ -187,13 +187,10 @@ app.controller('chartCtrl', function($scope, $http){
     $scope.updateTrafficChart = function(){
         $http({
             withCredentials: false,
-            method: 'post',
-            url: "/get_traffic",
-            headers: {'Content-Type': 'application/json'},
-            data: $scope.brokerId,
-            contentType : 'application/json',
-            dataType: "json"
+            method: 'get',
+            url: "/get_traffic"
         }).then(function(response){
+            console.log(response.data);
             $scope.trafficChart.data['labels'].push(myDateString);
             $scope.trafficChart.data['datasets'][0]['data'].push(response.data);
             $scope.trafficChart.update();
@@ -239,20 +236,14 @@ app.controller('chartCtrl', function($scope, $http){
     $scope.updateErrorChart = function(){
         $http({
             withCredentials: false,
-            method: 'post',
-            url: "/get_error",
-            headers: {'Content-Type': 'application/json'},
-            data: $scope.brokerId,
-            contentType : 'application/json',
-            dataType: "json"
+            method: 'get',
+            url: "/get_error"
         }).then(function(response){
-            console.log(response.data);
-            console.log('----------------------');
-            console.log(response.data['traffic']);
-            console.log(response.data['error']);
+            console.log("this is"+response.data);
+            console.log("type is"+ typeof(response.data));
             setTimeout(function(){
-                $scope.errorChart.data['datasets'][0]['data'][0] += response.data['traffic'] - response.data['error'];
-                $scope.errorChart.data['datasets'][0]['data'][1] += response.data['error'];
+                $scope.errorChart.data['datasets'][0]['data'][0] += response.data['traffic']*1 - response.data['errorRate']*1;
+                $scope.errorChart.data['datasets'][0]['data'][1] += response.data['errorRate'] *1;
             }, 1000);
             $scope.errorChart.update();
         });
