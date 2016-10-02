@@ -121,7 +121,7 @@ ascoltatori_kafka.build(settings_kafka, function (err, ascoltatori_kafka){
 
     for(i = 0 ; i<brokerList.length ; i++){
       if(brokerId == brokerList[i].brokerId){
-        brokerList[i].broker.publish(topicName + "/feed",JSON.stringify(callback))
+        brokerList[i].brokerStatus.publish(topicName + "/feed",JSON.stringify(callback))
         console.log("messaging to a message " + JSON.stringify(callback)+" to topic name : " + topicName + "/feed succeed");
       }
     }
