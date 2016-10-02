@@ -442,7 +442,7 @@ expressapp.post('/post_url_settings', function(req, res){
     mongoPort = req.body['mongoPort'];
     kafkaUrl = req.body['kafkaUrl'];
     kafkaPort = req.body['kafkaPort'];
-    // timeoutLimit = req.body['timeoutLimit']*1000;
+    timeoutLimit = req.body['timeoutLimit']*1000;
     producer.client.connectionString = kafkaUrl+':'+kafkaPort;
     if(db){
         db.close();
@@ -547,11 +547,7 @@ var server = expressapp.listen(expressapp.get('port'), function(){
             db.db(dbName).collection(collectionName).find({}).toArray(function(err,result){
                 response.send(result);
             });
-        };
-        var findBroker = function(callback){
-            db.db(dbName).collection(collectionName).find({brokerId:source['brokerId']}).toArray(function(err,result){
-                    response.send(result);
-            });
+
         };
         var findBroker_2 = function(callback){
             if(source['brokerId']!='null' && source['lambda']==true){

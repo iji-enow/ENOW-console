@@ -910,7 +910,7 @@ $(window).ready(function(){
 //select broker from brokerlist
 $(document).on("change","#brokerSelect", function(){
     tempBroker = $(this).parent().parent().parent()[0].id;
-    deviceInfo[$(this).parent().parent().parent()[0].id.slice(-1)]['brokerId'] = $(this)[0].value;
+    deviceInfo[$(this).parent().parent().parent()[0].id.slice(8)]['brokerId'] = $(this)[0].value;
     angular.element(document.getElementById('jsonToScope')).scope().currentBroker['brokerId']=$(this)[0].value;
     angular.element(document.getElementById('jsonToScope')).scope().getBroker();
     $('#deviceModal').modal('show');
@@ -921,7 +921,7 @@ $(document).on("change","#brokerSelect", function(){
 $(document).on("click","#listOfDevice", function(){
     var ask = confirm($(this)[0].childNodes[1].innerText +'?');
     if(ask){
-        deviceInfo[tempBroker.slice(-1)]['deviceId']=$(this)[0].childNodes[1].innerText;
+        deviceInfo[tempBroker.slice(8)]['deviceId']=$(this)[0].childNodes[1].innerText;
         $('#deviceModal').modal('hide');
     }else{}
 });
@@ -948,23 +948,23 @@ $('#test').on("click",'#deviceOrLambda', function(){
         console.log($(this).parent().parent().parent()[0].id);
         $("#"+$(this).parent().parent().parent()[0].id).find('h3').text('node'+$(this).parent().parent().parent()[0].id.slice(8)+' [Lambda]');
         $("#"+$(this).parent().parent().parent()[0].id).find('#hideIfLambda').hide();
-        deviceInfo[$(this).parent().parent().parent()[0].id.slice(-1)]['lambda'] = true;
+        deviceInfo[$(this).parent().parent().parent()[0].id.slice(8)]['lambda'] = true;
 
-        deviceInfo[$(this).parent().parent().parent()[0].id.slice(-1)]['brokerId'] = "null";
+        deviceInfo[$(this).parent().parent().parent()[0].id.slice(8)]['brokerId'] = "null";
     }
     else{
         $("#"+$(this).parent().parent().parent()[0].id).find('h3').text('node'+$(this).parent().parent().parent()[0].id.slice(8)+' [Device]');
         $("#"+$(this).parent().parent().parent()[0].id).find('#hideIfLambda').show();
-        deviceInfo[$(this).parent().parent().parent()[0].id.slice(-1)]['lambda'] = false;
-        // deviceInfo[$(this).parent().parent().parent()[0].id.slice(-1)]['brokerId'] = "";
+        deviceInfo[$(this).parent().parent().parent()[0].id.slice(8)]['lambda'] = false;
+        // deviceInfo[$(this).parent().parent().parent()[0].id.slice(8)]['brokerId'] = "";
     }
 });
 
 // phone toggle button
 $('#test').on("click",'#triggerToggle', function(){
     if($(this).is(':checked')){
-        console.log($(this).parent().parent().parent().parent()[0].id.slice(-1));
-        orderNode["key"] = $(this).parent().parent().parent().parent()[0].id.slice(-1);
+        console.log($(this).parent().parent().parent().parent()[0].id.slice(8));
+        orderNode["key"] = $(this).parent().parent().parent().parent()[0].id.slice(8);
         console.log(orderNode);
     }
     else{
@@ -1125,7 +1125,7 @@ targetEndpoint = {
     overlays: []
 },
 init = function (connection) {
-    connection.getOverlay("label").setLabel(connection.sourceId.slice(-1) + "->" + connection.targetId.slice(-1));
+    connection.getOverlay("label").setLabel(connection.sourceId.slice(8) + "->" + connection.targetId.slice(8));
 };
 instance.batch(function () {
     // listen for new connections; initialise them the same way we initialise the connections at startup.
@@ -1166,8 +1166,8 @@ function saveTree(){
     instance.getConnections().forEach(
         function foo(value){
             var temp = new Object();
-            temp["source"] = value['sourceId'].slice(-1);
-            temp["target"] = value['targetId'].slice(-1);
+            temp["source"] = value['sourceId'].slice(8);
+            temp["target"] = value['targetId'].slice(8);
             connectInfo.push(temp);
         }
     )
@@ -1185,7 +1185,10 @@ function saveTree(){
         }
     }
     //position values
+    console.log(Object.keys(deviceInfo).length);
+    console.log(deviceInfo);
     for(var i=1; i <= Object.keys(deviceInfo).length ; ++i){
+
         console.log(deviceInfo[i]['deviceId']);
         var temp = $('#test').find('#deviceId'+i)[0];
         deviceInfo[i]['x'] = temp.style['left'] || "0px";
@@ -1242,17 +1245,16 @@ $('#test').on("click",".tog_button", function () {
 
 //show 'code editor'
 $('#test').on("click","#codeEditor", function () {
-    var node = $(this)[0].parentNode.parentNode.id;
-    currentNode = node;
+    currentNode = $(this)[0].parentNode.parentNode.id;
     code="def eventHandler(event, context, callback):\n    ";
-    $('#parameters').val(deviceInfo[currentNode.slice(-1)]['parameter']);
+    $('#parameters').val(deviceInfo[currentNode.slice(8)]['parameter']);
     setTimeout(function () {
         editor.getSession().setValue(code);
         editor.resize();
     }, 300);
-    if(deviceInfo[currentNode.slice(-1)]['code']!==undefined){
+    if(deviceInfo[currentNode.slice(8)]['code']!==undefined){
         console.log(deviceInfo);
-        code = deviceInfo[currentNode.slice(-1)]['code'];
+        code = deviceInfo[currentNode.slice(8)]['code'];
         setTimeout(function () {
             editor.getSession().setValue(code);
             editor.resize();
@@ -1264,12 +1266,12 @@ $('#test').on("click","#codeEditor", function () {
 //save roadmap to 'recipes' database
 $("#saveCode").click(function(){
     code = editor.getSession().getValue();
-    deviceInfo[currentNode.slice(-1)]['code'] = code;
+    deviceInfo[currentNode.slice(8)]['code'] = code;
     editor.setValue(code);
     var temp = $('#parameters').val().split(",");
-    deviceInfo[currentNode.slice(-1)]['parameter']=[];
+    deviceInfo[currentNode.slice(8)]['parameter']=[];
     for (var i = 0; i< temp.length ; ++i){
-        deviceInfo[currentNode.slice(-1)]['parameter'].push(temp[i].trim());
+        deviceInfo[currentNode.slice(8)]['parameter'].push(temp[i].trim());
     }
     $('#myModal').append(toast);
     toast.stop().fadeIn(400).delay(2000).fadeOut(400); //fade out after 2 seconds
@@ -1293,16 +1295,17 @@ function clearMap(){
 function addnode(){
     angular.element(document.getElementById('jsonToScope')).scope().$apply();
     var _id = "deviceId" + $(".window").length;
+    console.log(_id);
     var newnode = $('<div class="window box collapsed-box" id="' + _id + '" >').appendTo("#test").html($(("#device0"))[0].innerHTML);
     newnode.find('h3').text('node'+_id.slice(8)+' [Device]');
     _addEndpoints(newnode);
-    var temp = deviceInfo[_id.slice(-1)] = deviceInfo[_id.slice(-1)] || new Object();
-    deviceInfo[_id.slice(-1)]['parameter'] = deviceInfo[_id.slice(-1)]['parameter'] || new Array();
-    deviceInfo[_id.slice(-1)]['code'] = deviceInfo[_id.slice(-1)]['code'] || "def eventHandler(event, context, callback):\n    ";
-    deviceInfo[_id.slice(-1)]['deviceId']= _id;
-    deviceInfo[_id.slice(-1)]['lambda'] = false;
-    deviceInfo[_id.slice(-1)]['brokerId'] = "null";
-    deviceInfo[_id.slice(-1)]['serverId'] = "server0";
+    var temp = deviceInfo[_id.slice(8)] = deviceInfo[_id.slice(8)] || new Object();
+    deviceInfo[_id.slice(8)]['parameter'] = deviceInfo[_id.slice(8)]['parameter'] || new Array();
+    deviceInfo[_id.slice(8)]['code'] = deviceInfo[_id.slice(8)]['code'] || "def eventHandler(event, context, callback):\n    ";
+    deviceInfo[_id.slice(8)]['deviceId']= _id;
+    deviceInfo[_id.slice(8)]['lambda'] = false;
+    deviceInfo[_id.slice(8)]['brokerId'] = "null";
+    deviceInfo[_id.slice(8)]['serverId'] = "server0";
 
     $(instance.getSelector("#"+_id)).draggable({
         containment:'parent',
