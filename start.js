@@ -402,7 +402,7 @@ expressapp.post('/alive_check', function(req, res){
         }
         setTimeout(function(){
             res.end();
-        }, timeoutLimit || 12000)
+        }, timeoutLimit || 8000)
     }, 3000);
 });
 expressapp.post('/run_db', function(req, res){
