@@ -295,7 +295,8 @@ offset.fetchLatestOffsets(['log'], function (error, offsets) {
     );
     consumer.on('message', function (message) {
         MyDate = new Date();
-        var errorCheck = message['value'].substr(message['value'].search("message")+12, 10).split(' ')[0];
+        var logs = message['value'];
+        console.log(message['value']);
         MyDate.setDate(MyDate.getDate() + 20);
         MyDateString = MyDate.getFullYear() + '/'
         +('0' + MyDate.getMonth()).slice(-2) + '/'
@@ -303,16 +304,16 @@ offset.fetchLatestOffsets(['log'], function (error, offsets) {
         +('0' + MyDate.getHours()).slice(-2) + ':'
         +('0' + MyDate.getMinutes()).slice(-2) + ':'
         +('0' + MyDate.getSeconds()).slice(-2);
-        console.log("errorcheck is "+ errorCheck);
-        if(errorCheck=="ERROR"){
-            console.log('add error......');
-            errorRate++;
-            console.log(errorRate);
+        console.log(logs.split('  ')[0]);
+        if(logs.split(' ')[0]=="INFO"){
+            traffic++;
+        }else if(logs.split(' ')[0]=="WARN"){
+            traffic++;
+            error++;
+        }else if(logs.split(' ')[0]=="ERROR"){
+            console.log('ERROR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
         }
-        console.log(message);
-        traffic++;
-
-        fs.appendFile('.log', '['+MyDateString+']  '+ JSON.stringify(message['value'])+'\r\n', 'utf8', function(err) {
+        fs.appendFile('.log', '['+MyDateString+']  '+ JSON.stringify(logs)+'\r\n', 'utf8', function(err) {
         });
     });
 });
