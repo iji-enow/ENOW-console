@@ -195,7 +195,7 @@ app.controller('chartCtrl', function($scope, $http){
                         backgroundColor: [],
                         hoverBackgroundColor: [],
                         borderWidth: 1
-                    }]c
+                    }]
                 },
                 options: {
                     title:{

@@ -343,6 +343,8 @@ expressapp.post('/post_db', function(req, res){
 var sendKafka = function(req, topic, messages){
     payloads[0]['topic'] = topic
     payloads[0]['messages']= JSON.stringify(messages);
+    console.log("send kafka");
+    console.log(producer.client);
     setTimeout(function () {
         producer.send(payloads, function (err, data) {
             console.log(payloads);
