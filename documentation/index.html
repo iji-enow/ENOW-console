@@ -110,6 +110,18 @@
                                 </div><!-- /.box-body -->
                             </div><!-- /.box -->
                         </div><!-- /.col -->
+                        <div class="col-sm-6 col-lg-6">
+                            <div class="box box-primary">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">Download via Npm.</h3>
+                                    <span class="label label-primary pull-right"><i class="fa fa-html5"></i></span>
+                                </div><!-- /.box-header -->
+                                <div class="box-body">
+                                    <p>Type 'npm install enow-console' in cmd.</p>
+                                    <a href="https://www.npmjs.com/package/enow-console" class="btn btn-primary"><i class="fa fa-download"></i> Npm Link</a>
+                                    </div><!-- /.box-body -->
+                            </div><!-- /.box -->
+                        </div><!-- /.col -->
                     </div><!-- /.row -->
                     <pre class="hierarchy bring-up"><code class="language-bash" data-lang="bash">Hierarchy of the Main Folders for ENOW - console
 
@@ -190,50 +202,48 @@
                                 <ul>
                                     <li><code>Editor body</code> Write codes here.<br>
                                         <pre class="prettyprint">
-                                            def eventHandler(event, context, callback):
+                                            //
+                                            //
+                                            //
+                                            //def eventHandler(event, context, callback):
                                             // Similar to Amazon AWS Lambda.
                                             // event is input value, send from previous node(or switch trigger if node is a independent node).
                                             //      can be received as json format like event['key']. ex) print('value is'+event['key'])
                                             //
                                             //
-                                            // context is the output send to next node. Also a json format.
+                                            // callback is the output send to next node. Also a json format.
                                             //      ev) if you want to send input value to next node. you can type like context['key'] = event['key']
                                             //
                                             //
-                                            // callback is
+                                            //
                                         </pre>
-                                        <li><code>Parameters</code> Similar as cmd parameters.</li>
+                                        <li><code>Parameters</code> Similar as command parameters.</li>
                                     </ul>
-
+                                    <div class="callout callout-info lead col-xs-6 col-lg-6">
+                                        <h4>In future..</h4>
+                                        <p>We only support Python in our code. In future, we will also support other languages like C, C++.</p>
+                                    </div>
                                 </section>
-
-
                                 <!-- ============================================================= -->
 
                                 <section id="analytics">
-
-                                    <p> In Image, there are three nodes. In nodes, they have two circles.
-                                        Empty circle means 'start point' and filled circle means 'end point'.<br>
-                                        Each nodes can be connected to others by dragging 'start point' to 'end point'. If connection is created, data will flow as arrow direction.<br>
-                                        Connections can be like 1:1 or 1:n even n:n is possible.<br><br>
-                                        <div class="callout callout-info lead col-xs-6 col-lg-6">
-                                            <h4>Attention!</h4>
-                                            <p>Independent node can't have connections like n:1 or n:n. Only 1:1 or 1:n can be accepted.</p>
-                                        </div>
                                         <br><br><br><br><br>
-                                        Nodes has some options like below.</p>
                                         <h2 class="page-header"><a href="#layout">Analytics</a></h2>
                                         <img src="build/img/enow-analytics.jpg" style="border:2px solid black; margin-bottom:10px;"></img>
+                                        <p> In Image, there are three nodes. In nodes, they have two circles.
+                                            Empty circle means 'start point' and filled circle means 'end point'.<br>
+                                            Each nodes can be connected to others by dragging 'start point' to 'end point'. If connection is created, data will flow as arrow direction.<br>
+                                            Connections can be like 1:1 or 1:n even n:n is possible.<br><br>
                                         <ul>
                                             <li><code>Traffic Chart</code> Show traffics of whole system.</li>
-                                            <li><code>Log Chart</code> Show the number of logs that is send from Apache Kafka to Server.</li>
-                                            <li><code>ErrorRate Chart</code> Show error rate.<br>
-                                                'Passed' means 'no error'.<br>
-                                                'ConnectionError' means 'connection failed'. Check MongoDB or Apache Kafka connection.<br>
+                                            <li><code>Request Chart</code> Show Requests count of each roadmaps.</li>
+                                            <li><code>ErrorRate Chart</code> Show error rate of responsed logs.<br>
+                                                'Passed' means OK.<br>
+                                                'ConnectionError' means 'connect to something has failed'. Check MongoDB or Apache Kafka connection in settings.<br>
                                                 'TypeError' means 'code is not a json type.'. Check code editor to find the problem.<br>
                                             </li>
+                                            <li><code>Log Chart</code> Show the number of logs that is send from Apache Kafka to server.</li>
                                         </ul>
-
                                     </section>
 
                                     <!-- ============================================================= -->
@@ -268,6 +278,7 @@
                                                     <li><h4>Other</h4></li>
                                                     <li><a href="http://jqueryui.com/" target="_blank">jQuery UI</a></li>
                                                     <li><a href="http://anthonyterrien.com/knob/" target="_blank">jQuery Knob</a></li>
+                                                    <li><a href="https://jsplumbtoolkit.com/" target="_blank">jsPlumb</a></li>
                                                 </ul>
                                             </div><!-- /.col -->
                                         </div><!-- /.row -->
@@ -292,15 +303,6 @@
 
                                     <section id="faq">
                                         <h2 class="page-header"><a href="#faq">FAQ</a></h2>
-                                        <h3>Can ENOW-console be used with Wordpress?</h3>
-                                        <p class="lead">ENOW-console is an HTML template that can be used for any purpose. However, it is not made to be easily installed on Wordpress. It will require some effort and enough knowledge of the Wordpress script to do so.</p>
-
-                                        <h3>Is there an integration guide for PHP frameworks such as Yii or Symfony?</h3>
-                                        <p class="lead">Short answer, no. However, there are forks and tutorials around the web that provide info on how to integrate with many different frameworks. There are even versions of AdminLTE that are integrated with jQuery ajax, AngularJS and/or MVC5 ASP .NET.</p>
-
-                                        <h3>How do I get notified of new ENOW-console versions?</h3>
-                                        <p class="lead">The best option is to subscribe to our mailing list using the <a href="http://almsaeedstudio.com/#subscribe">subscription form on Almsaeed Studio</a>.
-                                            If that's not appealing to you, you may watch the <a href="https://github.com/almasaeed2010/AdminLTE">repository on Github</a> or visit <a href="http://almsaeedstudio.com">Almsaeed Studio</a> every now and then for updates and announcements.</p>
                                         </section>
 
 

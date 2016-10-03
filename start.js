@@ -19,11 +19,11 @@ var kafkaUrl;
 var kafkaPort;
 var roadmapNum;
 var timeoutLimit,
-    roadMapIdTemp,
-    db,
-    latestOffset,
-    mqttHost,
-    mqttPort;
+roadMapIdTemp,
+db,
+latestOffset,
+mqttHost,
+mqttPort;
 var MyDate = new Date();
 var traffic=0;
 var trafficPin=0;
@@ -45,232 +45,232 @@ payloads = [
     }
 ],
 offset = new kafka.Offset(client);
-
+// kafka default setting.
 var settings_kafka = {
-  type: 'kafka',
-  json: false,
-  kafka: require('kafka-node'),
-  connectString: "127.0.0.1:2181",
-  clientId: "ascoltatori",
-  groupId: "ascoltatori",
-  defaultEncoding: "utf8",
-  encodings: {
-    image: "buffer"
-  }
+    type: 'kafka',
+    json: false,
+    kafka: require('kafka-node'),
+    connectString: "127.0.0.1:2181",
+    clientId: "ascoltatori",
+    groupId: "ascoltatori",
+    defaultEncoding: "utf8",
+    encodings: {
+        image: "buffer"
+    }
 };
 
 var brokerList = new Array()
 var functions = new Array()
 
 var findbrokers = function(db, callback) {
-   var cursor =db.collection('brokerList').find( );
-   cursor.each(function(err, doc) {
-      assert.equal(err, null);
-      if (doc != null) {
-         makeFunction(doc.brokerId,doc.ipAddress,doc.port)
-         console.log("made connection to brokerId : " + doc.brokerId + " ipAddress : " + doc.ipAddress + " port : "  + doc.port);
-      } else {
-         callback();
-      }
-   });
+    var cursor =db.collection('brokerList').find( );
+    cursor.each(function(err, doc) {
+        assert.equal(err, null);
+        if (doc != null) {
+            makeFunction(doc.brokerId,doc.ipAddress,doc.port)
+            console.log("made connection to brokerId : " + doc.brokerId + " ipAddress : " + doc.ipAddress + " port : "  + doc.port);
+        } else {
+            callback();
+        }
+    });
 };
 
 MongoClient.connect('mongodb://localhost:27017/connectionData', function(err, db) {
-  assert.equal(null, err);
-  findbrokers(db, function() {
-      db.close();
-  });
+    assert.equal(null, err);
+    findbrokers(db, function() {
+        db.close();
+    });
 });
 
 ascoltatori_kafka.build(settings_kafka, function (err, ascoltatori_kafka){
-  ascoltatori_kafka.subscribe('brokerAdd', function(topic, message) {
-    console.log("added broker : " + message);
+    ascoltatori_kafka.subscribe('brokerAdd', function(topic, message) {
+        console.log("added broker : " + message);
 
-    var jsonMessage = JSON.parse(message);
+        var jsonMessage = JSON.parse(message);
 
-    var brokerId = jsonMessage.brokerId
-    var ipAddress = jsonMessage.ipAddress
-    var port = jsonMessage.port
+        var brokerId = jsonMessage.brokerId
+        var ipAddress = jsonMessage.ipAddress
+        var port = jsonMessage.port
 
-    makeFunction(brokerId,ipAddress,port)
-  });
+        makeFunction(brokerId,ipAddress,port)
+    });
 });
 
 ascoltatori_kafka.build(settings_kafka, function (err, ascoltatori_kafka){
-  ascoltatori_kafka.subscribe('brokerSub', function(topic, message) {
-    for(i = 0 ; i<brokerList.length ; i++){
-      if(message == brokerList[i].brokerId){
-        console.log("delete" + message);
-        console.log("deleting broker is not succeed")
-        brokerList.splice(i,1);
-        functions.splice(i,1);
-      }
-    }
-  });
+    ascoltatori_kafka.subscribe('brokerSub', function(topic, message) {
+        for(i = 0 ; i<brokerList.length ; i++){
+            if(message == brokerList[i].brokerId){
+                console.log("delete" + message);
+                console.log("deleting broker is not succeed")
+                brokerList.splice(i,1);
+                functions.splice(i,1);
+            }
+        }
+    });
 });
 
 
 ascoltatori_kafka.build(settings_kafka, function (err, ascoltatori_kafka){
-  ascoltatori_kafka.subscribe("feed", function(topic, message) {
-    var jsonMessage = JSON.parse(message);
+    ascoltatori_kafka.subscribe("feed", function(topic, message) {
+        var jsonMessage = JSON.parse(message);
 
-    var topicName = jsonMessage.topic
-    var payload = jsonMessage.payload
-    var callback = payload.callback
+        var topicName = jsonMessage.topic
+        var payload = jsonMessage.payload
+        var callback = payload.callback
 
 
-    var arr = topicName.split("/");
-    var brokerId = arr[2];
+        var arr = topicName.split("/");
+        var brokerId = arr[2];
 
-    for(i = 0 ; i<brokerList.length ; i++){
-      if(brokerId == brokerList[i].brokerId){
-        brokerList[i].brokerStatus.publish(topicName + "/feed",JSON.stringify(callback))
-        console.log("messaging to a message " + JSON.stringify(callback)+" to topic name : " + topicName + "/feed succeed");
-      }
-    }
-  });
+        for(i = 0 ; i<brokerList.length ; i++){
+            if(brokerId == brokerList[i].brokerId){
+                brokerList[i].brokerStatus.publish(topicName + "/feed",JSON.stringify(callback))
+                console.log("messaging to a message " + JSON.stringify(callback)+" to topic name : " + topicName + "/feed succeed");
+            }
+        }
+    });
 });
 
 ascoltatori_kafka.build(settings_kafka, function (err, ascoltatori_kafka){
-  ascoltatori_kafka.subscribe('sslAdd', function(topic, message) {
-    addSSLFunction(message)
+    ascoltatori_kafka.subscribe('sslAdd', function(topic, message) {
+        addSSLFunction(message)
 
-    console.log("adding ssl option to topic : " + topic + " succeed");
-  });
+        console.log("adding ssl option to topic : " + topic + " succeed");
+    });
 });
 
 ascoltatori_kafka.build(settings_kafka, function (err, ascoltatori_kafka){
-  ascoltatori_kafka.subscribe('sslSub', function(topic, message) {
-    subSSLFunction(message)
+    ascoltatori_kafka.subscribe('sslSub', function(topic, message) {
+        subSSLFunction(message)
 
-    console.log("subtracting ssl option to topic : " + topic + " succeed");
-  });
+        console.log("subtracting ssl option to topic : " + topic + " succeed");
+    });
 });
 
 function makeFunction(brokerId,ipAddress,port){
-  functions.push(function(){
-    var brokerSetting = "mqtt://"+ ipAddress+":"+port
-    var brokerStatus = mqtt.connect(brokerSetting)
-    var brokerOrder = mqtt.connect(brokerSetting)
+    functions.push(function(){
+        var brokerSetting = "mqtt://"+ ipAddress+":"+port
+        var brokerStatus = mqtt.connect(brokerSetting)
+        var brokerOrder = mqtt.connect(brokerSetting)
 
-    brokerList.push({"brokerId":brokerId,"brokerStatus":brokerStatus,"brokerOrder":brokerOrder,"brokerSetting":brokerSetting})
-
-    brokerStatus.subscribe("enow/server0/"+brokerId+"/+/status");
-    brokerStatus.on('message', function (topic, message) {
-      console.log("succeed subscribing to mqtt topic " + topic);
-
-      ascoltatori_kafka.build(settings_kafka, function (err, ascoltatori_kafka){
-        ascoltatori_kafka.publish("status", message, function() {
-          console.log("succeed publishing to kafka topic status");
-        });
-      });
-    });
-
-    brokerOrder.subscribe("enow/server0/"+brokerId+"/+/order");
-    brokerOrder.on('message', function (topic, message) {
-      console.log("succeed subscribing to mqtt topic " + topic);
-
-      ascoltatori_kafka.build(settings_kafka, function (err, ascoltatori_kafka){
-        ascoltatori_kafka.publish("order", message, function() {
-          console.log("succeed publishing to kafka topic order");
-        });
-      });
-    });
-
-
-  })
-
-  functions[functions.length-1]()
-}
-
-function addSSLFunction(brokerId){
-  var index
-  for(i = 0 ; i<brokerList.length ; i++){
-    if(brokerId == brokerList[i].brokerId){
-      var options = {
-        key: fs.readFileSync('/Users/leegunjoon/Documents/downloadSpace/tools/TLS/iui-MacBook-Air.local.key'),
-        cert: fs.readFileSync('/Users/leegunjoon/Documents/downloadSpace/tools/TLS/iui-MacBook-Air.local.crt'),
-        rejectUnauthorized: true,
-        // The CA list will be used to determine if server is authorized
-        ca: fs.readFileSync('/Users/leegunjoon/Documents/downloadSpace/tools/TLS/ca.crt')
-      }
-
-      var brokerStatusSSL = mqtt.connect(brokerList[i].brokerSetting,options)
-      var brokerOrderSSL = mqtt.connect(brokerList[i].brokerSetting,options)
-
-      brokerList[i] = {"brokerId":brokerId,"brokerStatusSSL":brokerStatusSSL,"brokerOrderSSL":brokerOrderSSL,"brokerSetting":brokerList[i].brokerSetting,"options":options}
-
-      functions[i] = function(){
-
-        brokerStatusSSL.subscribe("enow/server0/"+brokerId+"/+/status");
-        brokerStatusSSL.on('message', function (topic, message) {
-          console.log("succeed subscribing to mqtt topic " + topic);
-
-          ascoltatori_kafka.build(settings_kafka, function (err, ascoltatori_kafka){
-            ascoltatori_kafka.publish("status", message, function() {
-              console.log("succeed publishing to kafka topic status");
-            });
-          });
-        });
-
-        brokerOrderSSL.subscribe("enow/server0/"+brokerId+"/+/order");
-        brokerOrderSSL.on('message', function (topic, message) {
-          console.log("succeed subscribing to mqtt topic " + topic);
-
-          ascoltatori_kafka.build(settings_kafka, function (err, ascoltatori_kafka){
-            ascoltatori_kafka.publish("order", message, function() {
-              console.log("succeed publishing to kafka topic order");
-            });
-          });
-        });
-      }
-      index = i;
-    }
-  }
-
-
-  functions[index]()
-}
-
-function subSSLFunction(brokerId){
-  var index;
-  for(i = 0 ; i<brokerList.length ; i++){
-    if(brokerId == brokerList[i].brokerId){
-      var brokerStatus = mqtt.connect(brokerList[i].brokerSetting)
-      var brokerOrder = mqtt.connect(brokerList[i].brokerSetting)
-
-      brokerList[i] = {"brokerId":brokerId,"brokerStatus":brokerStatus,"brokerOrder":brokerOrder,"brokerSetting":brokerList[i].brokerSetting}
-
-      functions[i] = function(){
+        brokerList.push({"brokerId":brokerId,"brokerStatus":brokerStatus,"brokerOrder":brokerOrder,"brokerSetting":brokerSetting})
 
         brokerStatus.subscribe("enow/server0/"+brokerId+"/+/status");
         brokerStatus.on('message', function (topic, message) {
-          console.log("succeed subscribing to mqtt topic " + topic);
+            console.log("succeed subscribing to mqtt topic " + topic);
 
-          ascoltatori_kafka.build(settings_kafka, function (err, ascoltatori_kafka){
-            ascoltatori_kafka.publish("status", message, function() {
-              console.log("succeed publishing to kafka topic status");
+            ascoltatori_kafka.build(settings_kafka, function (err, ascoltatori_kafka){
+                ascoltatori_kafka.publish("status", message, function() {
+                    console.log("succeed publishing to kafka topic status");
+                });
             });
-          });
         });
 
         brokerOrder.subscribe("enow/server0/"+brokerId+"/+/order");
         brokerOrder.on('message', function (topic, message) {
-          console.log("succeed subscribing to mqtt topic " + topic);
+            console.log("succeed subscribing to mqtt topic " + topic);
 
-          ascoltatori_kafka.build(settings_kafka, function (err, ascoltatori_kafka){
-            ascoltatori_kafka.publish("order", message, function() {
-              console.log("succeed publishing to kafka topic order");
+            ascoltatori_kafka.build(settings_kafka, function (err, ascoltatori_kafka){
+                ascoltatori_kafka.publish("order", message, function() {
+                    console.log("succeed publishing to kafka topic order");
+                });
             });
-          });
         });
-      }
 
-      index = i;
+
+    })
+
+    functions[functions.length-1]()
+}
+
+function addSSLFunction(brokerId){
+    var index
+    for(i = 0 ; i<brokerList.length ; i++){
+        if(brokerId == brokerList[i].brokerId){
+            var options = {
+                key: fs.readFileSync('/Users/leegunjoon/Documents/downloadSpace/tools/TLS/iui-MacBook-Air.local.key'),
+                cert: fs.readFileSync('/Users/leegunjoon/Documents/downloadSpace/tools/TLS/iui-MacBook-Air.local.crt'),
+                rejectUnauthorized: true,
+                // The CA list will be used to determine if server is authorized
+                ca: fs.readFileSync('/Users/leegunjoon/Documents/downloadSpace/tools/TLS/ca.crt')
+            }
+
+            var brokerStatusSSL = mqtt.connect(brokerList[i].brokerSetting,options)
+            var brokerOrderSSL = mqtt.connect(brokerList[i].brokerSetting,options)
+
+            brokerList[i] = {"brokerId":brokerId,"brokerStatusSSL":brokerStatusSSL,"brokerOrderSSL":brokerOrderSSL,"brokerSetting":brokerList[i].brokerSetting,"options":options}
+
+            functions[i] = function(){
+
+                brokerStatusSSL.subscribe("enow/server0/"+brokerId+"/+/status");
+                brokerStatusSSL.on('message', function (topic, message) {
+                    console.log("succeed subscribing to mqtt topic " + topic);
+
+                    ascoltatori_kafka.build(settings_kafka, function (err, ascoltatori_kafka){
+                        ascoltatori_kafka.publish("status", message, function() {
+                            console.log("succeed publishing to kafka topic status");
+                        });
+                    });
+                });
+
+                brokerOrderSSL.subscribe("enow/server0/"+brokerId+"/+/order");
+                brokerOrderSSL.on('message', function (topic, message) {
+                    console.log("succeed subscribing to mqtt topic " + topic);
+
+                    ascoltatori_kafka.build(settings_kafka, function (err, ascoltatori_kafka){
+                        ascoltatori_kafka.publish("order", message, function() {
+                            console.log("succeed publishing to kafka topic order");
+                        });
+                    });
+                });
+            }
+            index = i;
+        }
     }
-  }
 
-  functions[index]()
+
+    functions[index]()
+}
+
+function subSSLFunction(brokerId){
+    var index;
+    for(i = 0 ; i<brokerList.length ; i++){
+        if(brokerId == brokerList[i].brokerId){
+            var brokerStatus = mqtt.connect(brokerList[i].brokerSetting)
+            var brokerOrder = mqtt.connect(brokerList[i].brokerSetting)
+
+            brokerList[i] = {"brokerId":brokerId,"brokerStatus":brokerStatus,"brokerOrder":brokerOrder,"brokerSetting":brokerList[i].brokerSetting}
+
+            functions[i] = function(){
+
+                brokerStatus.subscribe("enow/server0/"+brokerId+"/+/status");
+                brokerStatus.on('message', function (topic, message) {
+                    console.log("succeed subscribing to mqtt topic " + topic);
+
+                    ascoltatori_kafka.build(settings_kafka, function (err, ascoltatori_kafka){
+                        ascoltatori_kafka.publish("status", message, function() {
+                            console.log("succeed publishing to kafka topic status");
+                        });
+                    });
+                });
+
+                brokerOrder.subscribe("enow/server0/"+brokerId+"/+/order");
+                brokerOrder.on('message', function (topic, message) {
+                    console.log("succeed subscribing to mqtt topic " + topic);
+
+                    ascoltatori_kafka.build(settings_kafka, function (err, ascoltatori_kafka){
+                        ascoltatori_kafka.publish("order", message, function() {
+                            console.log("succeed publishing to kafka topic order");
+                        });
+                    });
+                });
+            }
+
+            index = i;
+        }
+    }
+
+    functions[index]()
 }
 
 //make server starts from latest logs
@@ -418,12 +418,12 @@ expressapp.post('/alive_check', function(req, res){
 });
 // run roadmap.
 expressapp.post('/run_db', function(req, res){
-        connectDB(req.body, 'enow', 'execute', 'run', res);
-        setTimeout(function(){
-            var obj = {};
-            obj['roadMapId'] = roadmapNum.toString();
-            sendKafka(req, 'event', obj);
-        },3000);
+    connectDB(req.body, 'enow', 'execute', 'run', res);
+    setTimeout(function(){
+        var obj = {};
+        obj['roadMapId'] = roadmapNum.toString();
+        sendKafka(req, 'event', obj);
+    },3000);
 });
 // stop roadmap.
 expressapp.post('/kill_db', function(req, res){
@@ -437,12 +437,11 @@ expressapp.post('/add_broker', function(req, res){
     connectDB(req.body, 'connectionData', 'brokerList', 'saveBroker', res);
     sendKafka(req, 'brokerAdd', req.body);
 });
-// append device to broker in mongoDB.
+// append device to selected broker in mongoDB.
 expressapp.post('/add_device', function(req, res){
     console.log('add device...');
     connectDB(req.body, 'connectionData', 'brokerList', 'saveDevice', res);
 });
-// delete
 expressapp.post('/delete_device', function(req, res){
     console.log('delete device...');
     connectDB(req.body, 'connectionData', 'brokerList', 'deleteDevice', res);
@@ -455,6 +454,7 @@ expressapp.post('/find_broker', function(req, res){
     console.log('find broker...');
     connectDB(req.body, 'connectionData', 'brokerList', 'findBroker', res);
 });
+// default settings
 expressapp.post('/post_url_settings', function(req, res){
     console.log('setting url...');
     console.log(req.body);
@@ -480,7 +480,6 @@ expressapp.post('/post_url_settings', function(req, res){
 });
 expressapp.post('/load_roadmap', function(req, res){
     console.log('load roadmap...');
-    console.log(req.body['db']);
     connectDB(req.body, req.body['db'], req.body['collection'], 'findTarget', res);
 });
 expressapp.post('/get_broker', function(req, res){
@@ -488,7 +487,7 @@ expressapp.post('/get_broker', function(req, res){
     connectDB(req.body, 'connectionData', 'brokerList', 'findBroker', res);
 });
 
-
+// add ca, cert, key file to broker.
 expressapp.post('/add_secure', function(req, res){
     console.log('add secure...');
     console.log(req.body);
@@ -504,13 +503,14 @@ expressapp.post('/add_secure', function(req, res){
         sendKafka(req, 'sslAdd', obj);
     }
 });
+// get request count for requestChart.
 expressapp.get('/get_request', function(req, res){
     console.log('get requests...');
     setTimeout(function(){
         res.send(nodeTraffic);
     }, 1000);
 });
-
+// get traffic count for trafficChart.
 expressapp.get('/get_traffic', function(req, res){
     console.log('get traffics...');
     setTimeout(function(){
@@ -521,19 +521,18 @@ expressapp.get('/get_traffic', function(req, res){
         }, 500);
     }, 1000);
 });
+// get error count for errorChart.
 expressapp.get('/get_error', function(req, res){
     console.log('get error...');
     var obj = {};
-        obj['traffic'] = (traffic - trafficPin)+"";
-        trafficPin = traffic;
-
+    obj['traffic'] = (traffic - trafficPin)+"";
+    trafficPin = traffic;
     obj['errorRate'] = errorRate+"";
     console.log(obj);
     res.send(obj);
     setTimeout(function(){
         errorRate=0;
     }, 500);
-    // error = 0;
 });
 
 expressapp.get('/get_brokers', function(req, res){
@@ -552,6 +551,7 @@ expressapp.get('/get_running_roadmaps', function(req, res){
     console.log('get running roadmaps...');
     connectDB(null, 'enow', 'execute', 'find', res);
 });
+//load all of deviceslist.
 expressapp.get('/get_devices', function(req, res){
     console.log('get devices...');
     connectDB(null, 'connectionData', 'brokerList', 'find', res);
@@ -564,149 +564,147 @@ var server = expressapp.listen(expressapp.get('port'), function(){
         \n  █████╗  ██╔██╗ ██║██║   ██║██║ █╗ ██║  Connect to 127.0.0.1:1111\
         \n  ██╔══╝  ██║╚██╗██║██║   ██║██║███╗██║\
         \n  ███████╗██║ ╚████║╚██████╔╝╚███╔███╔╝  Version 0.0.1\
-        \n  ╚══════╝╚═╝  ╚═══╝ ╚═════╝  ╚══╝╚══╝   Copyright © 2016 ENOW. All rights reserved.");
-    });
+        \n  ╚══════╝╚═╝  ╚═══╝ ╚═════╝  ╚══╝╚══╝   Copyright © 2016 ENOW. All rights reserved."
+    );
+});
 
-    function connectDB(source, dbName, collectionName, command, response){
-        console.log('connecting to '+mongoUrl+':'+mongoPort+'...'+dbName+'.'+collectionName);
-        var findDocument = function(callback){
-            db.db(dbName).collection(collectionName).find({}).toArray(function(err,result){
-                response.send(result);
-            });
-
-        };
-        var findBroker_2 = function(callback){
-            if(source['brokerId']!='null' && source['lambda']==true){
-                db.db(dbName).collection(collectionName).find({brokerId:source['brokerId']}).toArray(function(err,result){
-                        mqttHost = result[0]['ipAddress'];
-                        mqttPort = result[0]['port'];
-                });
-            }else{
-                mqttHost = null;
-                mqttPort = null;
-            }
-
-        };
-        var findBroker = function(callback){
+function connectDB(source, dbName, collectionName, command, response){
+    console.log('connecting to '+mongoUrl+':'+mongoPort+'...'+dbName+'.'+collectionName);
+    var findDocument = function(callback){
+        db.db(dbName).collection(collectionName).find({}).toArray(function(err,result){
+            response.send(result);
+        });
+    };
+    // find broker for get mqtt url.
+    var findBroker_2 = function(callback){
+        if(source['brokerId']!='null' && source['lambda']==true){
             db.db(dbName).collection(collectionName).find({brokerId:source['brokerId']}).toArray(function(err,result){
-                response.send(result);
+                mqttHost = result[0]['ipAddress'];
+                mqttPort = result[0]['port'];
             });
+        }else{
+            mqttHost = mqttPort = null;
         }
-        var findTarget = function(callback){
-            var o_id = BSON.ObjectID.createFromHexString(source['_id']);
-            db.db(dbName).collection(collectionName).find({_id:o_id}).toArray(function(err,result){
-                response.send(result);
-                o_id = null;
-            });
-        }
-        var deleteDevice = function(callback){
-            db.db(dbName).collection(collectionName).updateOne({'brokerId':source['brokerId']},{
-                '$pull' : { 'deviceId': source['deviceId']}
-            }, function(err,result){
-                response.send("done");
-            });
-        }
-        var findDevice = function(callback){
-            db.db(dbName).collection(collectionName).find({deviceId:source['deviceId']}).toArray(function(err,result){
-                response.send(result);
-            });
-        }
-        var insertDocument = function(callback){
-            var cursor = db.db(dbName).collection(collectionName).find({}).toArray(function(err,result){
-                if(result.length!=0){
-                    roadmapNum = roadMapIdTemp = parseInt(result[result.length-1]['roadMapId'])+1;
-                }
-                else{
-                    roadmapNum = roadMapIdTemp = 1;
-                }
-                db.db(dbName).collection(collectionName).insertOne({
-                    "roadMapId" : roadMapIdTemp.toString(),
-                    "clientId" : source['clientId'],
-                    "orderNode" : source['orderNode'],
-                    "initNode" : source['initNode'],
-                    "lastNode" : source['lastNode'],
-                    "incomingNode" : source['incomingNode'],
-                    "outingNode" : source['outingNode'],
-                    "isInput" : source['isInput'],
-                    "isOutput" : source['isOutput'],
-                    "nodeIds" : source['nodeIds']
-                },function(err, result){
-                    response.send("done");
-                });
-            });
-
-        };
-
-
-        var insertDocumentDevice = function(callback){
-            db.db(dbName).collection(collectionName).updateOne({'brokerId':source['brokerId']},{
-                '$push' : { 'deviceId': source['deviceId']}
-            }, function(err,result){
-                response.send("done");
-            });
-        };
-
-        var insertDocumentBroker = function(callback){
-            db.db(dbName).collection(collectionName).count({}, function(err, cnt) {
-                db.db(dbName).collection(collectionName).insertOne({
-                    "brokerNum" : (cnt+1).toString(),
-                    "brokerId" : source['brokerId'],
-                    "ipAddress" : source['ipAddress'],
-                    "port" : source['port'],
-                    "deviceId" : source['deviceId'],
-                },function(err, result){
-                    response.send("done");
-                });
-            });
-        };
-
-        var updateBroker = function(callback){
-            db.db(dbName).collection(collectionName).updateOne({'brokerId':source['brokerId']},{
-                '$set' : { 'ca': source['ca'], 'hostCrt': source['hostCrt'], 'hostKey': source['hostKey']}
-            }, function(err,result){
-                response.send("done");
-            });
-        };
-
-        var deleteDocument = function(callback){
-            db.db(dbName).collection(collectionName).deleteOne({
+    };
+    // find broker and load info.
+    var findBroker = function(callback){
+        db.db(dbName).collection(collectionName).find({brokerId:source['brokerId']}).toArray(function(err,result){
+            response.send(result);
+        });
+    }
+    // find roadmap.
+    var findTarget = function(callback){
+        var o_id = BSON.ObjectID.createFromHexString(source['_id']);
+        db.db(dbName).collection(collectionName).find({_id:o_id}).toArray(function(err,result){
+            response.send(result);
+            o_id = null;
+        });
+    }
+    var deleteDevice = function(callback){
+        db.db(dbName).collection(collectionName).updateOne({'brokerId':source['brokerId']},{
+            '$pull' : { 'deviceId': source['deviceId']}
+        }, function(err,result){
+            response.send("done");
+        });
+    }
+    var findDevice = function(callback){
+        db.db(dbName).collection(collectionName).find({deviceId:source['deviceId']}).toArray(function(err,result){
+            response.send(result);
+        });
+    }
+    // run roadmap of save it to mongodb.
+    var insertDocument = function(callback){
+        var cursor = db.db(dbName).collection(collectionName).find({}).toArray(function(err,result){
+            if(result.length!=0){
+                roadmapNum = roadMapIdTemp = parseInt(result[result.length-1]['roadMapId'])+1;
+            }
+            else{
+                roadmapNum = roadMapIdTemp = 1;
+            }
+            db.db(dbName).collection(collectionName).insertOne({
+                "roadMapId" : roadMapIdTemp.toString(),
+                "clientId" : source['clientId'],
+                "orderNode" : source['orderNode'],
+                "initNode" : source['initNode'],
+                "lastNode" : source['lastNode'],
+                "incomingNode" : source['incomingNode'],
+                "outingNode" : source['outingNode'],
+                "isInput" : source['isInput'],
+                "isOutput" : source['isOutput'],
+                "nodeIds" : source['nodeIds']
             },function(err, result){
                 response.send("done");
             });
-        };
+        });
 
-        if(command=="save" || command=="run"){
-            insertDocument(db, function(){
-            });
-        }else if(command=="saveBroker"){
-            insertDocumentBroker(db, function(){
-            });
-        }else if(command=="saveDevice"){
-            insertDocumentDevice(db, function(){
-            });
-        }else if(command=="deleteDevice"){
-            deleteDevice(db, function(){
-            });
-        }else if(command=="findDevice"){
-            findDevice(db, function(){
-            });
-        }else if(command=="kill"){
-            deleteDocument(db,function(){
-            });
-        }else if(command=="find"){
-            findDocument(db, function(){
-            });
-        }else if(command=="findTarget"){
-            findTarget(db, function(){
-            });
-        }else if(command=="findBroker"){
-            findBroker(db, function(){
-            });
-        }else if(command=="findBroker2"){
-            findBroker_2(db, function(){
-            });
-        }else if(command=="addSecure"){
-            updateBroker(db, function(){
-            });
-        }
     };
+    // append device to broker.
+    var insertDocumentDevice = function(callback){
+        db.db(dbName).collection(collectionName).updateOne({'brokerId':source['brokerId']},{
+            '$push' : { 'deviceId': source['deviceId']}
+        }, function(err,result){
+            response.send("done");
+        });
+    };
+
+    var insertDocumentBroker = function(callback){
+        db.db(dbName).collection(collectionName).count({}, function(err, cnt) {
+            db.db(dbName).collection(collectionName).insertOne({
+                "brokerNum" : (cnt+1).toString(),
+                "brokerId" : source['brokerId'],
+                "ipAddress" : source['ipAddress'],
+                "port" : source['port'],
+                "deviceId" : source['deviceId'],
+            },function(err, result){
+                response.send("done");
+            });
+        });
+    };
+    var updateBroker = function(callback){
+        db.db(dbName).collection(collectionName).updateOne({'brokerId':source['brokerId']},{
+            '$set' : { 'ca': source['ca'], 'hostCrt': source['hostCrt'], 'hostKey': source['hostKey']}
+        }, function(err,result){
+            response.send("done");
+        });
+    };
+    var deleteDocument = function(callback){
+        db.db(dbName).collection(collectionName).deleteOne({
+        },function(err, result){
+            response.send("done");
+        });
+    };
+    if(command=="save" || command=="run"){
+        insertDocument(db, function(){
+        });
+    }else if(command=="saveBroker"){
+        insertDocumentBroker(db, function(){
+        });
+    }else if(command=="saveDevice"){
+        insertDocumentDevice(db, function(){
+        });
+    }else if(command=="deleteDevice"){
+        deleteDevice(db, function(){
+        });
+    }else if(command=="findDevice"){
+        findDevice(db, function(){
+        });
+    }else if(command=="kill"){
+        deleteDocument(db,function(){
+        });
+    }else if(command=="find"){
+        findDocument(db, function(){
+        });
+    }else if(command=="findTarget"){
+        findTarget(db, function(){
+        });
+    }else if(command=="findBroker"){
+        findBroker(db, function(){
+        });
+    }else if(command=="findBroker2"){
+        findBroker_2(db, function(){
+        });
+    }else if(command=="addSecure"){
+        updateBroker(db, function(){
+        });
+    }
+};

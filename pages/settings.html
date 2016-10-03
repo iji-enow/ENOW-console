@@ -198,7 +198,7 @@
 
 </head>
 <body id="back" class="hold-transition skin-blue sidebar-mini">
-
+    <!-- div : loading screen -->
     <div id="loader"></div>
     <header class="main-header">
         <!-- Logo -->
@@ -431,12 +431,9 @@
                     <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
                 </div>
             </div>
-            <!-- search form -->
-            <!-- /.search form -->
-            <!-- sidebar menu: : style can be found in sidebar.less -->
+            <!-- sidebar menu -->
             <ul class="sidebar-menu">
                 <li class="header">MAIN NAVIGATION</li>
-
 <li>
     <a href="../pages/stages.html">
         <i class="fa fa-th"></i> <span>Stages</span>
@@ -474,7 +471,7 @@
     <!-- Main content -->
 
     <section class="content" ng-controller="myCtrl">
-
+        <!-- setting window 1 -->
         <br>
         <input name="sendToAngular" type="hidden" id="jsonToScope" ng-model="list" ng-change="list"></input>
         <div class="row">
@@ -513,6 +510,7 @@
                     </div>
                 </div>
             </div>
+            <!-- setting window 2 -->
             <div class="col-lg-4 col-xs-4">
                 <div class="box box-info">
                     <div class="box-header with-border">
@@ -548,6 +546,7 @@
                     </div>
                 </div>
             </div>
+            <!-- setting window 3 -->
             <div class="col-lg-4 col-xs-4">
                 <div class="box box-warning">
                     <div class="box-header with-border">
@@ -584,6 +583,7 @@
                 </div>
             </div>
         </div>
+        <!-- broker setting window -->
         <div class="row">
             <div class="col-lg-12 col-xs-12">
                 <div class="box box-success">
@@ -629,7 +629,7 @@
             </div>
         </div>
 
-        <!-- adding broker -->
+        <!-- broker secure settings -->
         <div id="secureModal" class="modal fade">
             <div class="modal-dialog" style="width:300px;">
                 <div class="modal-content">
@@ -676,6 +676,7 @@
                 </div>
             </div>
         </div>
+
         <!-- device add from broker window -->
         <div id="deviceModal" class="modal fade">
             <div class="modal-dialog" style="width:600px;">
@@ -1028,7 +1029,7 @@ $("#addDeviceSubmit").click(function(){
         }, 200);
     }
 });
-
+// remove device
 $(document).on("click","#removeDeviceSubmit", function(){
     console.log($(this).parent()[0].innerText.split('	')[1]);
     var ask = confirm('delete '+$(this).parent()[0].innerText.split('	')[1]+'?');
@@ -1048,6 +1049,7 @@ $(document).on("click","#removeDeviceSubmit", function(){
         }, 200);
     }
 })
+// secure checkbox
 $(document).on("click",'#checkSecure',function(e){
     e.stopPropagation();
         var arr = $(this).parent().parent()[0].innerText.split("	");
