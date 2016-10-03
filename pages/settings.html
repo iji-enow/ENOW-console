@@ -950,21 +950,46 @@ $(document).ready(function(){
 $("#submit1").click(function(){
     localStorage['kafkaUrl'] = $('#kafkaUrl')[0].value;
     localStorage['kafkaPort'] = $('#kafkaPort')[0].value;
-    alert('Saved.');
+    setTimeout(function () {
+        angular.element(document.getElementById('jsonToScope')).scope().settings = localStorage;
+        setTimeout(function () {
+            angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings();
+            setTimeout(function () {
+                angular.element(document.getElementById('jsonToScope')).scope().getBrokers();
+                alert('Saved.');
+            }, 300);
+        }, 300);
+    }, 300);
 });
 $("#submit2").click(function(){
     localStorage['mongoUrl'] = $('#mongoUrl')[0].value;
     localStorage['mongoPort'] = $('#mongoPort')[0].value;
-    alert('Saved.');
+    setTimeout(function () {
+        angular.element(document.getElementById('jsonToScope')).scope().settings = localStorage;
+        setTimeout(function () {
+            angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings();
+            setTimeout(function () {
+                angular.element(document.getElementById('jsonToScope')).scope().getBrokers();
+                alert('Saved.');
+            }, 300);
+        }, 300);
+    }, 300);
 });
 $("#submit3").click(function(){
     localStorage['timeoutLimit'] = $('#timeoutLimit')[0].value;
     localStorage['maxTaskParallelism'] = $('#maxTask')[0].value;
-    alert('Saved.');
+    setTimeout(function () {
+        angular.element(document.getElementById('jsonToScope')).scope().settings = localStorage;
+        setTimeout(function () {
+            angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings();
+            setTimeout(function () {
+                angular.element(document.getElementById('jsonToScope')).scope().getBrokers();
+                alert('Saved.');
+            }, 300);
+        }, 300);
+    }, 300);
 });
 $("#addBroker").click(function(){
-
-
         $('#s1')[0].value = "";
         $('#s2')[0].value = "";
         $('#s3')[0].value = "";
