@@ -701,16 +701,14 @@
                                 <tr id="showDeviceList" ng-repeat = "n in currentDeviceList track by $index">
                                     <td>{{$index+1}}</td>
                                     <td>{{n}}</td>
-                                    <td class="canClick" style="width:10px;"><i class="fa fa-fw fa-remove"></i></td>
+                                    <td class="canClick" id="removeDeviceSubmit" style="width:10px;"><i class="fa fa-fw fa-remove"></i></td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="file" class="btn btn-default" id="addSecurityFile">Security</button>
                         <button type="button" class="btn btn-default" id="addDeviceSubmit">Add Device</button>
-                        <button type="button" class="btn btn-default" id="removeDeviceSubmit">Remove Device</button>
                     </div>
                 </div>
             </div>
@@ -1000,19 +998,36 @@ $("#addDeviceSubmit").click(function(){
     if(ask){
         angular.element(document.getElementById('jsonToScope')).scope().newdevice['deviceId'] = ask;
         angular.element(document.getElementById('jsonToScope')).scope().newdevice['brokerId'] = temp;
-        angular.element(document.getElementById('jsonToScope')).scope().findDevice();
+        angular.element(document.getElementById('jsonToScope')).scope().findDevice("add");
         setTimeout(function () {
             angular.element(document.getElementById('jsonToScope')).scope().getBroker();
             angular.element(document.getElementById('jsonToScope')).scope().getBrokers();
-        }, 200);
-        setTimeout(function () {
-            angular.element(document.getElementById('jsonToScope')).scope().$apply();
+            setTimeout(function () {
+                angular.element(document.getElementById('jsonToScope')).scope().$apply();
+            }, 200);
         }, 200);
     }
 });
-$("#removeDeviceSubmit").click(function(){
-    alert("nope");
-});
+
+$(document).on("click","#removeDeviceSubmit", function(){
+    console.log($(this).parent()[0].innerText.split('	')[1]);
+    var ask = confirm('delete '+$(this).parent()[0].innerText.split('	')[1]+'?');
+    if(ask){
+        angular.element(document.getElementById('jsonToScope')).scope().newdevice['deviceId'] = $(this).parent()[0].innerText.split('	')[1];
+        angular.element(document.getElementById('jsonToScope')).scope().newdevice['brokerId'] = angular.element(document.getElementById('jsonToScope')).scope().currentBroker['brokerId'];
+        angular.element(document.getElementById('jsonToScope')).scope().findDevice("delete");
+        setTimeout(function () {
+            angular.element(document.getElementById('jsonToScope')).scope().findDevice("delete");
+            setTimeout(function () {
+                }, 200);
+            angular.element(document.getElementById('jsonToScope')).scope().getBroker();
+            angular.element(document.getElementById('jsonToScope')).scope().getBrokers();
+            setTimeout(function () {
+                angular.element(document.getElementById('jsonToScope')).scope().$apply();
+            }, 200);
+        }, 200);
+    }
+})
 $(document).on("click",'#checkSecure',function(e){
     e.stopPropagation();
         var arr = $(this).parent().parent()[0].innerText.split("	");

@@ -434,6 +434,10 @@ expressapp.post('/add_device', function(req, res){
     console.log('add device...');
     connectDB(req.body, 'connectionData', 'brokerList', 'saveDevice', res);
 });
+expressapp.post('/delete_device', function(req, res){
+    console.log('delete device...');
+    connectDB(req.body, 'connectionData', 'brokerList', 'deleteDevice', res);
+});
 expressapp.post('/find_device', function(req, res){
     console.log('find device...');
     connectDB(req.body, 'connectionData', 'brokerList', 'findDevice', res);
@@ -474,6 +478,7 @@ expressapp.post('/get_broker', function(req, res){
     console.log('get broker...');
     connectDB(req.body, 'connectionData', 'brokerList', 'findBroker', res);
 });
+
 
 expressapp.post('/add_secure', function(req, res){
     console.log('add secure...');
@@ -561,7 +566,6 @@ var server = expressapp.listen(expressapp.get('port'), function(){
                 db.db(dbName).collection(collectionName).find({brokerId:source['brokerId']}).toArray(function(err,result){
                         mqttHost = result[0]['ipAddress'];
                         mqttPort = result[0]['port'];
-
                 });
             }else{
                 mqttHost = null;
@@ -579,6 +583,13 @@ var server = expressapp.listen(expressapp.get('port'), function(){
             db.db(dbName).collection(collectionName).find({_id:o_id}).toArray(function(err,result){
                 response.send(result);
                 o_id = null;
+            });
+        }
+        var deleteDevice = function(callback){
+            db.db(dbName).collection(collectionName).updateOne({'brokerId':source['brokerId']},{
+                '$pull' : { 'deviceId': source['deviceId']}
+            }, function(err,result){
+                response.send("done");
             });
         }
         var findDevice = function(callback){
@@ -658,6 +669,9 @@ var server = expressapp.listen(expressapp.get('port'), function(){
             });
         }else if(command=="saveDevice"){
             insertDocumentDevice(db, function(){
+            });
+        }else if(command=="deleteDevice"){
+            deleteDevice(db, function(){
             });
         }else if(command=="findDevice"){
             findDevice(db, function(){

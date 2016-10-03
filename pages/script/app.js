@@ -179,7 +179,7 @@ app.controller('myCtrl', function($scope, $http){
         }).then(function(response){
         });
     }
-    $scope.findDevice = function(){
+    $scope.findDevice = function(option){
         $http({
             withCredentials: false,
             method: 'post',
@@ -189,15 +189,37 @@ app.controller('myCtrl', function($scope, $http){
             contentType : 'application/json',
             dataType: "json"
         }).then(function(response){
-            if(response.data=="no_connect"){
-                alert('Connect failed. Check MongoDB Url, Port.');
-            }else{
-                if(response.data.length==0){
-                    $scope.addDevice();
+            if(option=="add"){
+                if(response.data=="no_connect"){
+                    alert('Connect failed. Check MongoDB Url, Port.');
                 }else{
-                    alert('deviceId already exist.');
+                    if(response.data.length==0){
+                        $scope.addDevice();
+                    }else{
+                        alert('deviceId already exist.');
+                    }
+                }
+            }else if(option=="delete"){
+                if(response.data=="no_connect"){
+                    alert('Connect failed. Check MongoDB Url, Port.');
+                }else{
+                    if(response.data.length==1){
+                        $scope.deleteDevice();
+                    }
                 }
             }
+        });
+    }
+    $scope.deleteDevice = function(){
+        $http({
+            withCredentials: false,
+            method: 'post',
+            url: "/delete_device",
+            headers: {'Content-Type': 'application/json'},
+            data: $scope.newdevice,
+            contentType : 'application/json',
+            dataType: "json"
+        }).then(function(response){
         });
     }
     $scope.findBroker = function(){
