@@ -304,15 +304,21 @@ offset.fetchLatestOffsets(['log'], function (error, offsets) {
         +('0' + MyDate.getHours()).slice(-2) + ':'
         +('0' + MyDate.getMinutes()).slice(-2) + ':'
         +('0' + MyDate.getSeconds()).slice(-2);
-        console.log(logs.split('  ')[0]);
-        if(logs.split(' ')[0]=="INFO"){
+
+        logArray = logs.split(' ');
+        if(logArray[0]=="INFO"){
             traffic++;
-        }else if(logs.split(' ')[0]=="WARN"){
+        }else if(logArray[0]=="WARN"){
             traffic++;
             error++;
-        }else if(logs.split(' ')[0]=="ERROR"){
+        }else if(logArray[0]=="ERROR"){
             console.log('ERROR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
         }
+        console.log("1 "+logArray[0])
+        console.log("2 "+logArray[1])
+        console.log("3 "+logArray[2])
+        console.log("4 "+logArray[3])
+        console.log("5 "+logArray[4])
         fs.appendFile('.log', '['+MyDateString+']  '+ JSON.stringify(logs)+'\r\n', 'utf8', function(err) {
         });
     });
@@ -563,6 +569,11 @@ var server = expressapp.listen(expressapp.get('port'), function(){
             }
 
         };
+        var findBroker = function(callback){
+            db.db(dbName).collection(collectionName).find({brokerId:source['brokerId']}).toArray(function(err,result){
+                response.send(result);
+            });
+        }
         var findTarget = function(callback){
             var o_id = BSON.ObjectID.createFromHexString(source['_id']);
             db.db(dbName).collection(collectionName).find({_id:o_id}).toArray(function(err,result){

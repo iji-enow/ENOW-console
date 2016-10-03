@@ -193,7 +193,8 @@ app.controller('chartCtrl', function($scope, $http){
                         label: "",
                         data: [],
                         backgroundColor: [],
-                        hoverBackgroundColor: []
+                        hoverBackgroundColor: [],
+                        borderWidth: 1
                     }]
                 },
                 options: {
@@ -206,8 +207,7 @@ app.controller('chartCtrl', function($scope, $http){
                         }]
                     },
                     barPercentage: 0.3,
-                    categoryPercentage:0.3,
-                    barThickness: 0.1
+                    categoryPercentage:0.3
                 }
             });
 
