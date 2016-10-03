@@ -12,6 +12,7 @@ var path = require('path');
 var MongoClient = mongo.MongoClient;
 var Server = mongo.Server;
 var expressapp = express();
+const port = 1111;
 var mongoUrl;
 var mongoPort;
 var kafkaUrl;
@@ -27,6 +28,8 @@ var MyDate = new Date();
 var traffic=0;
 var trafficPin=0;
 var errorRate=0;
+var nodeTraffic= new Array(1000);
+nodeTraffic.fill(0);
 var MyDateString;
 var consumer;
 var kafka = require('kafka-node'),
@@ -220,9 +223,7 @@ function addSSLFunction(brokerId){
             });
           });
         });
-
       }
-
       index = i;
     }
   }
@@ -232,7 +233,7 @@ function addSSLFunction(brokerId){
 }
 
 function subSSLFunction(brokerId){
-  var index
+  var index;
   for(i = 0 ; i<brokerList.length ; i++){
     if(brokerId == brokerList[i].brokerId){
       var brokerStatus = mqtt.connect(brokerList[i].brokerSetting)
@@ -290,13 +291,14 @@ offset.fetchLatestOffsets(['log'], function (error, offsets) {
         {
             autoCommit: false,
             fromOffset: true
-
         }
     );
+    // when kafka message came from topic:'log'.
     consumer.on('message', function (message) {
         MyDate = new Date();
         var logs = message['value'];
         console.log(message['value']);
+        //get date
         MyDate.setDate(MyDate.getDate() + 20);
         MyDateString = MyDate.getFullYear() + '/'
         +('0' + MyDate.getMonth()).slice(-2) + '/'
@@ -304,7 +306,6 @@ offset.fetchLatestOffsets(['log'], function (error, offsets) {
         +('0' + MyDate.getHours()).slice(-2) + ':'
         +('0' + MyDate.getMinutes()).slice(-2) + ':'
         +('0' + MyDate.getSeconds()).slice(-2);
-
         logArray = logs.split(' ');
         if(logArray[0]=="INFO"){
             traffic++;
@@ -312,19 +313,17 @@ offset.fetchLatestOffsets(['log'], function (error, offsets) {
             traffic++;
             error++;
         }else if(logArray[0]=="ERROR"){
-            console.log('ERROR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+            console.log('ERROR!!!!!!!!!!!!!!!!');
         }
-        console.log("1 "+logArray[0])
-        console.log("2 "+logArray[1])
-        console.log("3 "+logArray[2])
-        console.log("4 "+logArray[3])
-        console.log("5 "+logArray[4])
+        console.log("4 "+logArray[3].split(',')[0]);
+        nodeTraffic[logArray[3].split(',')[0]]++;
         fs.appendFile('.log', '['+MyDateString+']  '+ JSON.stringify(logs)+'\r\n', 'utf8', function(err) {
         });
     });
 });
-
+// express settings
 expressapp.use(bodyparser.json());
+// timeout for all response
 expressapp.use(function(req,res,next){
     res.setTimeout(15000, function(){
         console.log('time out..');
@@ -333,13 +332,12 @@ expressapp.use(function(req,res,next){
     next();
 });
 expressapp.use(express.static(path.join(__dirname+"/../", 'ENOW-console')));
-const port = 1111;
 expressapp.set('port', port);
-
+// save recipe in mongoDB. db:enow, collection:recipes.
 expressapp.post('/post_db', function(req, res){
     connectDB(req.body, 'enow', 'recipes', 'save', res);
 });
-
+// publish message to kafka.
 var sendKafka = function(req, topic, messages){
     payloads[0]['topic'] = topic
     payloads[0]['messages']= JSON.stringify(messages);
@@ -347,6 +345,9 @@ var sendKafka = function(req, topic, messages){
     console.log(producer.client);
     setTimeout(function () {
         producer.send(payloads, function (err, data) {
+            if(err){
+                console.log(err);
+            }
             console.log(payloads);
         });
         producer.on('error', function (err) {
@@ -355,6 +356,7 @@ var sendKafka = function(req, topic, messages){
     }, 1000);
 }
 
+// mqtt listener. wait for all devices response.
 var reserve = function(cb) {
     process.nextTick(function() {
         cb();
@@ -390,11 +392,10 @@ var makeReserve = function(key, value, res) {
             }else{
                 res.write('1');
             }
-
-
         }, 2000);
     });
 }
+// run mqtt listener.
 expressapp.post('/alive_check', function(req, res){
     var obj = new Object();
     console.log('Running RoadMap!');
@@ -406,6 +407,7 @@ expressapp.post('/alive_check', function(req, res){
         }
         for(key in obj){
             for(val in obj[key]){
+                //mqtt listener.
                 makeReserve(key, obj[key][val], res);
             }
         }
@@ -414,6 +416,7 @@ expressapp.post('/alive_check', function(req, res){
         }, timeoutLimit || 8000)
     }, 3000);
 });
+// run roadmap.
 expressapp.post('/run_db', function(req, res){
         connectDB(req.body, 'enow', 'execute', 'run', res);
         setTimeout(function(){
@@ -422,20 +425,24 @@ expressapp.post('/run_db', function(req, res){
             sendKafka(req, 'event', obj);
         },3000);
 });
+// stop roadmap.
 expressapp.post('/kill_db', function(req, res){
     console.log('kill execute...');
     connectDB(req.body, 'enow', 'execute', 'kill', res)
 });
+// add broker to mongoDB. db:connectionData, collection:brokerList.
 expressapp.post('/add_broker', function(req, res){
     console.log('add broker...');
     console.log(req.body);
     connectDB(req.body, 'connectionData', 'brokerList', 'saveBroker', res);
     sendKafka(req, 'brokerAdd', req.body);
 });
+// append device to broker in mongoDB.
 expressapp.post('/add_device', function(req, res){
     console.log('add device...');
     connectDB(req.body, 'connectionData', 'brokerList', 'saveDevice', res);
 });
+// delete
 expressapp.post('/delete_device', function(req, res){
     console.log('delete device...');
     connectDB(req.body, 'connectionData', 'brokerList', 'deleteDevice', res);
@@ -497,7 +504,12 @@ expressapp.post('/add_secure', function(req, res){
         sendKafka(req, 'sslAdd', obj);
     }
 });
-
+expressapp.get('/get_request', function(req, res){
+    console.log('get requests...');
+    setTimeout(function(){
+        res.send(nodeTraffic);
+    }, 1000);
+});
 
 expressapp.get('/get_traffic', function(req, res){
     console.log('get traffics...');

@@ -28,7 +28,7 @@ app.controller('chartCtrl', function($scope, $http){
                     for(i in response.data){
                         // console.log($scope.requestChart);
                         $scope.requestChart['config']['data']['labels'].push("roadMapId"+response.data[i]['roadMapId']);
-                        $scope.requestChart['config']['data']['datasets'][0]['data'][i] = 15;
+                        $scope.requestChart['config']['data']['datasets'][0]['data'][i] = 0;
                         $scope.requestChart['config']['data']['datasets'][0]['backgroundColor'][i] = $scope.backgroundColor[i%4];
                         $scope.requestChart['config']['data']['datasets'][0]['hoverBackgroundColor'][i] = $scope.backgroundColor[i%4];
                     }
@@ -303,16 +303,20 @@ app.controller('chartCtrl', function($scope, $http){
                 // $scope.errorChart.update();
             };
             $scope.updateRequestChart = function(){
-                // $http({
-                //     withCredentials: false,
-                //     method: 'get',
-                //     url: "/get_error"
-                // }).then(function(response){
-                // console.log("this is"+response.data);
-                // console.log("type is"+ typeof(response.data));
-                setTimeout(function(){
-                    console.log($scope.requestChart['config']['data']['datasets'][0]['data'][0] += 3);
-                }, 1000);
-                $scope.requestChart.update();
+                $http({
+                    withCredentials: false,
+                    method: 'get',
+                    url: "/get_request"
+                }).then(function(response){
+                    console.log(response.data);
+                    setTimeout(function(){
+                        for(var i =1; i< 1000 ;++i){
+                            if(response.data[i]){
+                                $scope.requestChart['config']['data']['datasets'][0]['data'][i-1] = response.data[i];
+                            }
+                        }
+                    }, 1000);
+                    $scope.requestChart.update();
+                });
             };
         });
