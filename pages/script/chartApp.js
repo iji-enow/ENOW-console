@@ -198,6 +198,11 @@ app.controller('chartCtrl', function($scope, $http){
                     }]
                 },
                 options: {
+                    title:{
+                        display:true,
+                        text:'Requests',
+                        fontSize : 24
+                    },
                     scales: {
                         xAxes: [{
                             stacked: true
