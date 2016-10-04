@@ -62,6 +62,8 @@ var settings_kafka = {
 var brokerList = new Array()
 var functions = new Array()
 
+
+//find brokers at brokerList collection in MongoDB and connect brokers to server side kafka
 var findbrokers = function(db, callback) {
     var cursor =db.collection('brokerList').find( );
     cursor.each(function(err, doc) {
@@ -75,6 +77,8 @@ var findbrokers = function(db, callback) {
     });
 };
 
+
+//making connection to connectionData in MongoDB
 MongoClient.connect('mongodb://localhost:27017/connectionData', function(err, db) {
     assert.equal(null, err);
     findbrokers(db, function() {
@@ -82,6 +86,7 @@ MongoClient.connect('mongodb://localhost:27017/connectionData', function(err, db
     });
 });
 
+//subscribe kafka brokerAdd topic.
 ascoltatori_kafka.build(settings_kafka, function (err, ascoltatori_kafka){
     ascoltatori_kafka.subscribe('brokerAdd', function(topic, message) {
         console.log("added broker : " + message);
@@ -96,6 +101,7 @@ ascoltatori_kafka.build(settings_kafka, function (err, ascoltatori_kafka){
     });
 });
 
+//subscribe kafka brokerSub topic. then disconnect removed client broker to server side kafka
 ascoltatori_kafka.build(settings_kafka, function (err, ascoltatori_kafka){
     ascoltatori_kafka.subscribe('brokerSub', function(topic, message) {
         for(i = 0 ; i<brokerList.length ; i++){
@@ -109,7 +115,7 @@ ascoltatori_kafka.build(settings_kafka, function (err, ascoltatori_kafka){
     });
 });
 
-
+//subscribe kafka feed topic. then send message to client device
 ascoltatori_kafka.build(settings_kafka, function (err, ascoltatori_kafka){
     ascoltatori_kafka.subscribe("feed", function(topic, message) {
         var jsonMessage = JSON.parse(message);
@@ -131,6 +137,7 @@ ascoltatori_kafka.build(settings_kafka, function (err, ascoltatori_kafka){
     });
 });
 
+//subscribe kafka sslAdd topic.
 ascoltatori_kafka.build(settings_kafka, function (err, ascoltatori_kafka){
     ascoltatori_kafka.subscribe('sslAdd', function(topic, message) {
         addSSLFunction(message)
@@ -139,6 +146,7 @@ ascoltatori_kafka.build(settings_kafka, function (err, ascoltatori_kafka){
     });
 });
 
+//subscribe kafka sslSub topic.
 ascoltatori_kafka.build(settings_kafka, function (err, ascoltatori_kafka){
     ascoltatori_kafka.subscribe('sslSub', function(topic, message) {
         subSSLFunction(message)
@@ -147,6 +155,7 @@ ascoltatori_kafka.build(settings_kafka, function (err, ascoltatori_kafka){
     });
 });
 
+//connect client broker to server side kafka
 function makeFunction(brokerId,ipAddress,port){
     functions.push(function(){
         var brokerSetting = "mqtt://"+ ipAddress+":"+port
@@ -183,6 +192,7 @@ function makeFunction(brokerId,ipAddress,port){
     functions[functions.length-1]()
 }
 
+//if ssl is added suport ssl connection to client mqtt
 function addSSLFunction(brokerId){
     var index
     for(i = 0 ; i<brokerList.length ; i++){
@@ -232,6 +242,7 @@ function addSSLFunction(brokerId){
     functions[index]()
 }
 
+//if ssl is removed suport ssl disconnection to client mqtt
 function subSSLFunction(brokerId){
     var index;
     for(i = 0 ; i<brokerList.length ; i++){
