@@ -22,11 +22,9 @@ app.controller('chartCtrl', function($scope, $http){
             if(response.data=="no_connect"){
                 alert('Connect failed. Check MongoDB Url, Port.');
             }else{
-                console.log(response.data);
                 $scope.listOfRunningRoadMap = response.data;
                 setTimeout(function(){
                     for(i in response.data){
-                        // console.log($scope.requestChart);
                         $scope.requestChart['config']['data']['labels'].push("roadMapId"+response.data[i]['roadMapId']);
                         $scope.requestChart['config']['data']['datasets'][0]['data'][i] = 0;
                         $scope.requestChart['config']['data']['datasets'][0]['backgroundColor'][i] = $scope.backgroundColor[i%4];
@@ -57,7 +55,6 @@ app.controller('chartCtrl', function($scope, $http){
             if(response.data=="no_connect"){
                 alert('Connect failed. Check MongoDB Url, Port.');
             }else{
-                console.log('done!');
                 $scope.brokerList = response.data;
             }
         });
@@ -240,7 +237,6 @@ app.controller('chartCtrl', function($scope, $http){
                     method: 'get',
                     url: "/get_traffic"
                 }).then(function(response){
-                    console.log(response.data);
                     $scope.trafficChart.data['labels'].push(myDateString);
                     $scope.trafficChart.data['datasets'][0]['data'].push(response.data);
                     $scope.trafficChart.update();
@@ -258,18 +254,6 @@ app.controller('chartCtrl', function($scope, $http){
 
             };
             $scope.updateLogChart = function(){
-                // $http({
-                //     withCredentials: false,
-                //     method: 'get',
-                //     url: "/get_log"
-                // }).then(function(response){
-                //     if(response.data=="no_connect"){
-                //         alert('Connect failed. Check MongoDB Url, Port.');
-                //     }else{
-                //         console.log('done!');
-                //         $scope.brokerList = response.data;
-                //     }
-                // });
                 MyDate = new Date();
                 MyDate.setDate(MyDate.getDate() + 20);
                 var myDateString = ('0' + MyDate.getMinutes()).slice(-2) + ':'
@@ -289,8 +273,6 @@ app.controller('chartCtrl', function($scope, $http){
                     method: 'get',
                     url: "/get_error"
                 }).then(function(response){
-                    console.log("this is"+response.data);
-                    console.log("type is"+ typeof(response.data));
                     setTimeout(function(){
                         $scope.errorChart.data['datasets'][0]['data'][0] += response.data['traffic']*1 - response.data['errorRate']*1;
                         $scope.errorChart.data['datasets'][0]['data'][1] += response.data['errorRate'] *1;
@@ -308,7 +290,6 @@ app.controller('chartCtrl', function($scope, $http){
                     method: 'get',
                     url: "/get_request"
                 }).then(function(response){
-                    console.log(response.data);
                     setTimeout(function(){
                         for(var i =1; i< 1000 ;++i){
                             if(response.data[i]){

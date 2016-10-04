@@ -288,7 +288,6 @@ function subSSLFunction(brokerId){
 offset.fetchLatestOffsets(['log'], function (error, offsets) {
     if (error)
     return handleError(error);
-    console.log('start from...\n\tkafka topic: log\n\toffset : '+offsets['log'][0]);
     latestOffset = offsets['log'][0];
     consumer = new Consumer(
         client,
@@ -308,7 +307,6 @@ offset.fetchLatestOffsets(['log'], function (error, offsets) {
     consumer.on('message', function (message) {
         MyDate = new Date();
         var logs = message['value'];
-        console.log(message['value']);
         //get date
         MyDate.setDate(MyDate.getDate() + 20);
         MyDateString = MyDate.getFullYear() + '/'
@@ -324,9 +322,8 @@ offset.fetchLatestOffsets(['log'], function (error, offsets) {
             traffic++;
             error++;
         }else if(logArray[0]=="ERROR"){
-            console.log('ERROR!!!!!!!!!!!!!!!!');
+            console.log('ERROR!!');
         }
-        console.log("4 "+logArray[3].split(',')[0]);
         nodeTraffic[logArray[3].split(',')[0]]++;
         fs.appendFile('.log', '['+MyDateString+']  '+ JSON.stringify(logs)+'\r\n', 'utf8', function(err) {
         });
@@ -352,8 +349,6 @@ expressapp.post('/post_db', function(req, res){
 var sendKafka = function(req, topic, messages){
     payloads[0]['topic'] = topic
     payloads[0]['messages']= JSON.stringify(messages);
-    console.log("send kafka");
-    console.log(producer.client);
     setTimeout(function () {
         producer.send(payloads, function (err, data) {
             if(err){
@@ -444,7 +439,6 @@ expressapp.post('/kill_db', function(req, res){
 // add broker to mongoDB. db:connectionData, collection:brokerList.
 expressapp.post('/add_broker', function(req, res){
     console.log('add broker...');
-    console.log(req.body);
     connectDB(req.body, 'connectionData', 'brokerList', 'saveBroker', res);
     sendKafka(req, 'brokerAdd', req.body);
 });
@@ -468,7 +462,6 @@ expressapp.post('/find_broker', function(req, res){
 // default settings
 expressapp.post('/post_url_settings', function(req, res){
     console.log('setting url...');
-    console.log(req.body);
     mongoUrl = req.body['mongoUrl'];
     mongoPort = req.body['mongoPort'];
     kafkaUrl = req.body['kafkaUrl'];
@@ -501,7 +494,6 @@ expressapp.post('/get_broker', function(req, res){
 // add ca, cert, key file to broker.
 expressapp.post('/add_secure', function(req, res){
     console.log('add secure...');
-    console.log(req.body);
     connectDB(req.body, 'connectionData', 'brokerList', 'addSecure', res);
     var obj = {};
     obj['brokerId'] = req.body['brokerId'];
@@ -539,7 +531,6 @@ expressapp.get('/get_error', function(req, res){
     obj['traffic'] = (traffic - trafficPin)+"";
     trafficPin = traffic;
     obj['errorRate'] = errorRate+"";
-    console.log(obj);
     res.send(obj);
     setTimeout(function(){
         errorRate=0;

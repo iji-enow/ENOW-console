@@ -508,7 +508,7 @@
         </section>
         <!-- Main content -->
         <section class="content" ng-controller="myCtrl">
-            
+
             <input name="sendToAngular" type="hidden" id="jsonToScope" ng-model="list" ng-change="list"></input>
             <div class="col-lg-12 col-xs-12">
                 <div class="box box-warning" style="height:800px;">
@@ -940,7 +940,6 @@ $('#run').click(function(){
 
 $('#test').on("click",'#deviceOrLambda', function(){
     if($(this).is(':checked')){
-        console.log($(this).parent().parent().parent()[0].id);
         $("#"+$(this).parent().parent().parent()[0].id).find('h3').text('node'+$(this).parent().parent().parent()[0].id.slice(8)+' [Lambda]');
         $("#"+$(this).parent().parent().parent()[0].id).find('#hideIfLambda').hide();
         deviceInfo[$(this).parent().parent().parent()[0].id.slice(8)]['lambda'] = true;
@@ -958,13 +957,10 @@ $('#test').on("click",'#deviceOrLambda', function(){
 // phone toggle button
 $('#test').on("click",'#triggerToggle', function(){
     if($(this).is(':checked')){
-        console.log($(this).parent().parent().parent().parent()[0].id.slice(8));
         orderNode["key"] = $(this).parent().parent().parent().parent()[0].id.slice(8);
-        console.log(orderNode);
     }
     else{
         orderNode = {};
-        console.log(orderNode);
     }
 });
 
@@ -998,8 +994,6 @@ $('#broker_table').on('click','#loadRoadMapItem, #loadRunningRoadMapItem', funct
                 n[i].style['top'] = temp['nodeIds'][i]['y'];
                 if(temp['nodeIds'][i]['lambda']){
                     console.log(n.find('h3')[i].childNodes[0]='node'+i+' [Lambda]');
-                    // n[i].childNodes[1].innerText = 'node'+i+' [Lambda]';
-                    // console.log(n[i].childNodes);
                     n[i].childNodes[3].childNodes[3].childNodes[1].checked=true;
                 }
             };
@@ -1057,7 +1051,6 @@ var instance = window.jsp = jsPlumb.getInstance({
                         instance.detach(connection);
                     }
                     else{
-                        console.log("no");
                     }
                 }
             }
@@ -1180,11 +1173,8 @@ function saveTree(){
         }
     }
     //position values
-    console.log(Object.keys(deviceInfo).length);
-    console.log(deviceInfo);
     for(var i=1; i <= Object.keys(deviceInfo).length ; ++i){
 
-        console.log(deviceInfo[i]['deviceId']);
         var temp = $('#test').find('#deviceId'+i)[0];
         deviceInfo[i]['x'] = temp.style['left'] || "0px";
         deviceInfo[i]['y'] = temp.style['top'] || "0px";
@@ -1197,7 +1187,6 @@ function saveTree(){
     angular.element(document.getElementById('jsonToScope')).scope().orderNode = orderNode;
     angular.element(document.getElementById('jsonToScope')).scope().list = connectInfo;
     angular.element(document.getElementById('jsonToScope')).scope().nodeIds = deviceInfo;
-    console.log(deviceInfo);
     angular.element(document.getElementById('jsonToScope')).scope().changeToTree(connectInfo);
     console.log(angular.element(document.getElementById('jsonToScope')).scope().tree);
 }
@@ -1228,16 +1217,6 @@ $('#test').on("click",".tog_button", function () {
     }, 801);
 });
 
-
-//zoom in & out.. not working now
-// $('#test').on("mousewheel", function (e) {
-//     if(e.originalEvent.wheelDelta>0){
-//         console.log($('#test').find())
-//     }else{
-//         console.log("zz");
-//     }
-// });
-
 //show 'code editor'
 $('#test').on("click","#codeEditor", function () {
     currentNode = $(this)[0].parentNode.parentNode.id;
@@ -1248,7 +1227,6 @@ $('#test').on("click","#codeEditor", function () {
         editor.resize();
     }, 300);
     if(deviceInfo[currentNode.slice(8)]['code']!==undefined){
-        console.log(deviceInfo);
         code = deviceInfo[currentNode.slice(8)]['code'];
         setTimeout(function () {
             editor.getSession().setValue(code);
@@ -1290,7 +1268,6 @@ function clearMap(){
 function addnode(){
     angular.element(document.getElementById('jsonToScope')).scope().$apply();
     var _id = "deviceId" + $(".window").length;
-    console.log(_id);
     var newnode = $('<div class="window box collapsed-box" id="' + _id + '" >').appendTo("#test").html($(("#device0"))[0].innerHTML);
     newnode.find('h3').text('node'+_id.slice(8)+' [Device]');
     _addEndpoints(newnode);

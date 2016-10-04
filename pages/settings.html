@@ -926,7 +926,6 @@ immediately after the control sidebar -->
 $(document).ready(function(){
     setTimeout(function () {
         angular.element(document.getElementById('jsonToScope')).scope().settings = localStorage;
-        console.log(angular.element(document.getElementById('jsonToScope')).scope().settings);
         setTimeout(function () {
             angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings();
             setTimeout(function () {
@@ -1031,7 +1030,6 @@ $("#addDeviceSubmit").click(function(){
 });
 // remove device
 $(document).on("click","#removeDeviceSubmit", function(){
-    console.log($(this).parent()[0].innerText.split('	')[1]);
     var ask = confirm('delete '+$(this).parent()[0].innerText.split('	')[1]+'?');
     if(ask){
         angular.element(document.getElementById('jsonToScope')).scope().newdevice['deviceId'] = $(this).parent()[0].innerText.split('	')[1];

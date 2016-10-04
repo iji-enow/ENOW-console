@@ -84,11 +84,9 @@ app.controller('myCtrl', function($scope, $http){
             contentType : 'application/json',
             dataType: "json"
         }).then(function(response){
-            console.log(response.data);
             if(response.data.includes('0')){
                 alert('no ack from devices');
             }else{
-                console.log('running db...');
                 $http({
                     withCredentials: false,
                     method: 'post',
@@ -151,7 +149,6 @@ app.controller('myCtrl', function($scope, $http){
                 alert('Connect failed. Check MongoDB Url, Port.');
             }else{
                 $scope.getTarget = response.data;
-                    console.log($scope.getTarget);
             }
         });
     }
@@ -270,7 +267,6 @@ app.controller('myCtrl', function($scope, $http){
             if(response.data=="no_connect"){
                 alert('Connect failed. Check MongoDB Url, Port.');
             }else{
-                console.log('done!');
                 $scope.brokerList = response.data;
             }
         });
@@ -297,7 +293,6 @@ app.controller('myCtrl', function($scope, $http){
             if(response.data=="no_connect"){
                 alert('Connect failed. Check MongoDB Url, Port.');
             }else{
-                console.log(response.data);
                 $scope.listOfRoadMap = response.data;
             }
         });
