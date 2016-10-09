@@ -50,7 +50,7 @@ var settings_kafka = {
     type: 'kafka',
     json: false,
     kafka: require('kafka-node'),
-    connectString: "127.0.0.1:2181",
+    connectString: "192.168.99.100:2181",
     clientId: "ascoltatori",
     groupId: "ascoltatori",
     defaultEncoding: "utf8",
@@ -80,7 +80,7 @@ var findbrokers = function(db, callback) {
 
 
 //making connection to connectionData in MongoDB
-MongoClient.connect('mongodb://localhost:27017/connectionData', function(err, db) {
+MongoClient.connect('mongodb://192.168.99.100:27017/connectionData', function(err, db) {
     assert.equal(null, err);
     findbrokers(db, function() {
         db.close();
