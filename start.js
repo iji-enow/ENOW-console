@@ -59,6 +59,7 @@ var settings_kafka = {
     }
 };
 
+
 var brokerList = new Array()
 var functions = new Array()
 
@@ -69,7 +70,7 @@ var findbrokers = function(db, callback) {
     cursor.each(function(err, doc) {
         assert.equal(err, null);
         if (doc != null) {
-            makeFunction(doc.brokerId,doc.ipAddress,doc.port)
+            makeFunction(doc.brokerId,doc.ipAddress,doc.port);
             console.log("made connection to brokerId : " + doc.brokerId + " ipAddress : " + doc.ipAddress + " port : "  + doc.port);
         } else {
             callback();
@@ -185,11 +186,9 @@ function makeFunction(brokerId,ipAddress,port){
                 });
             });
         });
+    });
 
-
-    })
-
-    functions[functions.length-1]()
+    functions[functions.length-1]();
 }
 
 //if ssl is added suport ssl connection to client mqtt
@@ -349,6 +348,7 @@ expressapp.post('/post_db', function(req, res){
 var sendKafka = function(req, topic, messages){
     payloads[0]['topic'] = topic
     payloads[0]['messages']= JSON.stringify(messages);
+    console.log(producer);
     setTimeout(function () {
         producer.send(payloads, function (err, data) {
             if(err){
@@ -467,7 +467,10 @@ expressapp.post('/post_url_settings', function(req, res){
     kafkaUrl = req.body['kafkaUrl'];
     kafkaPort = req.body['kafkaPort'];
     timeoutLimit = req.body['timeoutLimit']*1000;
-    producer.client.connectionString = kafkaUrl+':'+kafkaPort;
+    console.log("kafkaUrl : "+ kafkaUrl);
+
+    client = new kafka.Client(kafkaUrl+':'+kafkaPort);
+    producer = new Producer(client);
     if(db){
         db.close();
     }
