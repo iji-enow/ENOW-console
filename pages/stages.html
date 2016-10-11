@@ -540,7 +540,10 @@
                                     <input type="checkbox" id="deviceOrLambda">
                                     <div class="slider_slim round"></div>
                                 </label>
-
+                                <br>
+                                <label id="deviceOrLambdaText">Timeout</label>
+                                <label class="pull-right" style="margin-right:5px;">sec</label>
+                                <input id="timeout" class="pull-right" style="height:20px; width:20px; margin-right:4px;"type="text"></input>
                                 <div id="hideIfLambda" style="">
                                     <label id="triggerToggleText">Trigger Node</label>
                                     <label class="switch_slim pull-right" data-toggle="tooltip" title="Trigger other nodes" style="margin-right:5px;">
@@ -1000,7 +1003,6 @@ $('#broker_table').on('click','#loadRoadMapItem, #loadRunningRoadMapItem', funct
             var arr = Object.keys(temp['outingNode']).map(function(key){
                 return temp['outingNode'][key];
             });
-            // console.log(arr);
             for(var i = 0 ; i< Object.keys(temp['outingNode']).length ; ++i){
                 for(var j = 0 ; j < arr[i].length; ++j){
                     instance.connect({
@@ -1015,9 +1017,9 @@ $('#broker_table').on('click','#loadRoadMapItem, #loadRunningRoadMapItem', funct
                 deviceInfo[i]['brokerId'] = arr[i-1].brokerId;
                 deviceInfo[i]['code'] = arr[i-1].code;
                 deviceInfo[i]['lambda'] = arr[i-1].lambda;
-
                 deviceInfo[i]['deviceId'] = arr[i-1].deviceId;
                 deviceInfo[i]['parameter'] = arr[i-1].parameter;
+                deviceInfo[i]['timeoutLimit'] = arr[i-1].timeoutLimit;
             }
             instance.repaintEverything();
         }, 200);
@@ -1049,8 +1051,6 @@ var instance = window.jsp = jsPlumb.getInstance({
                     if(ask==true){
                         var connection = $(this)[0].component;
                         instance.detach(connection);
-                    }
-                    else{
                     }
                 }
             }
@@ -1145,7 +1145,7 @@ var _addEndpoints = function (toId) {
         uuid: toId[0].id+"_target"
     });
 };
-
+//save roadmap to recipes collection
 $("#saveDB").click(function(){
     saveTree();
 });
@@ -1174,7 +1174,6 @@ function saveTree(){
     }
     //position values
     for(var i=1; i <= Object.keys(deviceInfo).length ; ++i){
-
         var temp = $('#test').find('#deviceId'+i)[0];
         deviceInfo[i]['x'] = temp.style['left'] || "0px";
         deviceInfo[i]['y'] = temp.style['top'] || "0px";
@@ -1206,12 +1205,17 @@ $("#loadRoadMap").click(function(){
 
 // collapsed-box toggle button
 $('#test').on("click",".tog_button", function () {
+  // console.log(deviceInfo[$(this).parent().parent().parent()[0].id.slice(8)]);
+  $(this).parent().parent().parent().find('#timeout').attr('value',deviceInfo[$(this).parent().parent().parent()[0].id.slice(8)]['timeoutLimit']);
     if($(this).parent().parent().parent().find('#deviceOrLambda')[0].checked){
         $(this).parent().parent().parent().find('h3').text('node'+$(this).parent().parent().parent()[0].id.slice(8)+' [Lambda]');
         $(this).parent().parent().parent().find('#hideIfLambda').hide();
     }else{
         $(this).parent().parent().parent().find('#hideIfLambda').show();
     }
+    // if(deviceInfo[$(this).parent().parent()]){
+
+    // }
     setTimeout(function () {
         instance.repaintEverything();
     }, 801);
@@ -1278,6 +1282,7 @@ function addnode(){
     deviceInfo[_id.slice(8)]['lambda'] = false;
     deviceInfo[_id.slice(8)]['brokerId'] = "null";
     deviceInfo[_id.slice(8)]['serverId'] = "server0";
+    deviceInfo[_id.slice(8)]['timeoutLimit'] = "0";
     $(instance.getSelector("#"+_id)).draggable({
         containment:'parent',
         grid:[20, 20],
