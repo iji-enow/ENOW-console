@@ -17,6 +17,7 @@
   },
   "main": "dist/js/app.min.js",
   "dependencies": {
+    "ascoltatori": "^3.1.0",
     "body-parser": "^1.15.2",
     "bson": "^0.5.5",
     "enow-bridge": "^0.0.1-alpha",
