@@ -543,7 +543,7 @@
                                 <br>
                                 <label id="deviceOrLambdaText">Timeout</label>
                                 <label class="pull-right" style="margin-right:5px;">sec</label>
-                                <input id="timeout" class="pull-right" style="height:20px; width:20px; margin-right:4px;"type="text" value="3"></input>
+                                <input id="timeout" class="pull-right" style="height:20px; width:30px; margin-right:4px;"type="text" value="3"></input>
                                 <div id="hideIfLambda" style="">
                                     <label id="triggerToggleText">Trigger Node</label>
                                     <label class="switch_slim pull-right" data-toggle="tooltip" title="Trigger other nodes" style="margin-right:5px;">
@@ -921,7 +921,7 @@ $(document).on("click","#listOfDevice", function(){
     if(ask){
         deviceInfo[tempBroker.slice(8)]['deviceId']=$(this)[0].childNodes[1].innerText;
         $('#deviceModal').modal('hide');
-    }else{}
+    }
 });
 //run button. start current roadmap
 $('#run').click(function(){
@@ -935,8 +935,7 @@ $('#run').click(function(){
         }else{
             $(this).attr("checked",false);
         }
-    }
-    else{
+    }else{
         angular.element(document.getElementById('jsonToScope')).scope().killRoadMap();
     }
 });
@@ -948,8 +947,7 @@ $('#test').on("click",'#deviceOrLambda', function(){
         deviceInfo[$(this).parent().parent().parent()[0].id.slice(8)]['lambda'] = true;
 
         deviceInfo[$(this).parent().parent().parent()[0].id.slice(8)]['brokerId'] = "null";
-    }
-    else{
+    }else{
         $("#"+$(this).parent().parent().parent()[0].id).find('h3').text('node'+$(this).parent().parent().parent()[0].id.slice(8)+' [Device]');
         $("#"+$(this).parent().parent().parent()[0].id).find('#hideIfLambda').show();
         deviceInfo[$(this).parent().parent().parent()[0].id.slice(8)]['lambda'] = false;
@@ -961,8 +959,7 @@ $('#test').on("click",'#deviceOrLambda', function(){
 $('#test').on("click",'#triggerToggle', function(){
     if($(this).is(':checked')){
         orderNode["key"] = $(this).parent().parent().parent().parent()[0].id.slice(8);
-    }
-    else{
+    }else{
         orderNode = {};
     }
 });
@@ -1175,7 +1172,7 @@ function saveTree(){
     //position values
     for(var i=1; i <= Object.keys(deviceInfo).length ; ++i){
         var temp = $('#test').find('#deviceId'+i)[0];
-        deviceInfo[i]['timeoutLimit'] = $('#test').find('#deviceId'+i)[0].children[1].children[5].value;
+        deviceInfo[i]['timeoutLimit'] = $('#test').find('#deviceId'+i)[0].children[1].children[5].value+"000";
         deviceInfo[i]['x'] = temp.style['left'] || "0px";
         deviceInfo[i]['y'] = temp.style['top'] || "0px";
     }
@@ -1206,11 +1203,8 @@ $("#loadRoadMap").click(function(){
 
 // collapsed-box toggle button
 $('#test').on("click",".tog_button", function () {
-  // console.log(deviceInfo[$(this).parent().parent().parent()[0].id.slice(8)]);
-  // console.log($(this).parent().parent().parent().find('#timeout')[0].value);
   deviceInfo[$(this).parent().parent().parent()[0].id.slice(8)]['timeoutLimit'] = $(this).parent().parent().parent().find('#timeout')[0].value;
-  // $(this).parent().parent().parent().find('#timeout').attr('value',deviceInfo[$(this).parent().parent().parent()[0].id.slice(8)]['timeoutLimit'].slice(-3));
-    if($(this).parent().parent().parent().find('#deviceOrLambda')[0].checked){
+     if($(this).parent().parent().parent().find('#deviceOrLambda')[0].checked){
         $(this).parent().parent().parent().find('h3').text('node'+$(this).parent().parent().parent()[0].id.slice(8)+' [Lambda]');
         $(this).parent().parent().parent().find('#hideIfLambda').hide();
     }else{
@@ -1282,7 +1276,7 @@ function addnode(){
     deviceInfo[_id.slice(8)]['lambda'] = false;
     deviceInfo[_id.slice(8)]['brokerId'] = "null";
     deviceInfo[_id.slice(8)]['serverId'] = "server0";
-    deviceInfo[_id.slice(8)]['timeoutLimit'] = "5";
+    deviceInfo[_id.slice(8)]['timeoutLimit'] = "";
     $(instance.getSelector("#"+_id)).draggable({
         containment:'parent',
         grid:[20, 20],
