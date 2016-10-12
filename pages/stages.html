@@ -1175,8 +1175,7 @@ function saveTree(){
     //position values
     for(var i=1; i <= Object.keys(deviceInfo).length ; ++i){
         var temp = $('#test').find('#deviceId'+i)[0];
-        console.log(temp.childNodes[3].childNodes[11]);
-        // deviceInfo[i]['timeoutLimit'] = temp.
+        deviceInfo[i]['timeoutLimit'] = $('#test').find('#deviceId'+i)[0].children[1].children[5].value;
         deviceInfo[i]['x'] = temp.style['left'] || "0px";
         deviceInfo[i]['y'] = temp.style['top'] || "0px";
     }
