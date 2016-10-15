@@ -348,6 +348,7 @@ expressapp.post('/post_db', function(req, res){
 var sendKafka = function(req, topic, messages){
     payloads[0]['topic'] = topic
     payloads[0]['messages']= JSON.stringify(messages);
+    console.log(payloads[0]['messages']);
     setTimeout(function () {
         producer.send(payloads, function (err, data) {
             if(err){
@@ -460,6 +461,7 @@ expressapp.post('/find_broker', function(req, res){
 expressapp.post('/delete_broker', function(req, res){
     console.log('delete broker...');
     connectDB(req.body, 'connectionData', 'brokerList', 'deleteBroker', res);
+    sendKafka(req, 'brokerSub', req.body);
 });
 // default settings
 expressapp.post('/post_url_settings', function(req, res){
