@@ -972,11 +972,15 @@ $('#broker_table').on('click','#loadRoadMapItem, #loadRunningRoadMapItem', funct
     }else if($(this)[0].id == 'loadRunningRoadMapItem'){
         angular.element(document.getElementById('jsonToScope')).scope().loadTarget['db'] = 'enow';
         angular.element(document.getElementById('jsonToScope')).scope().loadTarget['collection'] = 'execute';
-        $('#run').attr("checked",true);
     }
     var ask = confirm('Load '+$(this)[0].childNodes[1].innerText +' RoadMap?');
     if(ask){
         clearMap();
+        
+        if(angular.element(document.getElementById('jsonToScope')).scope().loadTarget['collection'] == 'execute'){
+            $('#run').attr("checked",true);
+            $('#run')[0].checked = true;
+        }
         angular.element(document.getElementById('jsonToScope')).scope().loadTarget['_id'] = $(this)[0].childNodes[1].innerText;
         angular.element(document.getElementById('jsonToScope')).scope().loadRoadMap();
         setTimeout(function () {
@@ -1203,8 +1207,8 @@ $("#loadRoadMap").click(function(){
 
 // collapsed-box toggle button
 $('#test').on("click",".tog_button", function () {
-  deviceInfo[$(this).parent().parent().parent()[0].id.slice(8)]['timeoutLimit'] = $(this).parent().parent().parent().find('#timeout')[0].value;
-     if($(this).parent().parent().parent().find('#deviceOrLambda')[0].checked){
+    deviceInfo[$(this).parent().parent().parent()[0].id.slice(8)]['timeoutLimit'] = $(this).parent().parent().parent().find('#timeout')[0].value;
+    if($(this).parent().parent().parent().find('#deviceOrLambda')[0].checked){
         $(this).parent().parent().parent().find('h3').text('node'+$(this).parent().parent().parent()[0].id.slice(8)+' [Lambda]');
         $(this).parent().parent().parent().find('#hideIfLambda').hide();
     }else{
