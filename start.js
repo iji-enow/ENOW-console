@@ -80,12 +80,12 @@ var findbrokers = function(db, callback) {
 
 
 //making connection to connectionData in MongoDB
-MongoClient.connect('mongodb://192.168.99.100:27017/connectionData', function(err, db) {
-    assert.equal(null, err);
-    findbrokers(db, function() {
-        db.close();
-    });
-});
+// MongoClient.connect('mongodb://'+mongoUrl+':'+mongoPort+'/connectionData', function(err, db) {
+//     assert.equal(null, err);
+//     findbrokers(db, function() {
+//         db.close();
+//     });
+// });
 
 //subscribe kafka brokerAdd topic.
 ascoltatori_kafka.build(settings_kafka, function (err, ascoltatori_kafka){
@@ -348,13 +348,11 @@ expressapp.post('/post_db', function(req, res){
 var sendKafka = function(req, topic, messages){
     payloads[0]['topic'] = topic
     payloads[0]['messages']= JSON.stringify(messages);
-    console.log(producer);
     setTimeout(function () {
         producer.send(payloads, function (err, data) {
             if(err){
                 console.log(err);
             }
-            console.log(payloads);
         });
         producer.on('error', function (err) {
             console.log(err);
@@ -458,6 +456,10 @@ expressapp.post('/find_device', function(req, res){
 expressapp.post('/find_broker', function(req, res){
     console.log('find broker...');
     connectDB(req.body, 'connectionData', 'brokerList', 'findBroker', res);
+});
+expressapp.post('/delete_broker', function(req, res){
+    console.log('delete broker...');
+    connectDB(req.body, 'connectionData', 'brokerList', 'deleteBroker', res);
 });
 // default settings
 expressapp.post('/post_url_settings', function(req, res){
@@ -597,6 +599,12 @@ function connectDB(source, dbName, collectionName, command, response){
             response.send(result);
         });
     }
+    //delete broker
+    var deleteBroker = function(callback){
+        db.db(dbName).collection(collectionName).deleteOne({'brokerId':source['brokerId']},function(err,result){
+            response.send("done");
+        });
+    }
     // find roadmap.
     var findTarget = function(callback){
         var o_id = BSON.ObjectID.createFromHexString(source['_id']);
@@ -689,6 +697,9 @@ function connectDB(source, dbName, collectionName, command, response){
         });
     }else if(command=="deleteDevice"){
         deleteDevice(db, function(){
+        });
+    }else if(command=="deleteBroker"){
+        deleteBroker(db, function(){
         });
     }else if(command=="findDevice"){
         findDevice(db, function(){

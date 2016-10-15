@@ -219,6 +219,18 @@ app.controller('myCtrl', function($scope, $http){
         }).then(function(response){
         });
     }
+    $scope.deleteBroker = function(){
+        $http({
+            withCredentials: false,
+            method: 'post',
+            url: "/delete_broker",
+            headers: {'Content-Type': 'application/json'},
+            data: $scope.newnode,
+            contentType : 'application/json',
+            dataType: "json"
+        }).then(function(response){
+        });
+    }
     $scope.findBroker = function(){
         $http({
             withCredentials: false,

@@ -597,6 +597,7 @@
                                     <div class="box-header">
                                         <h3 class="box-title">Broker lists</h3>
                                         <button id="addBroker" class="btn btn-primary btn-flat pull-right">Add Broker</button>
+                                        <button id="deleteBroker" class="btn btn-primary btn-flat pull-right">Delete Broker</button>
 
                                     </div>
                                     <div class="box-body">
@@ -989,6 +990,19 @@ $("#addBroker").click(function(){
         $('#s2')[0].value = "";
         $('#s3')[0].value = "";
     $('#myModal').modal('show');
+});
+$("#deleteBroker").click(function(){
+    var ask = prompt('brokerId you want to delete');
+    console.log(ask);
+    angular.element(document.getElementById('jsonToScope')).scope().newnode['brokerId'] = ask;
+    setTimeout(function(){
+        angular.element(document.getElementById('jsonToScope')).scope().deleteBroker();
+        setTimeout(function(){
+            angular.element(document.getElementById('jsonToScope')).scope().getBrokers();
+            angular.element(document.getElementById('jsonToScope')).scope().$apply();
+        }, 600);
+    }, 300);
+
 });
 // add broker to list
 $("#addBrokerSubmit").click(function(){
