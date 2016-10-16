@@ -202,15 +202,22 @@ expressapp.post('/run_db', function(req, res){
     connectDB(req.body, 'enow', 'execute', 'run', res);
     setTimeout(function(){
         var obj = {};
-        obj['roadMapId'] = roadmapNum.toString();
+        obj['roadMapId'] = req.body["roadMapId"];
         obj['status'] = "start";
         sendKafka(req, 'event', obj);
-    },3000);
+    },1000);
 });
 // stop roadmap.
 expressapp.post('/kill_db', function(req, res){
     console.log('kill execute...');
-    connectDB(req.body, 'enow', 'execute', 'kill', res)
+    connectDB(req.body, 'enow', 'execute', 'kill', res);
+    setTimeout(function(){
+        var obj = {};
+        obj['roadMapId'] = req.body["roadMapId"];
+        obj['status'] = "stop";
+        sendKafka(req, 'event', obj);
+    },1000);
+
 });
 // add broker to mongoDB. db:connectionData, collection:brokerList.
 expressapp.post('/add_broker', function(req, res){
