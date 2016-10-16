@@ -90,7 +90,7 @@ offset.fetchLatestOffsets(['log'], function (error, offsets) {
         +('0' + MyDate.getHours()).slice(-2) + ':'
         +('0' + MyDate.getMinutes()).slice(-2) + ':'
         +('0' + MyDate.getSeconds()).slice(-2);
-        logArray = logs.split(' ');
+        logArray = logs.split('|');
         if(logArray[0]=="INFO"){
             traffic++;
         }else if(logArray[0]=="WARN"){
@@ -292,9 +292,11 @@ expressapp.post('/add_secure', function(req, res){
         sendKafka(req, 'sslSub', obj);
     }else{
         obj['caFile'] = req.body['caFile'];
-        obj['certFile'] = req.body['certFile'];
+        obj['crtFile'] = req.body['crtFile'];
         obj['keyFile'] = req.body['keyFile'];
-        sendKafka(req, 'sslAdd', obj);
+        setTimeout(function(){
+            sendKafka(req, 'sslAdd', obj);
+        }, 1000);
     }
 });
 // get request count for requestChart.
