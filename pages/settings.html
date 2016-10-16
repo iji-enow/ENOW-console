@@ -1068,7 +1068,11 @@ $(document).on("click",'#checkSecure',function(e){
         angular.element(document.getElementById('jsonToScope')).scope().currentBroker['brokerId'] = arr[0];
     if($(this).is(':checked')){
         $('#secureModal').modal('show');
-    }else{}
+    }else{
+    angular.element(document.getElementById('jsonToScope')).scope().file['brokerId']=angular.element(document.getElementById('jsonToScope')).scope().currentBroker['brokerId'];
+    angular.element(document.getElementById('jsonToScope')).scope().file['caFile'] = "";
+    angular.element(document.getElementById('jsonToScope')).scope().addSecure();
+    }
 });
 //add security file
 $('#secureSubmit').click(function(){

@@ -288,7 +288,7 @@ expressapp.post('/add_secure', function(req, res){
     connectDB(req.body, 'connectionData', 'brokerList', 'addSecure', res);
     var obj = {};
     obj['brokerId'] = req.body['brokerId'];
-    if(req.body['caFile']==null){
+    if(req.body['caFile']==""){
         sendKafka(req, 'sslSub', obj);
     }else{
         obj['caFile'] = req.body['caFile'];
