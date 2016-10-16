@@ -50,6 +50,7 @@ app.controller('myCtrl', function($scope, $http){
             $.each(files, function(i, j){
                 var reader = new FileReader();
                 reader.readAsText(files[i]);
+                reader.read(files[i]);
                 reader.onload = function(e){
                     $scope.temp.push(reader.result);
                 }
@@ -60,6 +61,7 @@ app.controller('myCtrl', function($scope, $http){
                 $scope.file['keyFile'] = $scope.temp[2];
                 }, 1000);
         }, 1000);
+        console.log($scope.file);
     };
 
     $scope.saveDataBase = function(){
