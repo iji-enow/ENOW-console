@@ -985,20 +985,18 @@ $('#broker_table').on('click','#loadRoadMapItem, #loadRunningRoadMapItem', funct
         angular.element(document.getElementById('jsonToScope')).scope().loadTarget['_id'] = $(this)[0].childNodes[1].innerText;
         angular.element(document.getElementById('jsonToScope')).scope().loadRoadMap();
         setTimeout(function () {
+            angular.element(document.getElementById('jsonToScope')).scope().currentTarget['roadMapId'] = angular.element(document.getElementById('jsonToScope')).scope().getTarget[0]['roadMapId'];
             var currentRoadMap = angular.element(document.getElementById('jsonToScope')).scope().getTarget;
-            console.log(JSON.stringify(currentRoadMap));
             var temp = JSON.parse(JSON.stringify(currentRoadMap[0], null, '   '));
 
             for(var i=0; i<Object.keys(temp['nodeIds']).length; ++i){
                 addnode();
             };
             var n = $('.window');
-            // console.log(n);
             for(var i=1 ; i< n.length; ++i){
                 n[i].style['left'] = temp['nodeIds'][i]['x'];
                 n[i].style['top'] = temp['nodeIds'][i]['y'];
                 if(temp['nodeIds'][i]['lambda']){
-                    console.log(n.find('h3')[i].childNodes[0]='node'+i+' [Lambda]');
                     n[i].childNodes[3].childNodes[3].childNodes[1].checked=true;
                 }
             };
@@ -1190,7 +1188,7 @@ function saveTree(){
     angular.element(document.getElementById('jsonToScope')).scope().list = connectInfo;
     angular.element(document.getElementById('jsonToScope')).scope().nodeIds = deviceInfo;
     angular.element(document.getElementById('jsonToScope')).scope().changeToTree(connectInfo);
-    console.log(angular.element(document.getElementById('jsonToScope')).scope().tree);
+    // console.log(angular.element(document.getElementById('jsonToScope')).scope().tree);
 }
 
 

@@ -15,6 +15,7 @@ app.controller('myCtrl', function($scope, $http){
     $scope.nodeIds;
     $scope.loadTarget ={};
     $scope.getTarget;
+    $scope.currentTarget={'roadMapId':''};
 
     // settings.html
     $scope.brokerList=[];
@@ -61,7 +62,6 @@ app.controller('myCtrl', function($scope, $http){
                 $scope.file['keyFile'] = $scope.temp[2];
                 }, 1000);
         }, 1000);
-        console.log($scope.file);
     };
 
     $scope.saveDataBase = function(){
@@ -97,7 +97,9 @@ app.controller('myCtrl', function($scope, $http){
                     data: $scope.tree,
                     contentType : 'application/json',
                     dataType: "json"
-                })
+                }).then(function(response){
+                    $scope.currentTarget['roadMapId'] = response.data;
+                });
             }
         });
     }
@@ -107,7 +109,7 @@ app.controller('myCtrl', function($scope, $http){
             method: 'post',
             url: "/kill_db",
             headers: {'Content-Type': 'application/json'},
-            data: $scope.tree,
+            data: $scope.currentTarget,
             contentType : 'application/json',
             dataType: "json"
         }).then(function(response){
@@ -358,7 +360,6 @@ app.controller('myCtrl', function($scope, $http){
         }
         // $scope.tree = rootNodes;
         $scope.tree = JSON.stringify(rootNodes, null, '   ');
-        console.log("roadmapid : "+rootNodes.roadMapId);
         return rootNodes;
     };
 
