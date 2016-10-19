@@ -202,7 +202,7 @@ expressapp.post('/run_db', function(req, res){
     connectDB(req.body, 'enow', 'execute', 'run', res);
     setTimeout(function(){
         var obj = {};
-        obj['roadMapId'] = req.body["roadMapId"];
+        obj['roadMapId'] = roadmapNum;
         obj['status'] = "start";
         sendKafka(req, 'event', obj);
     },1000);
@@ -213,7 +213,7 @@ expressapp.post('/kill_db', function(req, res){
     connectDB(req.body, 'enow', 'execute', 'kill', res);
     setTimeout(function(){
         var obj = {};
-        obj['roadMapId'] = req.body["roadMapId"];
+        obj['roadMapId'] = roadmapNum;
         obj['status'] = "stop";
         sendKafka(req, 'event', obj);
     },1000);
@@ -469,8 +469,7 @@ function connectDB(source, dbName, collectionName, command, response){
         });
     };
     var deleteDocument = function(callback){
-        db.db(dbName).collection(collectionName).deleteOne({
-        },function(err, result){
+        db.db(dbName).collection(collectionName).deleteOne({'roadMapId':source['roadMapId']},function(err, result){
             response.send("done");
         });
     };

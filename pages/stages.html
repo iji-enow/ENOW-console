@@ -925,6 +925,7 @@ $(document).on("click","#listOfDevice", function(){
 });
 //run button. start current roadmap
 $('#run').click(function(){
+
     if($(this).is(':checked')){
         var ask = confirm("Start Roadmap?");
         if(ask==true){
@@ -976,7 +977,7 @@ $('#broker_table').on('click','#loadRoadMapItem, #loadRunningRoadMapItem', funct
     var ask = confirm('Load '+$(this)[0].childNodes[1].innerText +' RoadMap?');
     if(ask){
         clearMap();
-        
+
         if(angular.element(document.getElementById('jsonToScope')).scope().loadTarget['collection'] == 'execute'){
             $('#run').attr("checked",true);
             $('#run')[0].checked = true;

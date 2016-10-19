@@ -358,6 +358,7 @@ app.controller('myCtrl', function($scope, $http){
         }
         // $scope.tree = rootNodes;
         $scope.tree = JSON.stringify(rootNodes, null, '   ');
+        console.log("roadmapid : "+rootNodes.roadMapId);
         return rootNodes;
     };
 
