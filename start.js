@@ -473,41 +473,95 @@ function connectDB(source, dbName, collectionName, command, response){
             response.send("done");
         });
     };
-    if(command=="save" || command=="run"){
-        insertDocument(db, function(){
-        });
-    }else if(command=="saveBroker"){
-        insertDocumentBroker(db, function(){
-        });
-    }else if(command=="saveDevice"){
-        insertDocumentDevice(db, function(){
-        });
-    }else if(command=="deleteDevice"){
-        deleteDevice(db, function(){
-        });
-    }else if(command=="deleteBroker"){
-        deleteBroker(db, function(){
-        });
-    }else if(command=="findDevice"){
-        findDevice(db, function(){
-        });
-    }else if(command=="kill"){
-        deleteDocument(db,function(){
-        });
-    }else if(command=="find"){
-        findDocument(db, function(){
-        });
-    }else if(command=="findTarget"){
-        findTarget(db, function(){
-        });
-    }else if(command=="findBroker"){
-        findBroker(db, function(){
-        });
-    }else if(command=="findBroker2"){
-        findBroker_2(db, function(){
-        });
-    }else if(command=="addSecure"){
-        updateBroker(db, function(){
-        });
-    }
+    switch(command){
+        case 'save':
+        case 'run':
+            insertDocument(db, function(){
+            });
+            break;
+        case 'saveBroker':
+            insertDocumentBroker(db, function(){
+            });
+            break;
+        case 'saveDevice':
+            insertDocumentDevice(db, function(){
+            });
+            break;
+        case 'deleteDevice':
+            deleteDevice(db, function(){
+            });
+            break;
+        case 'deleteBroker':
+            deleteBroker(db, function(){
+            });
+            break;
+        case 'findDevice':
+            findDevice(db, function(){
+            });
+            break;
+        case 'kill':
+            deleteDocument(db,function(){
+            });
+            break;
+        case 'find':
+            findDocument(db, function(){
+            });
+            break;
+        case 'findTarget':
+            findTarget(db, function(){
+            });
+            break;
+        case 'findBroker':
+            findBroker(db, function(){
+            });
+            break;
+        case 'findBroker2':
+            findBroker_2(db, function(){
+            });
+            break;
+        case 'addSecure':
+            updateBroker(db, function(){
+            });
+            break;
+        case default:
+            break;
+        }
+
+    // if(command=="save" || command=="run"){
+    //     insertDocument(db, function(){
+    //     });
+    // }else if(command=="saveBroker"){
+    //     insertDocumentBroker(db, function(){
+    //     });
+    // }else if(command=="saveDevice"){
+    //     insertDocumentDevice(db, function(){
+    //     });
+    // }else if(command=="deleteDevice"){
+    //     deleteDevice(db, function(){
+    //     });
+    // }else if(command=="deleteBroker"){
+    //     deleteBroker(db, function(){
+    //     });
+    // }else if(command=="findDevice"){
+    //     findDevice(db, function(){
+    //     });
+    // }else if(command=="kill"){
+    //     deleteDocument(db,function(){
+    //     });
+    // }else if(command=="find"){
+    //     findDocument(db, function(){
+    //     });
+    // }else if(command=="findTarget"){
+    //     findTarget(db, function(){
+    //     });
+    // }else if(command=="findBroker"){
+    //     findBroker(db, function(){
+    //     });
+    // }else if(command=="findBroker2"){
+    //     findBroker_2(db, function(){
+    //     });
+    // }else if(command=="addSecure"){
+    //     updateBroker(db, function(){
+    //     });
+    // }
 };

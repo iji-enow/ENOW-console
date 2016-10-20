@@ -27,7 +27,8 @@
     "kafka-node": "^0.5.8",
     "mongodb": "^2.2.10",
     "mqtt": "^2.0.1",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "shelljs": "^0.7.4"
   },
   "scripts": {},
   "engines": {
