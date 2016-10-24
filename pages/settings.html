@@ -928,6 +928,7 @@ $(document).ready(function(){
     setTimeout(function () {
         angular.element(document.getElementById('jsonToScope')).scope().settings = localStorage;
         setTimeout(function () {
+            angular.element(document.getElementById('jsonToScope')).scope().executeMongodb();
             angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings();
             setTimeout(function () {
                 angular.element(document.getElementById('jsonToScope')).scope().getBrokers();

@@ -3,8 +3,8 @@ const express = require('express');
 const mongo = require('mongodb');
 const fs = require('fs');
 const ascoltatori_kafka = require('ascoltatori')
-var assert = require('assert')
 const bodyparser = require('body-parser');
+const shell = require('shelljs');
 var ascoltatori_mqtt = require('ascoltatori');
 var mqtt = require('mqtt');
 const BSON = require('bson').BSONPure;
@@ -346,6 +346,11 @@ expressapp.get('/get_running_roadmaps', function(req, res){
     console.log('get running roadmaps...');
     connectDB(null, 'enow', 'execute', 'find', res);
 });
+//execute
+expressapp.get('/execute_mongodb', function(req, res){
+    console.log('execute mongodb...');
+    shell.exec('mongod');
+});
 //load all of deviceslist.
 expressapp.get('/get_devices', function(req, res){
     console.log('get devices...');
@@ -523,7 +528,7 @@ function connectDB(source, dbName, collectionName, command, response){
             updateBroker(db, function(){
             });
             break;
-        case default:
+        default:
             break;
         }
 

@@ -287,6 +287,14 @@ app.controller('myCtrl', function($scope, $http){
             }
         });
     }
+    $scope.executeMongodb = function(){
+        $http({
+            withCredentials: false,
+            method: 'get',
+            url: "/execute_mongodb"
+        }).then(function(response){
+        });
+    }
     $scope.getSettings = function(){
         $http({
             withCredentials: false,
