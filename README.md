@@ -74,4 +74,4 @@ Todo List
 - [x] ~~Build Widget Page~~ -> Deleted
 - [x] ~~Build Stage Page~~ (Done v0.0.1)
 - [x] ~~Build Statistics Page~~ (Done v0.0.1)
-- [ ] Build Documentation Page
+- [x] ~~Build Documentation Page~~ (Done v0.0.1)
