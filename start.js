@@ -351,18 +351,18 @@ expressapp.get('/get_running_roadmaps', function(req, res){
 //execute
 expressapp.get('/execute_mongodb', function(req, res){
     console.log('execute mongodb...');
-    var start = shell.exec('start cmd /k mongod',{async:true}, function(){
+    var start = shell.exec('start cmd /c mongod',{async:true}, function(){
         console.log("--------------------------------------");
     });
     // var proc = require('child_process').spawn('mongod');
-    setTimeout(function(){
-        // console.log(start);
-        console.log('asdf');
-        console.log('start mongo '+ start['pid']);
-        // start.kill('SIGTERM');
-        // process.kill(start['pid'], 'SIGINT');
-        // proc.kill('SIGINT');
-    }, 5000);
+    // setTimeout(function(){
+    //     // console.log(start);
+    //     console.log('asdf');
+    //     console.log('start mongo '+ start['pid']);
+    //     // start.kill('SIGTERM');
+    //     // process.kill(start['pid'], 'SIGINT');
+    //     // proc.kill('SIGINT');
+    // }, 5000);
     res.send("done");
     // console.log(shell.exec('dir'));
     // console.log(shell);
