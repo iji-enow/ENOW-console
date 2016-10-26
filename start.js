@@ -213,7 +213,7 @@ expressapp.post('/kill_db', function(req, res){
     connectDB(req.body, 'enow', 'execute', 'kill', res);
     setTimeout(function(){
         var obj = {};
-        obj['roadMapId'] = req.body['roadMapId'];
+        obj['roadMapId'] = req.body['roadMapId'].toString();
         obj['status'] = "stop";
         sendKafka(req, 'event', obj);
     },1000);
