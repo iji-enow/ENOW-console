@@ -202,7 +202,7 @@ expressapp.post('/run_db', function(req, res){
     connectDB(req.body, 'enow', 'execute', 'run', res);
     setTimeout(function(){
         var obj = {};
-        obj['roadMapId'] = roadmapNum;
+        obj['roadMapId'] = roadmapNum.toString();
         obj['status'] = "start";
         sendKafka(req, 'event', obj);
     },1000);
