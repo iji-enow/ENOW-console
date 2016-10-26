@@ -351,7 +351,12 @@ expressapp.get('/get_running_roadmaps', function(req, res){
 //execute
 expressapp.get('/execute_mongodb', function(req, res){
     console.log('execute mongodb...');
-    shell.exec('mongod');
+    shell.exec('start cmd /k mongod',{async:true, silent:true}, function(){
+    });
+
+        res.send("done");
+    // console.log(shell.exec('dir'));
+    // console.log(shell);
 });
 //load all of deviceslist.
 expressapp.get('/get_devices', function(req, res){

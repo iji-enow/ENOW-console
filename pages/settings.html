@@ -929,13 +929,16 @@ $(document).ready(function(){
     setTimeout(function () {
         angular.element(document.getElementById('jsonToScope')).scope().settings = localStorage;
         setTimeout(function () {
-            // angular.element(document.getElementById('jsonToScope')).scope().executeMongodb();
-            angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings();
-            setTimeout(function () {
-                angular.element(document.getElementById('jsonToScope')).scope().getBrokers();
-                $('#loader').hide();
-                $('#back').css('opacity','1');
-            }, 300);
+            angular.element(document.getElementById('jsonToScope')).scope().executeMongodb();
+            setTimeout(function(){
+                angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings();
+                setTimeout(function () {
+                    angular.element(document.getElementById('jsonToScope')).scope().getBrokers();
+                    $('#loader').hide();
+                    $('#back').css('opacity','1');
+                }, 300);
+            },2000);
+
         }, 300);
     }, 300);
     $('#kafkaUrl')[0].value = localStorage['kafkaUrl'] || "";
