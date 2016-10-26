@@ -256,17 +256,19 @@ expressapp.post('/post_url_settings', function(req, res){
     kafkaPort = req.body['kafkaPort'];
     timeoutLimit = req.body['timeoutLimit']*1000;
     console.log("kafkaUrl : "+ kafkaUrl);
-
-    client = new kafka.Client(kafkaUrl+':'+kafkaPort);
-    producer = new Producer(client);
+    if(kafkaUrl!==undefined){
+        client = new kafka.Client(kafkaUrl+':'+kafkaPort);
+        producer = new Producer(client);
+    }
     if(db){
         db.close();
     }
     MongoClient.connect('mongodb://'+ mongoUrl+'/'+mongoPort, function(err, database, callback) {
         if(err){
+            console.log("asdfasdfasdfasdfasdfasdfdsa");
             console.log(err);
             res.send('no_connect');
-            return;
+            // return;
         }
         db = database;
         console.log('connected to mongodb://'+ mongoUrl+'/'+mongoPort);

@@ -630,6 +630,7 @@
             </div>
         </div>
 
+            <button id="mongo" type="submit" class="btn btn-primary">Mongo</button>
         <!-- broker secure settings -->
         <div id="secureModal" class="modal fade">
             <div class="modal-dialog" style="width:300px;">
@@ -928,7 +929,7 @@ $(document).ready(function(){
     setTimeout(function () {
         angular.element(document.getElementById('jsonToScope')).scope().settings = localStorage;
         setTimeout(function () {
-            angular.element(document.getElementById('jsonToScope')).scope().executeMongodb();
+            // angular.element(document.getElementById('jsonToScope')).scope().executeMongodb();
             angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings();
             setTimeout(function () {
                 angular.element(document.getElementById('jsonToScope')).scope().getBrokers();
@@ -985,6 +986,10 @@ $("#submit3").click(function(){
             }, 300);
         }, 300);
     }, 300);
+});
+$("#mongo").click(function(){
+    angular.element(document.getElementById('jsonToScope')).scope().executeMongodb();
+    alert('a');
 });
 $("#addBroker").click(function(){
         $('#s1')[0].value = "";
