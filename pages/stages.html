@@ -1173,6 +1173,7 @@ function saveTree(){
     }
     //position values
     for(var i=1; i <= Object.keys(deviceInfo).length ; ++i){
+        console.log(i);
         var temp = $('#test').find('#deviceId'+i)[0];
         deviceInfo[i]['timeoutLimit'] = $('#test').find('#deviceId'+i)[0].children[1].children[5].value+"000";
         deviceInfo[i]['x'] = temp.style['left'] || "0px";
@@ -1187,7 +1188,7 @@ function saveTree(){
     angular.element(document.getElementById('jsonToScope')).scope().list = connectInfo;
     angular.element(document.getElementById('jsonToScope')).scope().nodeIds = deviceInfo;
     angular.element(document.getElementById('jsonToScope')).scope().changeToTree(connectInfo);
-    // console.log(angular.element(document.getElementById('jsonToScope')).scope().tree);
+    console.log(angular.element(document.getElementById('jsonToScope')).scope().tree);
 }
 
 
@@ -1236,8 +1237,14 @@ $('#test').on("click","#codeEditor", function () {
     $('#myModal').modal('show');
 });
 $('#test').on("click","#deleteNode", function () {
-    alert($(this)[0].parentNode.parentNode.id);
+    // alert(typeof($(this)[0].parentNode.parentNode.id));
     instance.remove($('#'+$(this)[0].parentNode.parentNode.id));
+    for(var i = $(this)[0].parentNode.parentNode.id.slice(8)*1+1 ; i <= $(".window").length ; ++i){
+        console.log(i);
+        // $('#deviceId'+i).attr('id', 'deviceId'+(i-1));
+        arr[$(this)[0].parentNode.parentNode.id.slice(8)*1] = 0;
+        instance.repaintEverything();
+    }
 });
 //save roadmap to 'recipes' database
 $("#saveCode").click(function(){
@@ -1266,11 +1273,23 @@ function clearMap(){
         $('#deviceId'+i).remove();
     }
 };
-
+var arr = [1];
 //add new node
 function addnode(){
     angular.element(document.getElementById('jsonToScope')).scope().$apply();
-    var _id = "deviceId" + $(".window").length;
+    // var _id = "deviceId" + $(".window").length;
+    var i=0;
+    for( i ; i< arr.length; ++i){
+        console.log(i);
+        if(arr[i]==0){
+            arr[i]=1;
+            break;
+        }
+    }
+    if( i == arr.length){
+        arr.push(1);
+    }
+    var _id = "deviceId"+i;
     var newnode = $('<div class="window box collapsed-box" id="' + _id + '" >').appendTo("#test").html($(("#device0"))[0].innerHTML);
     newnode.find('h3').text('node'+_id.slice(8)+' [Device]');
     _addEndpoints(newnode);
