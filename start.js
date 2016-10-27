@@ -13,6 +13,7 @@ var MongoClient = mongo.MongoClient;
 var Server = mongo.Server;
 var expressapp = express();
 const port = 1111;
+var start;
 var mongoUrl;
 var mongoPort;
 var kafkaUrl;
@@ -265,7 +266,6 @@ expressapp.post('/post_url_settings', function(req, res){
     }
     MongoClient.connect('mongodb://'+ mongoUrl+'/'+mongoPort, function(err, database, callback) {
         if(err){
-            console.log("asdfasdfasdfasdfasdfasdfdsa");
             console.log(err);
             res.send('no_connect');
             // return;
@@ -351,18 +351,19 @@ expressapp.get('/get_running_roadmaps', function(req, res){
 //execute
 expressapp.get('/execute_mongodb', function(req, res){
     console.log('execute mongodb...');
-    var start = shell.exec('start cmd /c mongod',{async:true}, function(){
-        console.log("--------------------------------------");
-    });
-    // var proc = require('child_process').spawn('mongod');
+    console.log(typeof(start));
+    if(typeof(start)=='undefined'){
+        start = shell.exec('start cmd /c mongod',{async:true});
+    }
     // setTimeout(function(){
-    //     // console.log(start);
-    //     console.log('asdf');
-    //     console.log('start mongo '+ start['pid']);
+    //     console.log(typeof(start));
+    //
+    //     // console.log('asdf');
+    //     // console.log('start mongo '+ start['pid']);
     //     // start.kill('SIGTERM');
     //     // process.kill(start['pid'], 'SIGINT');
     //     // proc.kill('SIGINT');
-    // }, 5000);
+    // }, 3000);
     res.send("done");
     // console.log(shell.exec('dir'));
     // console.log(shell);
