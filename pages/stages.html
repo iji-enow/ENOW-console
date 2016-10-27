@@ -514,7 +514,6 @@
                 <div class="box box-warning" style="height:800px;">
                     <div class="box-header with-border">
                         <h2 class="box-title" style="margin-top:10px;">RoadMap</h2>
-                        <button id="openDeviceList" class="btn btn-primary btn-flat pull-right" data-toggle="tooltip" title="Show list of available devices">DeviceList</button>
                         <form ng-submit="saveDataBase()"><button id="saveDB" type="submit" class="btn btn-primary btn-flat pull-right" data-toggle="tooltip" title="Save Roadmap to database">Save Recipe</button></form>
                         <button id="addDevice" class="btn btn-primary btn-flat pull-right" data-toggle="tooltip" title="Add custom device">Add Device</button>
                         <button id="loadRoadMap" class="btn btn-primary btn-flat pull-right" data-toggle="tooltip" title="Load RoadMap Recipes">Load Recipes</button>
@@ -557,8 +556,8 @@
                                         <option ng-repeat = "n in brokerList">{{n.brokerId}}</option>
                                     </select>
                                 </div>
-                                <button id="devSettingSave" class="btn btn-info btn-flat col-xs-12 col-lg-12" data-toggle="tooltip" title="Save settings" style="margin-top:18px;">Save</button>
-                                <button id="codeEditor" class="btn btn-info btn-flat col-xs-12 col-lg-12" data-toggle="tooltip" title="Add custom device" style="margin-top:2px;">Edit code</button>
+                                <button id="deleteNode" class="btn btn-info btn-flat col-xs-12 col-lg-12" data-toggle="tooltip" title="Save settings" style="margin-top:18px;">Delete Node</button>
+                                <button id="codeEditor" class="btn btn-info btn-flat col-xs-12 col-lg-12" data-toggle="tooltip" title="Add custom device" style="margin-top:2px;">Edit Code</button>
 
                             </div>
                         </div>
@@ -1236,7 +1235,10 @@ $('#test').on("click","#codeEditor", function () {
     }
     $('#myModal').modal('show');
 });
-
+$('#test').on("click","#deleteNode", function () {
+    alert($(this)[0].parentNode.parentNode.id);
+    instance.remove($('#'+$(this)[0].parentNode.parentNode.id));
+});
 //save roadmap to 'recipes' database
 $("#saveCode").click(function(){
     code = editor.getSession().getValue();
