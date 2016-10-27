@@ -1174,8 +1174,11 @@ function saveTree(){
     //position values
     // for(var i=1; i <= Object.keys(deviceInfo).length ; ++i){
     console.log(deviceInfo);
-    for(var i =1; i <= arr.length ; ++i){
+    for(var i =1; i < arr.length ; ++i){
         console.log(i);
+        if(arr[i]==0){
+            continue;
+        }
         var temp = $('#test').find('#deviceId'+i)[0];
         deviceInfo[i]['timeoutLimit'] = $('#test').find('#deviceId'+i)[0].children[1].children[5].value+"000";
         deviceInfo[i]['x'] = temp.style['left'] || "0px";
