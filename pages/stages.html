@@ -1172,7 +1172,9 @@ function saveTree(){
         }
     }
     //position values
-    for(var i=1; i <= Object.keys(deviceInfo).length ; ++i){
+    // for(var i=1; i <= Object.keys(deviceInfo).length ; ++i){
+    console.log(deviceInfo);
+    for(var i =1; i <= arr.length ; ++i){
         console.log(i);
         var temp = $('#test').find('#deviceId'+i)[0];
         deviceInfo[i]['timeoutLimit'] = $('#test').find('#deviceId'+i)[0].children[1].children[5].value+"000";
@@ -1238,7 +1240,9 @@ $('#test').on("click","#codeEditor", function () {
 });
 $('#test').on("click","#deleteNode", function () {
     // alert(typeof($(this)[0].parentNode.parentNode.id));
+    var temp = $('#'+$(this)[0].parentNode.parentNode.id)[0].id.slice(8);
     instance.remove($('#'+$(this)[0].parentNode.parentNode.id));
+    delete deviceInfo[temp];
     for(var i = $(this)[0].parentNode.parentNode.id.slice(8)*1+1 ; i <= $(".window").length ; ++i){
         console.log(i);
         // $('#deviceId'+i).attr('id', 'deviceId'+(i-1));
