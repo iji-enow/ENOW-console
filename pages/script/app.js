@@ -295,6 +295,15 @@ app.controller('myCtrl', function($scope, $http){
         }).then(function(response){
         });
     }
+    $scope.executeStorm = function(){
+        $http({
+            withCredentials: false,
+            method: 'get',
+            url: "/execute_storm"
+        }).then(function(response){
+        });
+    }
+
     $scope.getSettings = function(){
         $http({
             withCredentials: false,

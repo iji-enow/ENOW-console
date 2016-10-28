@@ -13,7 +13,7 @@ var MongoClient = mongo.MongoClient;
 var Server = mongo.Server;
 var expressapp = express();
 const port = 1111;
-var start;
+var mongoStart;
 var mongoUrl;
 var mongoPort;
 var kafkaUrl;
@@ -348,25 +348,29 @@ expressapp.get('/get_running_roadmaps', function(req, res){
     console.log('get running roadmaps...');
     connectDB(null, 'enow', 'execute', 'find', res);
 });
-//execute
+//start storm
+expressapp.get('/execute_storm', function(req, res){
+    console.log('execute storm...');
+    console.log(shell.which('storm'));
+    if(!shell.which('storm')){
+        console.log('you should install storm and add to system path.');
+        res.send("FILE_NO_FOUND");
+    }else{
+        shell.exec('start cmd /k storm nimbus',{async:true});
+        shell.exec('start cmd /k storm supervisor',{async:true});
+        shell.exec('start cmd /k storm ui',{async:true});
+        res.send("done");
+    }
+
+});
+//start mongodb
 expressapp.get('/execute_mongodb', function(req, res){
     console.log('execute mongodb...');
-    console.log(typeof(start));
-    if(typeof(start)=='undefined'){
-        start = shell.exec('start cmd /c mongod',{async:true});
+    console.log(typeof(mongoStart));
+    if(typeof(mongoStart)=='undefined'){
+        mongoStart = shell.exec('start cmd /c mongod',{async:true});
     }
-    // setTimeout(function(){
-    //     console.log(typeof(start));
-    //
-    //     // console.log('asdf');
-    //     // console.log('start mongo '+ start['pid']);
-    //     // start.kill('SIGTERM');
-    //     // process.kill(start['pid'], 'SIGINT');
-    //     // proc.kill('SIGINT');
-    // }, 3000);
     res.send("done");
-    // console.log(shell.exec('dir'));
-    // console.log(shell);
 });
 //load all of deviceslist.
 expressapp.get('/get_devices', function(req, res){
