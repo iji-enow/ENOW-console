@@ -572,14 +572,14 @@
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
                             <h4 class="modal-title">Code Editor</h4>
                         </div>
-                        <div class="modal-body" style="height:500px; margin-left:20px;margin-right:20px;">
+                        <div class="modal-body" style="height:600px; margin-left:20px;margin-right:20px;">
                             <div id="editor"></div>
                         </div>
                         <div class="modal-footer">
                             <input type="text" id="parameters" class="form-control" placeholder="Parameters Ex) -p, -num ..." style="margin-bottom:5px;">
                             <label class="pull-left" style="margin-right:10px">Font Size</label>
                             <select id="fontList" class="pull-left">
-                                <option value="10">10</option>
+                                <option value="10" selected="true">10</option>
                                 <option value="11">11</option>
                                 <option value="12">12</option>
                                 <option value="13">13</option>
@@ -587,7 +587,7 @@
                                 <option value="15">15</option>
                                 <option value="16">16</option>
                                 <option value="17">17</option>
-                                <option value="18" selected="true">18</option>
+                                <option value="18">18</option>
                                 <option value="19">19</option>
                                 <option value="20">20</option>
                             </select>
@@ -1203,7 +1203,7 @@ function saveTree(){
         deviceInfo[i]['y'] = temp.style['top'] || "0px";
     }
     if(!initNode.length && !orderNode['key']){
-        initNode = prompt('No InitNode. You must have at least 1 initnode. input initnode number.');
+        initNode.push(prompt('No InitNode. You must have at least 1 initnode. input initnode number.'));
     }
     angular.element(document.getElementById('jsonToScope')).scope().listOfInitNode = initNode;
     angular.element(document.getElementById('jsonToScope')).scope().listOfLastNode = lastNode;
@@ -1348,7 +1348,7 @@ var editor = ace.edit("editor");
 editor.setTheme("ace/theme/terminal");
 editor.getSession().setMode("ace/mode/python");
 editor.$blockScrolling = Infinity;
-document.getElementById('editor').style.fontSize='18px';
+document.getElementById('editor').style.fontSize='10px';
 </script>
 </body>
 </html>
