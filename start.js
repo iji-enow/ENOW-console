@@ -211,13 +211,13 @@ expressapp.post('/run_db', function(req, res){
 // stop roadmap.
 expressapp.post('/kill_db', function(req, res){
     console.log('kill execute...');
-    connectDB(req.body, 'enow', 'execute', 'kill', res);
+    var obj = {};
+    obj['roadMapId'] = req.body['roadMapId'].toString();
+    obj['status'] = "stop";
+    sendKafka(req, 'event', obj);
     setTimeout(function(){
-        var obj = {};
-        obj['roadMapId'] = req.body['roadMapId'].toString();
-        obj['status'] = "stop";
-        sendKafka(req, 'event', obj);
-    },1000);
+        connectDB(req.body, 'enow', 'execute', 'kill', res);
+    }, 5000);
 
 });
 // add broker to mongoDB. db:connectionData, collection:brokerList.
