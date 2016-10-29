@@ -206,7 +206,7 @@ expressapp.post('/run_db', function(req, res){
         obj['roadMapId'] = roadmapNum.toString();
         obj['status'] = "start";
         sendKafka(req, 'event', obj);
-    },1000);
+    }, 3000);
 });
 // stop roadmap.
 expressapp.post('/kill_db', function(req, res){
