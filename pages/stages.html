@@ -990,7 +990,8 @@ $('#broker_table').on('click','#loadRoadMapItem, #loadRunningRoadMapItem', funct
     var ask = confirm('Load '+$(this)[0].childNodes[1].innerText +' RoadMap?');
     if(ask){
         clearMap();
-
+        deviceInfo={};
+        arr = [1];
         if(angular.element(document.getElementById('jsonToScope')).scope().loadTarget['collection'] == 'execute'){
             $('#run').attr("checked",true);
             $('#run')[0].checked = true;
@@ -1002,38 +1003,41 @@ $('#broker_table').on('click','#loadRoadMapItem, #loadRunningRoadMapItem', funct
             var currentRoadMap = angular.element(document.getElementById('jsonToScope')).scope().getTarget;
             var temp = JSON.parse(JSON.stringify(currentRoadMap[0], null, '   '));
 
-            for(var i=0; i<Object.keys(temp['nodeIds']).length; ++i){
-                addnode();
-            };
+            $.each(temp['nodeIds'], function(index, value) {
+                addnode(index);
+            });
             var n = $('.window');
-            for(var i=1 ; i< n.length; ++i){
-                n[i].style['left'] = temp['nodeIds'][i]['x'];
-                n[i].style['top'] = temp['nodeIds'][i]['y'];
-                if(temp['nodeIds'][i]['lambda']){
-                    n[i].childNodes[3].childNodes[3].childNodes[1].checked=true;
+            $.each(temp['nodeIds'], function(index, value) {
+                var num=0;
+                for(num=1; num < n.length; ++num){
+                    if(n[num].id.slice(8) == index){
+                        n[num].style['left'] = temp['nodeIds'][index]['x'];
+                        n[num].style['top'] = temp['nodeIds'][index]['y'];
+                        if(temp['nodeIds'][index]['lambda']){
+                            n[num].childNodes[3].childNodes[3].childNodes[1].checked=true;
+                        };
+                    }
                 }
-            };
-            var arr = Object.keys(temp['outingNode']).map(function(key){
+            });
+            var arr2 = Object.keys(temp['outingNode']).map(function(key){
                 return temp['outingNode'][key];
             });
             for(var i = 0 ; i< Object.keys(temp['outingNode']).length ; ++i){
-                for(var j = 0 ; j < arr[i].length; ++j){
+                for(var j = 0 ; j < arr2[i].length; ++j){
                     instance.connect({
-                        uuids:['deviceId'+Object.keys(temp['outingNode'])[i]+'_source','deviceId'+arr[i][j]+'_target']
+                        uuids:['deviceId'+Object.keys(temp['outingNode'])[i]+'_source','deviceId'+arr2[i][j]+'_target']
                     });
                 }
             }
-            var arr = Object.keys(temp['nodeIds']).map(function(key){
-                return temp['nodeIds'][key];
+            $.each(deviceInfo, function(index, value) {
+                deviceInfo[i]['brokerId'] = temp['nodeIds'][index].brokerId;
+                deviceInfo[i]['code'] = temp['nodeIds'][index].code;
+                deviceInfo[i]['lambda'] = temp['nodeIds'][index].lambda;
+                deviceInfo[i]['deviceId'] = temp['nodeIds'][index].deviceId;
+                deviceInfo[i]['parameter'] = temp['nodeIds'][index].parameter;
+                deviceInfo[i]['timeoutLimit'] = temp['nodeIds'][index].timeoutLimit.slice(-3);
             });
-            for(var i=1; i <= arr.length ; ++i){
-                deviceInfo[i]['brokerId'] = arr[i-1].brokerId;
-                deviceInfo[i]['code'] = arr[i-1].code;
-                deviceInfo[i]['lambda'] = arr[i-1].lambda;
-                deviceInfo[i]['deviceId'] = arr[i-1].deviceId;
-                deviceInfo[i]['parameter'] = arr[i-1].parameter;
-                deviceInfo[i]['timeoutLimit'] = arr[i-1].timeoutLimit.slice(-3);
-            }
+
             instance.repaintEverything();
         }, 200);
 
@@ -1282,7 +1286,17 @@ $("#saveCode").click(function(){
 });
 var toast = $('<div class="error" style="display:none">Code Saved..</div>');
 $("#addDevice").click(function () {
-    addnode();
+    var i=0;
+    for( i ; i< arr.length; ++i){
+        if(arr[i]==0){
+            arr[i]=1;
+            break;
+        }
+    }
+    if( i == arr.length){
+        arr.push(1);
+    }
+    addnode(i);
 });
 
 //clear roadmap and reset.
@@ -1296,19 +1310,10 @@ function clearMap(){
 };
 var arr = [1];
 //add new node
-function addnode(){
+function addnode(i){
     angular.element(document.getElementById('jsonToScope')).scope().$apply();
     // var _id = "deviceId" + $(".window").length;
-    var i=0;
-    for( i ; i< arr.length; ++i){
-        if(arr[i]==0){
-            arr[i]=1;
-            break;
-        }
-    }
-    if( i == arr.length){
-        arr.push(1);
-    }
+
     var _id = "deviceId"+i;
     var newnode = $('<div class="window box collapsed-box" id="' + _id + '" >').appendTo("#test").html($(("#device0"))[0].innerHTML);
     newnode.find('h3').text('node'+_id.slice(8)+' [Device]');

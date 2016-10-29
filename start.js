@@ -217,13 +217,14 @@ expressapp.post('/kill_db', function(req, res){
     sendKafka(req, 'event', obj);
     setTimeout(function(){
         connectDB(req.body, 'enow', 'execute', 'kill', res);
-    }, timeoutLimit || 5000);
+    }, 8000);
 
 });
 // add broker to mongoDB. db:connectionData, collection:brokerList.
 expressapp.post('/add_broker', function(req, res){
     console.log('add broker...');
-    connectDB(req.body, 'connectionData', 'brokerList', 'saveBroker', res);
+    connectDB(req.body, 'connectionData', 'brokerList'
+    , 'saveBroker', res);
     sendKafka(req, 'brokerAdd', req.body);
 });
 // append device to selected broker in mongoDB.
