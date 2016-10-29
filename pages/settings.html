@@ -1069,10 +1069,12 @@ $(document).on("click","#removeDeviceSubmit", function(){
             }, 200);
         }, 200);
     }
-})
+});
 // secure checkbox
 $(document).on("click",'#checkSecure',function(e){
     e.stopPropagation();
+    console.log(e);
+    console.log(this);
         var arr = $(this).parent().parent()[0].innerText.split("	");
         angular.element(document.getElementById('jsonToScope')).scope().currentBroker['brokerId'] = arr[0];
     if($(this).is(':checked')){
@@ -1096,6 +1098,8 @@ $('#secureSubmit').click(function(){
     }
 });
 $(document).on("click","#deviceAdd",function(e){
+console.log(e);
+console.log(this);
     var arr = $(this)[0].innerText.split("	");
     angular.element(document.getElementById('jsonToScope')).scope().currentDeviceList =[];
     angular.element(document.getElementById('jsonToScope')).scope().currentBroker['brokerId'] = arr[0];

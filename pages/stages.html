@@ -640,14 +640,12 @@
                                         <tr>
                                             <th>_Id</th>
                                             <th>RoadMap Id</th>
-                                            <th>Client Id</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr class="canClick" id="loadRunningRoadMapItem" ng-repeat = "n in listOfRunningRoadMap">
                                             <td>{{n._id}}</td>
                                             <td>{{n.roadMapId}}</td>
-                                            <td>{{n.clientId}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -660,14 +658,14 @@
                                         <tr>
                                             <th>_Id</th>
                                             <th>RoadMap Id</th>
-                                            <th>Client Id</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr class="canClick" id="loadRoadMapItem" ng-repeat = "n in listOfRoadMap">
                                             <td>{{n._id}}</td>
                                             <td>{{n.roadMapId}}</td>
-                                            <td>{{n.clientId}}</td>
+                                            <td class="canClick" id="removeSubmit" style="width:10px;"><i class="fa fa-fw fa-remove"></i></td>
+
                                         </tr>
                                     </tbody>
                                 </table>
@@ -979,7 +977,7 @@ $('#test').on("click",'#triggerToggle', function(){
 });
 
 //load roadmap
-$('#broker_table').on('click','#loadRoadMapItem, #loadRunningRoadMapItem', function(){
+$('#broker_table').on('click','#loadRoadMapItem, #loadRunningRoadMapItem', function(event){
     if($(this)[0].id == 'loadRoadMapItem'){
         angular.element(document.getElementById('jsonToScope')).scope().loadTarget['db'] = 'enow';
         angular.element(document.getElementById('jsonToScope')).scope().loadTarget['collection'] = 'recipes';
@@ -987,6 +985,7 @@ $('#broker_table').on('click','#loadRoadMapItem, #loadRunningRoadMapItem', funct
         angular.element(document.getElementById('jsonToScope')).scope().loadTarget['db'] = 'enow';
         angular.element(document.getElementById('jsonToScope')).scope().loadTarget['collection'] = 'execute';
     }
+    console.log($(this));
     var ask = confirm('Load '+$(this)[0].childNodes[1].innerText +' RoadMap?');
     if(ask){
         clearMap();
@@ -1007,11 +1006,18 @@ $('#broker_table').on('click','#loadRoadMapItem, #loadRunningRoadMapItem', funct
                 addnode(index);
             });
             var n = $('.window');
+            console.log(n);
+            console.log(temp);
             $.each(temp['nodeIds'], function(index, value) {
-                var num=0;
-                for(num=1; num < n.length; ++num){
+                var num;
+                for(num=0; num < n.length; ++num){
                     if(n[num].id.slice(8) == index){
+                        console.log("index : "+ index);
                         n[num].style['left'] = temp['nodeIds'][index]['x'];
+                        console.log("n");
+                        console.log(n[num].style['left']);
+                        console.log("temp");
+                        console.log(temp['nodeIds'][index]['x']);
                         n[num].style['top'] = temp['nodeIds'][index]['y'];
                         if(temp['nodeIds'][index]['lambda']){
                             n[num].childNodes[3].childNodes[3].childNodes[1].checked=true;
@@ -1029,19 +1035,22 @@ $('#broker_table').on('click','#loadRoadMapItem, #loadRunningRoadMapItem', funct
                     });
                 }
             }
+            console.log(deviceInfo);
             $.each(deviceInfo, function(index, value) {
-                deviceInfo[i]['brokerId'] = temp['nodeIds'][index].brokerId;
-                deviceInfo[i]['code'] = temp['nodeIds'][index].code;
-                deviceInfo[i]['lambda'] = temp['nodeIds'][index].lambda;
-                deviceInfo[i]['deviceId'] = temp['nodeIds'][index].deviceId;
-                deviceInfo[i]['parameter'] = temp['nodeIds'][index].parameter;
-                deviceInfo[i]['timeoutLimit'] = temp['nodeIds'][index].timeoutLimit.slice(-3);
+                console.log(index);
+                deviceInfo[index]['brokerId'] = temp['nodeIds'][index].brokerId;
+                deviceInfo[index]['code'] = temp['nodeIds'][index].code;
+                deviceInfo[index]['lambda'] = temp['nodeIds'][index].lambda;
+                deviceInfo[index]['deviceId'] = temp['nodeIds'][index].deviceId;
+                deviceInfo[index]['parameter'] = temp['nodeIds'][index].parameter;
+                deviceInfo[index]['timeoutLimit'] = temp['nodeIds'][index].timeoutLimit.slice(-3);
             });
-
             instance.repaintEverything();
         }, 200);
-
     }else{}
+
+
+
 });
 
 var instance = window.jsp = jsPlumb.getInstance({
@@ -1301,7 +1310,28 @@ $("#addDevice").click(function () {
     }
     addnode(i);
 });
-
+// remove roadmap
+$(document).on("click", "#removeSubmit", function(event){
+    console.log(this);
+    setTimeout(function(){
+        var ask = confirm('delete '+$(this).parent()[0].innerText.split('	')[1]+'?');
+        if(ask){
+            angular.element(document.getElementById('jsonToScope')).scope().newdevice['deviceId'] = $(this).parent()[0].innerText.split('	')[1];
+            angular.element(document.getElementById('jsonToScope')).scope().newdevice['brokerId'] = angular.element(document.getElementById('jsonToScope')).scope().currentBroker['brokerId'];
+            angular.element(document.getElementById('jsonToScope')).scope().findDevice("delete");
+            setTimeout(function () {
+                angular.element(document.getElementById('jsonToScope')).scope().findDevice("delete");
+                setTimeout(function () {
+                    }, 200);
+                angular.element(document.getElementById('jsonToScope')).scope().getBroker();
+                angular.element(document.getElementById('jsonToScope')).scope().getBrokers();
+                setTimeout(function () {
+                    angular.element(document.getElementById('jsonToScope')).scope().$apply();
+                }, 200);
+            }, 200);
+        }
+    },1000);
+});
 //clear roadmap and reset.
 function clearMap(){
     var a = $(".window").length;
