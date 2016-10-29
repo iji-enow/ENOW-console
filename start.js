@@ -217,7 +217,7 @@ expressapp.post('/kill_db', function(req, res){
     sendKafka(req, 'event', obj);
     setTimeout(function(){
         connectDB(req.body, 'enow', 'execute', 'kill', res);
-    }, 5000);
+    }, timeoutLimit || 5000);
 
 });
 // add broker to mongoDB. db:connectionData, collection:brokerList.
