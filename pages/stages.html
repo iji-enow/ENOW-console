@@ -1004,6 +1004,10 @@ $('#broker_table').on('click','#loadRoadMapItem, #loadRunningRoadMapItem', funct
 
             $.each(temp['nodeIds'], function(index, value) {
                 addnode(index);
+                while(arr.length<index){
+                    arr.push(0);
+                }
+                arr[index]=1;
             });
             var n = $('.window');
             console.log(n);
@@ -1038,6 +1042,8 @@ $('#broker_table').on('click','#loadRoadMapItem, #loadRunningRoadMapItem', funct
             console.log(deviceInfo);
             $.each(deviceInfo, function(index, value) {
                 console.log(index);
+                deviceInfo[index]['x'] = temp['nodeIds'][index]['x'];
+                deviceInfo[index]['y'] = temp['nodeIds'][index]['y'];
                 deviceInfo[index]['brokerId'] = temp['nodeIds'][index].brokerId;
                 deviceInfo[index]['code'] = temp['nodeIds'][index].code;
                 deviceInfo[index]['lambda'] = temp['nodeIds'][index].lambda;
@@ -1188,6 +1194,8 @@ function saveTree(){
     var n = $('.window');
     initNode = [];
     lastNode = [];
+
+    console.log(n);
     for(var i = 1; i < n.length; ++i){
         if(!instance.getEndpoints($($('.window')[i]))[1].connections[0]){
             if(i != orderNode["key"]){
