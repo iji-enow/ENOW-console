@@ -180,11 +180,12 @@ var makeReserve = function(key, value, res) {
 expressapp.post('/alive_check', function(req, res){
     var obj = new Object();
     console.log('Running RoadMap!');
+    console.log(req.body);
     console.log(req.body['orderNode']);
     setTimeout(function(){
         for(var i=1; i<= Object.keys(req.body['nodeIds']).length ; ++i){
             obj[req.body['nodeIds'][i]['brokerId']] = obj[req.body['nodeIds'][i]['brokerId']] || [];
-            if(req.body['nodeIds'][i]['lambda']==false && req.body['orderNode']!=i){
+            if(req.body['nodeIds'][i]['lambda']==false && req.body['orderNode'][0]!=i+""){
                 obj[req.body['nodeIds'][i]['brokerId']].push(req.body['nodeIds'][i]['deviceId']);
             }
         }
