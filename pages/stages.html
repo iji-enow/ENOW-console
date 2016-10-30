@@ -24,6 +24,7 @@
     <!-- <link href="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap.min.css" rel="stylesheet"> -->
 
     <script src="script/app.js"></script>
+    <script src="../dist/js/FileSaver.js"></script>
 
 
     <!-- jsplumb -->
@@ -673,11 +674,11 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-default" id="saveCode">Save</button>
                         </div>
                     </div>
                 </div>
             </div>
+
             <div id="saveModal" class="modal fade">
                 <div class="modal-dialog" style="width:654px">
                     <div class="modal-content">
@@ -689,9 +690,9 @@
                             <textarea rows="30" cols="100" id="jsonCode"></textarea>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Save as file</button>
-                            <button type="button" class="btn btn-default" id="saveCode">Save in MongoDB</button>
-                            <button type="button" class="btn btn-default" id="saveCode">Both</button>
+                            <button type="button" class="btn btn-default" id="saveinFile">Save as file</button>
+                            <button type="button" class="btn btn-default" id="saveinDB">Save in MongoDB</button>
+                            <button type="button" class="btn btn-default" id="saveinBoth">Both</button>
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         </div>
                     </div>
@@ -1202,8 +1203,32 @@ $("#saveDB").click(function(){
     setTimeout(function(){
         $('#saveModal').modal('show');
     }, 1000);
-
 });
+
+$("#saveinFile").click(function(){
+    angular.element(document.getElementById('jsonToScope')).scope().tree = $('#jsonCode').val();
+    setTimeout(function(){
+        var text = $("#jsonCode").val();
+        var blob = new Blob([text], {type: "text/plain;charset=utf-8"});
+        saveAs(blob, "roadmap.json");
+    },1000);
+});
+$("#saveinDB").click(function(){
+    angular.element(document.getElementById('jsonToScope')).scope().tree = $('#jsonCode').val();
+    setTimeout(function(){
+        angular.element(document.getElementById('jsonToScope')).scope().saveDataBase();
+    },1000);
+});
+$("#saveinBoth").click(function(){
+    angular.element(document.getElementById('jsonToScope')).scope().tree = $('#jsonCode').val();
+    setTimeout(function(){
+        var text = $("#jsonCode").val();
+        var blob = new Blob([text], {type: "text/plain;charset=utf-8"});
+        saveAs(blob, "roadmap.json");
+        angular.element(document.getElementById('jsonToScope')).scope().saveDataBase();
+    },1000);
+});
+
 function saveTree(){
     connectInfo=[];
     instance.getConnections().forEach(
