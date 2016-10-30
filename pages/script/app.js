@@ -167,6 +167,7 @@ app.controller('myCtrl', function($scope, $http){
             contentType : 'application/json',
             dataType: "json"
         }).then(function(response){
+            console.log(response.data);
         });
     }
     $scope.addDevice = function(){

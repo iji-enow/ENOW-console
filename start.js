@@ -109,7 +109,7 @@ offset.fetchLatestOffsets(['log'], function (error, offsets) {
 expressapp.use(bodyparser.json());
 // timeout for all response
 expressapp.use(function(req,res,next){
-    res.setTimeout(15000, function(){
+    res.setTimeout(10000, function(){
         console.log('time out..');
         res.sendStatus(408);
     });
@@ -271,11 +271,6 @@ expressapp.post('/post_url_settings', function(req, res){
     }
     setTimeout(function(){
         MongoClient.connect('mongodb://'+ mongoUrl+'/'+mongoPort, function(err, database, callback) {
-            if(err){
-                console.log(err);
-                res.send('no_connect');
-                // return;
-            }
             db = database;
             console.log('connected to mongodb://'+ mongoUrl+'/'+mongoPort);
             res.send("done");
