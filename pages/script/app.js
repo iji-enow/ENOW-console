@@ -88,6 +88,7 @@ app.controller('myCtrl', function($scope, $http){
         }).then(function(response){
             if(response.data.includes('0')){
                 alert('no ack from devices');
+                console.log($('#run').attr('checked', false));
             }else{
                 $http({
                     withCredentials: false,

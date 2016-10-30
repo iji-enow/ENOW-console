@@ -158,13 +158,12 @@ var makeReserve = function(key, value, res) {
                     client.subscribe('enow/server0/'+key+'/'+value+'/alive/response');
                 })
                 var waitAck = setInterval(function(){
-                    console.log(client.connected);
-                    if(++aliveAsk>3){
+                    if(++aliveAsk>3 && client.connected){
                         clearInterval(waitAck);
                         res.write('0');
                         client.end();
                     }
-                }, 2000);
+                }, 1000);
                 client.on('message', function(topic, message){
                     console.log(topic + ' sent ack.');
                     client.end();
@@ -181,21 +180,25 @@ var makeReserve = function(key, value, res) {
 expressapp.post('/alive_check', function(req, res){
     var obj = new Object();
     console.log('Running RoadMap!');
-
+    console.log(req.body);
     setTimeout(function(){
         for(var i=1; i<= Object.keys(req.body['nodeIds']).length ; ++i){
             obj[req.body['nodeIds'][i]['brokerId']] = obj[req.body['nodeIds'][i]['brokerId']] || [];
-            obj[req.body['nodeIds'][i]['brokerId']].push(req.body['nodeIds'][i]['deviceId']);
+            if(req.body['nodeIds'][i]['lambda']==false){
+                obj[req.body['nodeIds'][i]['brokerId']].push(req.body['nodeIds'][i]['deviceId']);
+            }
         }
         for(key in obj){
+            console.log("ky "+key);
             for(val in obj[key]){
                 //mqtt listener.
+                    console.log("val: "+val);
                 makeReserve(key, obj[key][val], res);
             }
         }
         setTimeout(function(){
             res.end();
-        }, timeoutLimit || 8000)
+        }, 10000)
     }, 3000);
 });
 // run roadmap.
@@ -399,10 +402,11 @@ function connectDB(source, dbName, collectionName, command, response){
     };
     // find broker for get mqtt url.
     var findBroker_2 = function(callback){
-        if(source['brokerId']!='null' && source['lambda']==true){
+        if(source['brokerId']!='null'){
             db.db(dbName).collection(collectionName).find({brokerId:source['brokerId']}).toArray(function(err,result){
                 mqttHost = result[0]['ipAddress'];
                 mqttPort = result[0]['port'];
+                console.log(result);
             });
         }else{
             mqttHost = mqttPort = null;

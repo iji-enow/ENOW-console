@@ -955,7 +955,6 @@ $(document).on("click","#listOfDevice", function(){
 });
 //run button. start current roadmap
 $('#run').click(function(){
-
     if($(this).is(':checked')){
         var ask = confirm("Start Roadmap?");
         if(ask==true){
@@ -982,7 +981,6 @@ $('#test').on("click",'#deviceOrLambda', function(){
         $("#"+$(this).parent().parent().parent()[0].id).find('h3').text('node'+$(this).parent().parent().parent()[0].id.slice(8)+' [Device]');
         $("#"+$(this).parent().parent().parent()[0].id).find('#hideIfLambda').show();
         deviceInfo[$(this).parent().parent().parent()[0].id.slice(8)]['lambda'] = false;
-        // deviceInfo[$(this).parent().parent().parent()[0].id.slice(8)]['brokerId'] = "";
     }
 });
 
