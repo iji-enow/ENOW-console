@@ -920,7 +920,7 @@ var deviceInfo={};
 var tempBroker;
 var initNode = [];
 var lastNode = [];
-var orderNode = {};
+var orderNode = {"key":[]};
 $(window).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();
     setTimeout(function () {
@@ -987,9 +987,9 @@ $('#test').on("click",'#deviceOrLambda', function(){
 // phone toggle button
 $('#test').on("click",'#triggerToggle', function(){
     if($(this).is(':checked')){
-        orderNode["key"] = $(this).parent().parent().parent().parent()[0].id.slice(8);
+        orderNode["key"].push($(this).parent().parent().parent().parent()[0].id.slice(8));
     }else{
-        orderNode = {};
+        orderNode = {"key":[]};
     }
 });
 
