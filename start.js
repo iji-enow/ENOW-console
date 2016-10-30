@@ -269,16 +269,19 @@ expressapp.post('/post_url_settings', function(req, res){
     if(db){
         db.close();
     }
-    MongoClient.connect('mongodb://'+ mongoUrl+'/'+mongoPort, function(err, database, callback) {
-        if(err){
-            console.log(err);
-            res.send('no_connect');
-            // return;
-        }
-        db = database;
-        console.log('connected to mongodb://'+ mongoUrl+'/'+mongoPort);
-        res.send("done");
-    });
+    setTimeout(function(){
+        MongoClient.connect('mongodb://'+ mongoUrl+'/'+mongoPort, function(err, database, callback) {
+            if(err){
+                console.log(err);
+                res.send('no_connect');
+                // return;
+            }
+            db = database;
+            console.log('connected to mongodb://'+ mongoUrl+'/'+mongoPort);
+            res.send("done");
+        });
+    }, 2000);
+
 });
 expressapp.post('/load_roadmap', function(req, res){
     console.log('load roadmap...');
