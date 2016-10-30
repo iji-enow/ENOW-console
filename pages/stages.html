@@ -1265,7 +1265,7 @@ function saveTree(){
         deviceInfo[i]['x'] = temp.style['left'] || "0px";
         deviceInfo[i]['y'] = temp.style['top'] || "0px";
     }
-    if(!initNode.length && !orderNode['key']){
+    if(!initNode.length && orderNode['key'][0]==null){
         var temp = prompt('No InitNode. You must have at least 1 initnode. Input InitNode. It is tokenized by ",". ex) 1, 2  means InitNode is 1 and 2. ').split(',');
         temp.forEach(function(i, n){
             initNode.push(i);
