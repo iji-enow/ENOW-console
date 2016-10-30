@@ -100,9 +100,9 @@ offset.fetchLatestOffsets(['log'], function (error, offsets) {
         }else if(logArray[0]=="ERROR"){
             console.log('ERROR!!');
         }
-        nodeTraffic[logArray[3].split(',')[0]]++;
-        fs.appendFile('.log', '['+MyDateString+']  '+ JSON.stringify(logs)+'\r\n', 'utf8', function(err) {
-        });
+        // nodeTraffic[logArray[3].split(',')[0]]++;
+        // fs.appendFile('.log', '['+MyDateString+']  '+ JSON.stringify(logs)+'\r\n', 'utf8', function(err) {
+        // });
     });
 });
 // express settings
