@@ -514,7 +514,7 @@
             <div class="col-lg-12 col-xs-12">
                 <div class="box box-warning" style="height:800px;">
                     <div class="box-header with-border">
-                        <h2 class="box-title" style="margin-top:10px;">RoadMap</h2>
+                        <h2 id="currentMapName" class="box-title" style="margin-top:10px;">RoadMap</h2>
                         <button id="saveDB" type="submit" class="btn btn-primary btn-flat pull-right" data-toggle="tooltip" title="Save Roadmap to database">Save Recipe</button>
                         <button id="addDevice" class="btn btn-primary btn-flat pull-right" data-toggle="tooltip" title="Add custom device">Add Device</button>
                         <button id="loadRoadMap" class="btn btn-primary btn-flat pull-right" data-toggle="tooltip" title="Load RoadMap Recipes">Load Recipes</button>
@@ -961,6 +961,11 @@ $('#run').click(function(){
             saveTree();
             setTimeout(function(){
                 angular.element(document.getElementById('jsonToScope')).scope().runRoadMap();
+                setTimeout(function(){
+                    console.log(angular.element(document.getElementById('jsonToScope')).scope().currentTarget['roadMapId']);
+                    $('#currentMapName').text('RoadMap'+angular.element(document.getElementById('jsonToScope')).scope().currentTarget['roadMapId']);
+                }, 14000);
+
             }, 2000);
         }else{
             $(this).attr("checked",false);
@@ -1015,6 +1020,9 @@ $('#broker_table').on('click','#loadRoadMapItem, #loadRunningRoadMapItem', funct
         angular.element(document.getElementById('jsonToScope')).scope().loadTarget['_id'] = $(this)[0].childNodes[1].innerText;
         angular.element(document.getElementById('jsonToScope')).scope().loadRoadMap();
         setTimeout(function () {
+
+            console.log(angular.element(document.getElementById('jsonToScope')).scope().currentTarget['roadMapId']);
+            $('#currentMapName').text('RoadMap'+angular.element(document.getElementById('jsonToScope')).scope().getTarget[0]['roadMapId']);
             angular.element(document.getElementById('jsonToScope')).scope().currentTarget['roadMapId'] = angular.element(document.getElementById('jsonToScope')).scope().getTarget[0]['roadMapId'];
             var currentRoadMap = angular.element(document.getElementById('jsonToScope')).scope().getTarget;
             var temp = JSON.parse(JSON.stringify(currentRoadMap[0], null, '   '));
