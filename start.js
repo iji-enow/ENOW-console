@@ -33,10 +33,9 @@ var nodeTraffic= new Array(1000);
 nodeTraffic.fill(0);
 var MyDateString;
 var consumer = null;
-var kafka = require('kafka-node'),
-Producer = kafka.Producer;
+var kafka = require('kafka-node');
 client = new kafka.Client();
-producer = new Producer(client);
+producer = new kafka.Producer(client);
 payloads = [
     {
         // topic:'event',
@@ -44,6 +43,12 @@ payloads = [
         partition: 0
     }
 ];
+client.on('error',function(error){
+    console.log(error);
+});
+producer.on('error',function(error){
+    console.log(error);
+});
 setTimeout(function(){
     console.log(client);
 }, 1000);
@@ -206,7 +211,7 @@ expressapp.post('/post_url_settings', function(req, res){
     console.log("kafkaUrl : "+ kafkaUrl);
     if(kafkaUrl!==undefined){
         client = new kafka.Client(kafkaUrl+':'+kafkaPort);
-        producer = new Producer(client);
+        producer = new kafka.Producer(client);
     }
     if(db){
         db.close();
