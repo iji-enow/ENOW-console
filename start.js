@@ -109,7 +109,7 @@ offset.fetchLatestOffsets(['log'], function (error, offsets) {
 expressapp.use(bodyparser.json());
 // timeout for all response
 expressapp.use(function(req,res,next){
-    res.setTimeout(10000, function(){
+    res.setTimeout(20000, function(){
         console.log('time out..');
         res.sendStatus(408);
     });
