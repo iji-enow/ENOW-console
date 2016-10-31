@@ -45,6 +45,9 @@ payloads = [
         partition: 0
     }
 ];
+setTimeout(function(){
+    console.log(client);
+}, 1000);
 // express settings
 expressapp.use(bodyparser.json());
 // timeout for all response
