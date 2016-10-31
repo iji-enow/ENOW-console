@@ -46,19 +46,6 @@ payloads = [
     }
 ],
 offset = new kafka.Offset(client);
-// kafka default setting.
-var settings_kafka = {
-    type: 'kafka',
-    json: false,
-    kafka: require('kafka-node'),
-    connectString: "192.168.99.100:2181",
-    clientId: "ascoltatori",
-    groupId: "ascoltatori",
-    defaultEncoding: "utf8",
-    encodings: {
-        image: "buffer"
-    }
-};
 
 //make server starts from latest logs
 offset.fetchLatestOffsets(['log'], function (error, offsets) {
