@@ -32,12 +32,11 @@ var errorRate=0;
 var nodeTraffic= new Array(1000);
 nodeTraffic.fill(0);
 var MyDateString;
-var consumer;
+var consumer = null;
 var kafka = require('kafka-node'),
-Producer = kafka.Producer,
-Consumer = kafka.Consumer,
-client = new kafka.Client(),
-producer = new Producer(client),
+Producer = kafka.Producer;
+client = new kafka.Client();
+producer = new Producer(client);
 payloads = [
     {
         // topic:'event',
@@ -95,21 +94,21 @@ var makeReserve = function(key, value, res) {
         connectDB(obj, 'connectionData', 'brokerList', 'findBroker2', null);
         setTimeout(function(){
             if(mqttHost != null){
-                var client = mqtt.connect('mqtt://'+mqttHost+':'+mqttPort);
-                client.on('connect', function(){
-                    client.publish('enow/server0/'+key+'/'+value+'/alive/request', '{"topic":'+'"enow/server0/'+key+'/'+value+'"}');
-                    client.subscribe('enow/server0/'+key+'/'+value+'/alive/response');
+                var mqclient = mqtt.connect('mqtt://'+mqttHost+':'+mqttPort);
+                mqclient.on('connect', function(){
+                    mqclient.publish('enow/server0/'+key+'/'+value+'/alive/request', '{"topic":'+'"enow/server0/'+key+'/'+value+'"}');
+                    mqclient.subscribe('enow/server0/'+key+'/'+value+'/alive/response');
                 })
                 var waitAck = setInterval(function(){
-                    if(++aliveAsk>3 && client.connected){
+                    if(++aliveAsk>3 && mqclient.connected){
                         clearInterval(waitAck);
                         res.write('0');
-                        client.end();
+                        mqclient.end();
                     }
                 }, 1000);
-                client.on('message', function(topic, message){
+                mqclient.on('message', function(topic, message){
                     console.log(topic + ' sent ack.');
-                    client.end();
+                    mqclient.end();
                     res.write('1');
                     clearInterval(waitAck);
                 });
@@ -499,42 +498,4 @@ function connectDB(source, dbName, collectionName, command, response){
         default:
             break;
         }
-
-    // if(command=="save" || command=="run"){
-    //     insertDocument(db, function(){
-    //     });
-    // }else if(command=="saveBroker"){
-    //     insertDocumentBroker(db, function(){
-    //     });
-    // }else if(command=="saveDevice"){
-    //     insertDocumentDevice(db, function(){
-    //     });
-    // }else if(command=="deleteDevice"){
-    //     deleteDevice(db, function(){
-    //     });
-    // }else if(command=="deleteBroker"){
-    //     deleteBroker(db, function(){
-    //     });
-    // }else if(command=="findDevice"){
-    //     findDevice(db, function(){
-    //     });
-    // }else if(command=="kill"){
-    //     deleteDocument(db,function(){
-    //     });
-    // }else if(command=="find"){
-    //     findDocument(db, function(){
-    //     });
-    // }else if(command=="findTarget"){
-    //     findTarget(db, function(){
-    //     });
-    // }else if(command=="findBroker"){
-    //     findBroker(db, function(){
-    //     });
-    // }else if(command=="findBroker2"){
-    //     findBroker_2(db, function(){
-    //     });
-    // }else if(command=="addSecure"){
-    //     updateBroker(db, function(){
-    //     });
-    // }
 };
