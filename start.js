@@ -44,54 +44,7 @@ payloads = [
         messages: '',
         partition: 0
     }
-],
-offset = new kafka.Offset(client);
-
-//make server starts from latest logs
-offset.fetchLatestOffsets(['log'], function (error, offsets) {
-    if (error)
-    return handleError(error);
-    latestOffset = offsets['log'][0];
-    consumer = new Consumer(
-        client,
-        [
-            {
-                topic: 'log',
-                partition: 0,
-                offset: latestOffset
-            }
-        ],
-        {
-            autoCommit: false,
-            fromOffset: true
-        }
-    );
-    // when kafka message came from topic:'log'.
-    consumer.on('message', function (message) {
-        MyDate = new Date();
-        var logs = message['value'];
-        //get date
-        MyDate.setDate(MyDate.getDate() + 20);
-        MyDateString = MyDate.getFullYear() + '/'
-        +('0' + MyDate.getMonth()).slice(-2) + '/'
-        +('0' + MyDate.getDate()).slice(-2) + '   '
-        +('0' + MyDate.getHours()).slice(-2) + ':'
-        +('0' + MyDate.getMinutes()).slice(-2) + ':'
-        +('0' + MyDate.getSeconds()).slice(-2);
-        logArray = logs.split('|');
-        if(logArray[0]=="INFO"){
-            traffic++;
-        }else if(logArray[0]=="WARN"){
-            traffic++;
-            error++;
-        }else if(logArray[0]=="ERROR"){
-            console.log('ERROR!!');
-        }
-        // nodeTraffic[logArray[3].split(',')[0]]++;
-        // fs.appendFile('.log', '['+MyDateString+']  '+ JSON.stringify(logs)+'\r\n', 'utf8', function(err) {
-        // });
-    });
-});
+];
 // express settings
 expressapp.use(bodyparser.json());
 // timeout for all response
