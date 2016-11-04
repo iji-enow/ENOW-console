@@ -49,7 +49,7 @@ client.on('error',function(error){
 producer.on('error',function(error){
     console.log(error);
 });
-setTimeout(function(){
+setTimeout(function(){  
     console.log(client);
 }, 1000);
 // express settings

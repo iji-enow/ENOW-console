@@ -1050,6 +1050,7 @@ $('#broker_table').on('click','#loadRoadMapItem, #loadRunningRoadMapItem', funct
                         n[num].style['top'] = temp['nodeIds'][index]['y'];
                         if(temp['nodeIds'][index]['lambda']){
                             n[num].childNodes[3].childNodes[3].childNodes[1].checked=true;
+                            $('#deviceId'+index).find('h3').text('node'+index+' [Lambda]');
                         };
                     }
                 }
