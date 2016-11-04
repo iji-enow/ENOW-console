@@ -1038,18 +1038,11 @@ $('#broker_table').on('click','#loadRoadMapItem, #loadRunningRoadMapItem', funct
                 arr[index]=1;
             });
             var n = $('.window');
-            console.log(n);
-            console.log(temp);
             $.each(temp['nodeIds'], function(index, value) {
                 var num;
                 for(num=0; num < n.length; ++num){
                     if(n[num].id.slice(8) == index){
-                        console.log("index : "+ index);
                         n[num].style['left'] = temp['nodeIds'][index]['x'];
-                        console.log("n");
-                        console.log(n[num].style['left']);
-                        console.log("temp");
-                        console.log(temp['nodeIds'][index]['x']);
                         n[num].style['top'] = temp['nodeIds'][index]['y'];
                         if(temp['nodeIds'][index]['lambda']){
                             n[num].childNodes[3].childNodes[3].childNodes[1].checked=true;
@@ -1058,19 +1051,16 @@ $('#broker_table').on('click','#loadRoadMapItem, #loadRunningRoadMapItem', funct
                     }
                 }
             });
-            var arr2 = Object.keys(temp['outingNode']).map(function(key){
-                return temp['outingNode'][key];
-            });
-            for(var i = 0 ; i< Object.keys(temp['outingNode']).length ; ++i){
-                for(var j = 0 ; j < arr2[i].length; ++j){
+            $.each(temp['outingNode'], function(index, value){
+                $.each(value, function(a, b){
                     instance.connect({
-                        uuids:['deviceId'+Object.keys(temp['outingNode'])[i]+'_source','deviceId'+arr2[i][j]+'_target']
+                        uuids:['deviceId'+index+'_source','deviceId'+b+'_target']
                     });
-                }
-            }
+                })
+
+            });
             console.log(deviceInfo);
             $.each(deviceInfo, function(index, value) {
-                console.log(index);
                 deviceInfo[index]['x'] = temp['nodeIds'][index]['x'];
                 deviceInfo[index]['y'] = temp['nodeIds'][index]['y'];
                 deviceInfo[index]['brokerId'] = temp['nodeIds'][index].brokerId;
