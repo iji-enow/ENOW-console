@@ -1016,6 +1016,9 @@ $('#broker_table').on('click','#loadRoadMapItem, #loadRunningRoadMapItem', funct
         if(angular.element(document.getElementById('jsonToScope')).scope().loadTarget['collection'] == 'execute'){
             $('#run').attr("checked",true);
             $('#run')[0].checked = true;
+        }else{
+            $('#run').attr("checked", false);
+            $('#run')[0].checked = false;
         }
         angular.element(document.getElementById('jsonToScope')).scope().loadTarget['_id'] = $(this)[0].childNodes[1].innerText;
         angular.element(document.getElementById('jsonToScope')).scope().loadRoadMap();
