@@ -258,7 +258,7 @@
 
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
-                    
+
                     <!-- Control Sidebar Toggle Button -->
                     <li>
                         <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
@@ -1082,10 +1082,19 @@ function saveTree(){
         deviceInfo[i]['y'] = temp.style['top'] || "0px";
     }
     if(!initNode.length && orderNode['key'][0]==null){
-        var temp = prompt('No InitNode. You must have at least 1 initnode. Input InitNode. It is tokenized by ",". ex) 1, 2  means InitNode is 1 and 2. ').split(',');
-        temp.forEach(function(i, n){
-            initNode.push(i);
-        });
+        var temp = prompt('No InitNode. You must have at least 1 initnode. Input InitNode. It is tokenized by ",". ex) 1, 2  means InitNode is 1 and 2. ');
+        console.log(temp);
+        console.log(typeof(temp));
+        if(!temp){
+            $('#run').attr("checked", false);
+            $('#run')[0].checked = false;
+        }else{
+
+            temp.split(',').forEach(function(i, n){
+                initNode.push(i);
+            });
+        }
+
     }
     angular.element(document.getElementById('jsonToScope')).scope().listOfInitNode = initNode;
     angular.element(document.getElementById('jsonToScope')).scope().listOfLastNode = lastNode;

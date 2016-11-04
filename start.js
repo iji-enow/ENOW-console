@@ -248,7 +248,7 @@ expressapp.post('/add_secure', function(req, res){
         sendKafka(req, 'sslAdd', obj);
     }, 2000);
 });
-
+// delete ca, cert, key file from broker.
 expressapp.post('/del_secure', function(req, res){
     console.log('delete secure...');
     connectDB(req.body, 'connectionData', 'brokerList', 'delSecure', res);

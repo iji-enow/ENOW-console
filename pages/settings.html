@@ -747,12 +747,12 @@ $(document).ready(function(){
                 setTimeout(function () {
                     angular.element(document.getElementById('jsonToScope')).scope().getBrokers();
                     $('#loader').hide();
-                    $('#back').css('opacity','1');
+                    $('#back').css('opacity', '1');
                     setTimeout(function(){
                         console.log(angular.element(document.getElementById('jsonToScope')).scope().brokerList);
                         $.each(angular.element(document.getElementById('jsonToScope')).scope().brokerList, function(index, value){
                             if(value['ca']==""){
-                                console.log('nope');
+                                console.log($(document).find('#checkSecure'));
                             }else{
                                 console.log('zzz');
                             }
