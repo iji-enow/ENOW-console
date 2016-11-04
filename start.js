@@ -36,6 +36,7 @@ var consumer = null;
 var kafka = require('kafka-node');
 client = new kafka.Client();
 producer = new kafka.Producer(client);
+process.setMaxListeners(100);
 payloads = [
     {
         // topic:'event',
@@ -49,7 +50,7 @@ client.on('error',function(error){
 producer.on('error',function(error){
     console.log(error);
 });
-setTimeout(function(){  
+setTimeout(function(){
     console.log(client);
 }, 1000);
 // express settings
