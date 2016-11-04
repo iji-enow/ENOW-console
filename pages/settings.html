@@ -221,7 +221,7 @@
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
                     <!-- Messages: style can be found in dropdown.less-->
-                    
+
                     <!-- Control Sidebar Toggle Button -->
                     <li>
                         <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
@@ -748,6 +748,16 @@ $(document).ready(function(){
                     angular.element(document.getElementById('jsonToScope')).scope().getBrokers();
                     $('#loader').hide();
                     $('#back').css('opacity','1');
+                    setTimeout(function(){
+                        console.log(angular.element(document.getElementById('jsonToScope')).scope().brokerList);
+                        $.each(angular.element(document.getElementById('jsonToScope')).scope().brokerList, function(index, value){
+                            if(value['ca']==""){
+                                console.log('nope');
+                            }else{
+                                console.log('zzz');
+                            }
+                        });
+                    }, 1000);
                 }, 4000);
             },1000);
     }, 300);
@@ -891,8 +901,9 @@ $(document).on("click",'#checkSecure',function(e){
         $('#secureModal').modal('show');
     }else{
     angular.element(document.getElementById('jsonToScope')).scope().file['brokerId']=angular.element(document.getElementById('jsonToScope')).scope().currentBroker['brokerId'];
-    angular.element(document.getElementById('jsonToScope')).scope().file['caFile'] = "";
-    angular.element(document.getElementById('jsonToScope')).scope().addSecure();
+    setTimeout(function(){
+        angular.element(document.getElementById('jsonToScope')).scope().delSecure();
+    }, 2000);
     }
 });
 //add security file

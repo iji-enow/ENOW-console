@@ -241,16 +241,22 @@ expressapp.post('/add_secure', function(req, res){
     connectDB(req.body, 'connectionData', 'brokerList', 'addSecure', res);
     var obj = {};
     obj['brokerId'] = req.body['brokerId'];
-    if(req.body['caFile']==""){
+    obj['caFile'] = req.body['caFile'];
+    obj['crtFile'] = req.body['crtFile'];
+    obj['keyFile'] = req.body['keyFile'];
+    setTimeout(function(){
+        sendKafka(req, 'sslAdd', obj);
+    }, 2000);
+});
+
+expressapp.post('/del_secure', function(req, res){
+    console.log('delete secure...');
+    connectDB(req.body, 'connectionData', 'brokerList', 'delSecure', res);
+    var obj = {};
+    obj['brokerId'] = req.body['brokerId'];
+    setTimeout(function(){
         sendKafka(req, 'sslSub', obj);
-    }else{
-        obj['caFile'] = req.body['caFile'];
-        obj['crtFile'] = req.body['crtFile'];
-        obj['keyFile'] = req.body['keyFile'];
-        setTimeout(function(){
-            sendKafka(req, 'sslAdd', obj);
-        }, 1000);
-    }
+    }, 2000);
 });
 // get request count for requestChart.
 expressapp.get('/get_request', function(req, res){
@@ -434,14 +440,24 @@ function connectDB(source, dbName, collectionName, command, response){
                 "ipAddress" : source['ipAddress'],
                 "port" : source['port'],
                 "deviceId" : source['deviceId'],
+                "ca" : "",
+                "hostCrt" : "",
+                "hostKey" : ""
             },function(err, result){
                 response.send("done");
             });
         });
     };
-    var updateBroker = function(callback){
+    var addBrokerSecure = function(callback){
         db.db(dbName).collection(collectionName).updateOne({'brokerId':source['brokerId']},{
             '$set' : { 'ca': source['ca'], 'hostCrt': source['hostCrt'], 'hostKey': source['hostKey']}
+        }, function(err,result){
+            response.send("done");
+        });
+    };
+    var deleteBrokerSecure = function(callback){
+        db.db(dbName).collection(collectionName).updateOne({'brokerId':source['brokerId']},{
+            '$set' : { 'ca': "", 'hostCrt': "", 'hostKey': ""}
         }, function(err,result){
             response.send("done");
         });
@@ -498,7 +514,11 @@ function connectDB(source, dbName, collectionName, command, response){
             });
             break;
         case 'addSecure':
-            updateBroker(db, function(){
+            addBrokerSecure(db, function(){
+            });
+            break;
+        case 'delSecure':
+            deleteBrokerSecure(db, function(){
             });
             break;
         default:

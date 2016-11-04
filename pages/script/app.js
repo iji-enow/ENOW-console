@@ -140,6 +140,18 @@ app.controller('myCtrl', function($scope, $http){
         }).then(function(response){
         });
     }
+    $scope.delSecure = function(){
+        $http({
+            withCredentials: false,
+            method: 'post',
+            url: "/del_secure",
+            headers: {'Content-Type': 'application/json'},
+            data: $scope.file,
+            contentType : 'application/json',
+            dataType: "json"
+        }).then(function(response){
+        });
+    }
     $scope.loadRoadMap = function(){
         $http({
             withCredentials: false,
