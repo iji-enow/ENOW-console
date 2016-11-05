@@ -218,7 +218,7 @@ expressapp.post('/post_url_settings', function(req, res){
             db = database;
             console.log('connected to mongodb://'+ mongoUrl+'/'+mongoPort);
             if(err){
-                console.log("asdfadsfadsf");
+                console.log(err)
                 res.send('NO_CONNECT');
             }else{
                 res.send("done");
@@ -239,7 +239,6 @@ expressapp.post('/get_broker', function(req, res){
 // add ca, cert, key file to broker.
 expressapp.post('/add_secure', function(req, res){
     console.log('add secure...');
-    console.log(req.body);
     connectDB(req.body, 'connectionData', 'brokerList', 'addSecure', res);
     var obj = {};
     obj['brokerId'] = req.body['brokerId'];
@@ -310,25 +309,11 @@ expressapp.get('/get_running_roadmaps', function(req, res){
 //start storm
 expressapp.get('/execute_storm', function(req, res){
     console.log('execute storm...');
-    // console.log(shell.which('storm'));
-    // if(!shell.which('storm')){
-    //     console.log('you should install storm and add to system path.');
-    //     res.send("FILE_NO_FOUND");
-    // }else{
-    //     shell.exec('start cmd /k storm nimbus',{async:true});
-    //     shell.exec('start cmd /k storm supervisor',{async:true});
-    //     shell.exec('start cmd /k storm ui',{async:true});
-    //     res.send("done");
-    // }
     res.send("done");
 });
 //start mongodb
 expressapp.get('/execute_mongodb', function(req, res){
     console.log('execute mongodb...');
-    // console.log(typeof(mongoStart));
-    // if(typeof(mongoStart)=='undefined'){
-    //     mongoStart = shell.exec('start cmd /c mongod',{async:true});
-    // }
     res.send("done");
 });
 //load all of deviceslist.

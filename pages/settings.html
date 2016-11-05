@@ -748,7 +748,6 @@ $(document).ready(function(){
                     angular.element(document.getElementById('jsonToScope')).scope().getBrokers();
                     setTimeout(function(){
                         console.log(angular.element(document.getElementById('jsonToScope')).scope().brokerList);
-                            console.log($(document).find('#checkSecure').length);
                             $.each(angular.element(document.getElementById('jsonToScope')).scope().brokerList, function(index, value){
                                 if(!value['ca'] && !value['hostCrt'] && !value['hostKey']){
                                     $('#deviceAdd').parent()[0].childNodes[2+index*2].childNodes[9].childNodes[0].checked = false;
@@ -894,7 +893,6 @@ $(document).on("click","#removeDeviceSubmit", function(){
 // secure checkbox
 $(document).on("click",'#checkSecure',function(e){
     e.stopPropagation();
-    console.log(e);
     console.log(this);
         var arr = $(this).parent().parent()[0].innerText.split("	");
         angular.element(document.getElementById('jsonToScope')).scope().currentBroker['brokerId'] = arr[0];
@@ -920,7 +918,6 @@ $('#secureSubmit').click(function(){
     }
 });
 $(document).on("click","#deviceAdd",function(e){
-console.log(e);
 console.log(this);
     var arr = $(this)[0].innerText.split("	");
     angular.element(document.getElementById('jsonToScope')).scope().currentDeviceList =[];

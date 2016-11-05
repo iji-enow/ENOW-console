@@ -55,7 +55,6 @@ app.controller('myCtrl', function($scope, $http){
                     $scope.temp.push(reader.result);
                 }
             });
-            console.log(this.temp);
             setTimeout(function(){
                 $scope.file['caFile'] = $scope.temp[0];
                 $scope.file['crtFile'] = $scope.temp[1];
@@ -88,7 +87,6 @@ app.controller('myCtrl', function($scope, $http){
         }).then(function(response){
             if(response.data.includes('0')){
                 alert('no ack from devices');
-                console.log($('#run').attr('checked', false));
             }else{
                 $http({
                     withCredentials: false,
