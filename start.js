@@ -135,10 +135,8 @@ expressapp.post('/alive_check', function(req, res){
             }
         }
         for(key in obj){
-            console.log("ky "+key);
             for(val in obj[key]){
                 //mqtt listener.
-                    console.log("val: "+val);
                 makeReserve(key, obj[key][val], res);
             }
         }
@@ -448,7 +446,7 @@ function connectDB(source, dbName, collectionName, command, response){
     };
     var addBrokerSecure = function(callback){
         db.db(dbName).collection(collectionName).updateOne({'brokerId':source['brokerId']},{
-            '$set' : { 'ca': source['ca'], 'hostCrt': source['hostCrt'], 'hostKey': source['hostKey']}
+            '$set' : { 'ca': source['caFile'], 'hostCrt': source['crtFile'], 'hostKey': source['keyFile']}
         }, function(err,result){
             response.send("done");
         });

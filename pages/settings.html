@@ -460,7 +460,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-default" id="secureSubmit">Submit</button>
+                        <button type="button" class="btn btn-default" id="secureSubmit" data-dismiss="modal">Submit</button>
                     </div>
                 </div>
             </div>
@@ -487,7 +487,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-default" id="addBrokerSubmit">Submit</button>
+                        <button type="button" class="btn btn-default" id="addBrokerSubmit" data-dismiss="modal">Submit</button>
                     </div>
                 </div>
             </div>
@@ -520,7 +520,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-default" id="addDeviceSubmit">Add Device</button>
+                        <button type="button" class="btn btn-default" id="addDeviceSubmit" data-dismiss="modal">Add Device</button>
                     </div>
                 </div>
             </div>
@@ -750,13 +750,16 @@ $(document).ready(function(){
                     $('#back').css('opacity', '1');
                     setTimeout(function(){
                         console.log(angular.element(document.getElementById('jsonToScope')).scope().brokerList);
-                        $.each(angular.element(document.getElementById('jsonToScope')).scope().brokerList, function(index, value){
-                            if(value['ca']==""){
-                                console.log($(document).find('#checkSecure'));
-                            }else{
-                                console.log('zzz');
-                            }
-                        });
+
+                            console.log($(document).find('#checkSecure').length);
+                            $.each(angular.element(document.getElementById('jsonToScope')).scope().brokerList, function(index, value){
+                                if(!value['ca'] && !value['hostCrt'] && !value['hostKey']){
+                                    $('#deviceAdd').parent()[0].childNodes[2+index*2].childNodes[9].childNodes[0].checked = false;
+                                }
+                                else{
+                                    $('#deviceAdd').parent()[0].childNodes[2+index*2].childNodes[9].childNodes[0].checked = true;
+                                }
+                            });
                     }, 1000);
                 }, 4000);
             },1000);
@@ -811,8 +814,7 @@ $("#submit3").click(function(){
     }, 300);
 });
 $("#mongo").click(function(){
-    angular.element(document.getElementById('jsonToScope')).scope().executeStorm();
-    alert('a');
+
 });
 $("#addBroker").click(function(){
         $('#s1')[0].value = "";
