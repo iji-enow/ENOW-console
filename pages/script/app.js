@@ -51,11 +51,11 @@ app.controller('myCtrl', function($scope, $http){
             $.each(files, function(i, j){
                 var reader = new FileReader();
                 reader.readAsText(files[i]);
-                reader.read(files[i]);
                 reader.onload = function(e){
                     $scope.temp.push(reader.result);
                 }
             });
+            console.log(this.temp);
             setTimeout(function(){
                 $scope.file['caFile'] = $scope.temp[0];
                 $scope.file['crtFile'] = $scope.temp[1];

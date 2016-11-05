@@ -50,9 +50,6 @@ client.on('error',function(error){
 producer.on('error',function(error){
     console.log(error);
 });
-setTimeout(function(){
-    console.log(client);
-}, 1000);
 // express settings
 expressapp.use(bodyparser.json());
 // timeout for all response
@@ -238,6 +235,7 @@ expressapp.post('/get_broker', function(req, res){
 // add ca, cert, key file to broker.
 expressapp.post('/add_secure', function(req, res){
     console.log('add secure...');
+    console.log(req.body);
     connectDB(req.body, 'connectionData', 'brokerList', 'addSecure', res);
     var obj = {};
     obj['brokerId'] = req.body['brokerId'];
