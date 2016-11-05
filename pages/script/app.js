@@ -294,7 +294,8 @@ app.controller('myCtrl', function($scope, $http){
             method: 'get',
             url: "/get_brokers"
         }).then(function(response){
-            if(response.data=="no_connect"){
+            console.log(response.data);
+            if(response.data=="NO_CONNECT"){
                 alert('Connect failed. Check MongoDB Url, Port.');
             }else{
                 $scope.brokerList = response.data;

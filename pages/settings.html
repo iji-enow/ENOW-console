@@ -746,7 +746,6 @@ $(document).ready(function(){
                 angular.element(document.getElementById('jsonToScope')).scope().postUrlSettings();
                 setTimeout(function () {
                     angular.element(document.getElementById('jsonToScope')).scope().getBrokers();
-
                     setTimeout(function(){
                         console.log(angular.element(document.getElementById('jsonToScope')).scope().brokerList);
                             console.log($(document).find('#checkSecure').length);
@@ -757,10 +756,10 @@ $(document).ready(function(){
                                 else{
                                     $('#deviceAdd').parent()[0].childNodes[2+index*2].childNodes[9].childNodes[0].checked = true;
                                 }
-                                $('#loader').hide();
-                                $('#back').css('opacity', '1');
                             });
-                    }, 1000);
+                            $('#loader').hide();
+                            $('#back').css('opacity', '1');
+                    }, 2000);
                 }, 4000);
             },1000);
     }, 300);

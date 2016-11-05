@@ -56,7 +56,8 @@ expressapp.use(bodyparser.json());
 expressapp.use(function(req,res,next){
     res.setTimeout(20000, function(){
         console.log('time out..');
-        res.sendStatus(408);
+        // res.sendStatus(408);
+        // res.send('NOPE');
     });
     next();
 });
@@ -213,10 +214,15 @@ expressapp.post('/post_url_settings', function(req, res){
         db.close();
     }
     setTimeout(function(){
-        MongoClient.connect('mongodb://'+ mongoUrl+'/'+mongoPort, function(err, database, callback) {
+        MongoClient.connect('mongodb://'+ mongoUrl+'/'+mongoPort, function(err, database) {
             db = database;
             console.log('connected to mongodb://'+ mongoUrl+'/'+mongoPort);
-            res.send("done");
+            if(err){
+                console.log("asdfadsfadsf");
+                res.send('NO_CONNECT');
+            }else{
+                res.send("done");
+            }
         });
     }, 2000);
 
@@ -345,9 +351,14 @@ var server = expressapp.listen(expressapp.get('port'), function(){
 function connectDB(source, dbName, collectionName, command, response){
     console.log('connecting to '+mongoUrl+':'+mongoPort+'...'+dbName+'.'+collectionName);
     var findDocument = function(callback){
-        db.db(dbName).collection(collectionName).find({}).toArray(function(err,result){
-            response.send(result);
-        });
+        if(db){
+            db.db(dbName).collection(collectionName).find({}).toArray(function(err,result){
+                response.send(result);
+            });
+        }
+        else{
+            response.send("NO_CONNECT");
+        }
     };
     // find broker for get mqtt url.
     var findBroker_2 = function(callback){
