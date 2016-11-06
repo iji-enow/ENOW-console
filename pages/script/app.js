@@ -60,10 +60,6 @@ app.controller('myCtrl', function($scope, $http){
                 $scope.file['ca'] = $scope.temp[0];
                 $scope.file['hostCrt'] = $scope.temp[1];
                 $scope.file['hostKey'] = $scope.temp[2];
-                console.log($scope.temp[0]);
-                console.log($scope.temp[1]);
-                console.log($scope.temp[2]);
-                console.log($scope.file);
             }, 1200);
         }, 1000);
     };

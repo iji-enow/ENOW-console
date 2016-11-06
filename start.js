@@ -242,7 +242,6 @@ expressapp.post('/add_secure', function(req, res){
     var buf2 = new Buffer(req.body['hostCrt'].length);
     var buf3 = new Buffer(req.body['hostKey'].length);
     console.log('add secure...');
-    console.log(req.body);
     connectDB(req.body, 'connectionData', 'brokerList', 'addSecure', res);
     buf1.write(req.body['ca']);
     buf2.write(req.body['hostCrt']);
@@ -254,7 +253,6 @@ expressapp.post('/add_secure', function(req, res){
         obj['hostCrt'] = buf2;
         obj['hostKey'] = buf3;
         setTimeout(function(){
-            console.log(obj);
             sendKafka(req, 'sslAdd', obj);
         }, 2000);
     },1000);
@@ -474,58 +472,58 @@ function connectDB(source, dbName, collectionName, command, response){
     switch(command){
         case 'save':
         case 'run':
-            insertDocument(db, function(){
-            });
-            break;
+        insertDocument(db, function(){
+        });
+        break;
         case 'saveBroker':
-            insertDocumentBroker(db, function(){
-            });
-            break;
+        insertDocumentBroker(db, function(){
+        });
+        break;
         case 'saveDevice':
-            insertDocumentDevice(db, function(){
-            });
-            break;
+        insertDocumentDevice(db, function(){
+        });
+        break;
         case 'deleteDevice':
-            deleteDevice(db, function(){
-            });
-            break;
+        deleteDevice(db, function(){
+        });
+        break;
         case 'deleteBroker':
-            deleteBroker(db, function(){
-            });
-            break;
+        deleteBroker(db, function(){
+        });
+        break;
         case 'findDevice':
-            findDevice(db, function(){
-            });
-            break;
+        findDevice(db, function(){
+        });
+        break;
         case 'kill':
-            deleteDocument(db,function(){
-            });
-            break;
+        deleteDocument(db,function(){
+        });
+        break;
         case 'find':
-            findDocument(db, function(){
-            });
-            break;
+        findDocument(db, function(){
+        });
+        break;
         case 'findTarget':
-            findTarget(db, function(){
-            });
-            break;
+        findTarget(db, function(){
+        });
+        break;
         case 'findBroker':
-            findBroker(db, function(){
-            });
-            break;
+        findBroker(db, function(){
+        });
+        break;
         case 'findBroker2':
-            findBroker_2(db, function(){
-            });
-            break;
+        findBroker_2(db, function(){
+        });
+        break;
         case 'addSecure':
-            addBrokerSecure(db, function(){
-            });
-            break;
+        addBrokerSecure(db, function(){
+        });
+        break;
         case 'delSecure':
-            deleteBrokerSecure(db, function(){
-            });
-            break;
+        deleteBrokerSecure(db, function(){
+        });
+        break;
         default:
-            break;
-        }
+        break;
+    }
 };
