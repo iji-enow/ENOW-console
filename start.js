@@ -238,16 +238,28 @@ expressapp.post('/get_broker', function(req, res){
 
 // add ca, cert, key file to broker.
 expressapp.post('/add_secure', function(req, res){
+    var buf1 = new Buffer(req.body['ca'].length);
+    var buf2 = new Buffer(req.body['hostCrt'].length);
+    var buf3 = new Buffer(req.body['hostKey'].length);
     console.log('add secure...');
+    console.log(req.body);
     connectDB(req.body, 'connectionData', 'brokerList', 'addSecure', res);
-    var obj = {};
-    obj['brokerId'] = req.body['brokerId'];
-    obj['caFile'] = req.body['caFile'];
-    obj['crtFile'] = req.body['crtFile'];
-    obj['keyFile'] = req.body['keyFile'];
+    buf1.write(req.body['ca']);
+    buf2.write(req.body['hostCrt']);
+    buf3.write(req.body['hostKey']);
     setTimeout(function(){
-        sendKafka(req, 'sslAdd', obj);
-    }, 2000);
+        var obj = {};
+        obj['brokerId'] = req.body['brokerId'];
+        obj['ca'] = buf1;
+        obj['hostCrt'] = buf2;
+        obj['hostKey'] = buf3;
+        setTimeout(function(){
+            console.log(obj);
+            sendKafka(req, 'sslAdd', obj);
+        }, 2000);
+    },1000);
+
+
 });
 // delete ca, cert, key file from broker.
 expressapp.post('/del_secure', function(req, res){
@@ -442,7 +454,7 @@ function connectDB(source, dbName, collectionName, command, response){
     };
     var addBrokerSecure = function(callback){
         db.db(dbName).collection(collectionName).updateOne({'brokerId':source['brokerId']},{
-            '$set' : { 'ca': source['caFile'], 'hostCrt': source['crtFile'], 'hostKey': source['keyFile']}
+            '$set' : { 'ca': source['ca'], 'hostCrt': source['hostCrt'], 'hostKey': source['hostKey']}
         }, function(err,result){
             response.send("done");
         });

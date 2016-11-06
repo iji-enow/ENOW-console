@@ -51,15 +51,20 @@ app.controller('myCtrl', function($scope, $http){
             $.each(files, function(i, j){
                 var reader = new FileReader();
                 reader.readAsText(files[i]);
+                // reader.readAsArrayBuffer(files[i]);
                 reader.onload = function(e){
                     $scope.temp.push(reader.result);
                 }
             });
             setTimeout(function(){
-                $scope.file['caFile'] = $scope.temp[0];
-                $scope.file['crtFile'] = $scope.temp[1];
-                $scope.file['keyFile'] = $scope.temp[2];
-                }, 1000);
+                $scope.file['ca'] = $scope.temp[0];
+                $scope.file['hostCrt'] = $scope.temp[1];
+                $scope.file['hostKey'] = $scope.temp[2];
+                console.log($scope.temp[0]);
+                console.log($scope.temp[1]);
+                console.log($scope.temp[2]);
+                console.log($scope.file);
+            }, 1200);
         }, 1000);
     };
 
