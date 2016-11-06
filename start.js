@@ -238,20 +238,14 @@ expressapp.post('/get_broker', function(req, res){
 
 // add ca, cert, key file to broker.
 expressapp.post('/add_secure', function(req, res){
-    var buf1 = new Buffer(req.body['ca'].length);
-    var buf2 = new Buffer(req.body['hostCrt'].length);
-    var buf3 = new Buffer(req.body['hostKey'].length);
     console.log('add secure...');
     connectDB(req.body, 'connectionData', 'brokerList', 'addSecure', res);
-    buf1.write(req.body['ca']);
-    buf2.write(req.body['hostCrt']);
-    buf3.write(req.body['hostKey']);
     setTimeout(function(){
         var obj = {};
         obj['brokerId'] = req.body['brokerId'];
-        obj['ca'] = buf1;
-        obj['hostCrt'] = buf2;
-        obj['hostKey'] = buf3;
+        obj['ca'] = req.body['ca'];
+        obj['hostCrt'] = req.body['hostCrt'];
+        obj['hostKey'] = req.body['hostKey'];
         setTimeout(function(){
             sendKafka(req, 'sslAdd', obj);
         }, 2000);
